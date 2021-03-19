@@ -8,7 +8,7 @@ class Publicacion(models.Model):
     categoria = models.CharField(default=Categorias.DORMITORIO, choices=Categorias.choices(), max_length=255)
 
     def __str__(self):
-        return self.titulo
+        return self.descripcion
 
 
 class Destacada(models.Model):

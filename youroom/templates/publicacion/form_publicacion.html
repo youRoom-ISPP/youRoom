@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+
+{% block titulo %}Formulario de publicacion{% endblock %}
+
+{% block contenido %}
+<form method="post">
+    <h4 class="display-5 py-3 text-truncate">Crear una publicacion:</h4>
+        <div class="px-2">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-primary">Publicar</button>
+        </div>
+</form>
+{% endblock %}
