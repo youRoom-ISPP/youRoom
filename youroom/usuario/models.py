@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.template.defaultfilters import default
-from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 
