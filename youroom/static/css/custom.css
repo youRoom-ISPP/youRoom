@@ -1,5 +1,24 @@
-body {
+html,body {
     background-color: #fafafa;
+    height: 100vh;
+}
+
+.container {
+    height: 100%;
+}
+
+.boton {
+    background-color: #0DDFAD;
+    border: 2px solid #07745A;
+    border-radius: 30px;
+    color: #07745A;
+}
+
+.boton:hover,
+.boton:active {
+    background-color: #07745A!important;
+    border-color: #0DDFAD!important;
+    color: #0DDFAD!important;
 }
 
 .titulo-accion {
@@ -46,4 +65,22 @@ body {
     .logo-mobile {
         display: none;
     }
+}
+
+/* 
+    LOGIN
+*/
+
+.login-form {
+    border-color: #0DDFAD;
+    background-color: white;
+    border-radius: 40px;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.form-control {
+    background-color: #F6F6F3;
+    border: 1px solid #D4D0C4;
+    border-radius: 15px;
 }
