@@ -1,18 +1,61 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-    <title>{% block titulo %} {% endblock %}</title>
+    <title>{% block titulo_pagina %} {% endblock %}</title>
 </head>
 <body>
-    {% block contenido %}
-    {% endblock %}
+    <div class="container-fluid">
+        <div class="row align-items-center logo-mobile">
+            <div class="col-4 mx-auto">
+                <img class="img-fluid" src="{% static 'images/logo-footer.png' %}" alt="">
+            </div>
+            {% block titulo_accion %}{% endblock %}
+        </div>
+    </div>
+
+    <header class="header-mobile">
+        <nav class="navbar">
+            <div class="container text-center">
+                <div class="col-3">
+                    <a class="item-menu" href="/"><i class="bi bi-house"></i></a>
+                </div>
+                <div class="col-3">
+                    <a class="item-menu" href="/new"><i class="bi bi-plus-square"></i></a>
+                </div>
+                <div class="col-3">
+                    <a class="item-menu" href="/ranking"><i class="bi bi-trophy"></i></a>
+                </div>
+                <div class="col-3">
+                    <a class="item-menu" href="/user"><i class="bi bi-person-square"></i></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-md">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; 2021 - youRoom</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
