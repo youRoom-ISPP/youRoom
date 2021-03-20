@@ -1,0 +1,32 @@
+html,body {
+    background-color: #F6F6F3;
+    height: 100vh;
+}
+
+.container {
+    height: 100%;
+}
+
+.btn.btn-primary {
+    background-color: #0DDFAD;
+    border-color: #0DDFAD;
+    border-radius: 30px;
+}
+
+/* 
+    LOGIN
+*/
+
+.login-form {
+    border-color: #0DDFAD;
+    background-color: white;
+    border-radius: 40px;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.form-control {
+    background-color: #F6F6F3;
+    border: 1px solid #D4D0C4;
+    border-radius: 40px;
+}
