@@ -6,17 +6,16 @@ addons:
   postgresql: "9.4"
 before_script:
   - psql -U postgres -c "create user youroom password 'youroom'"
-  - psql -U postgres -c "create database youroom owner youroom"
+  - psql -U postgres -c "create database test_youroom owner youroom"
   - psql -U postgres -c "ALTER USER youroom CREATEDB"
 language: python
 python:
-  - "3.6"
+  - "3.8"
 install:
   - pip install -r requirements.txt
   - pip install codacy-coverage
 script:
   - cd youroom
-  - ./manage.py migrate
   - coverage run --branch --source=. ./manage.py test --keepdb
   - coverage xml
   - python-codacy-coverage -r coverage.xml
