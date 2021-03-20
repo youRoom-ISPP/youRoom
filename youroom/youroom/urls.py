@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from usuario import urls as usuario_urls
 from publicacion import urls as publicacion_urls
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(usuario_urls)),
