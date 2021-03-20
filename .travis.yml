@@ -16,6 +16,7 @@ install:
   - pip install codacy-coverage
 script:
   - cd youroom
+  - ./manage.py migrate
   - coverage run --branch --source=. ./manage.py test --keepdb
   - coverage xml
   - python-codacy-coverage -r coverage.xml
