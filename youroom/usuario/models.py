@@ -1,3 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import default
+from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.exceptions import ValidationError
+from django.dispatch import receiver
 
+class UsuarioPerfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, )
+    descripcion = models.TextField(max_length=500, blank=True)
+
+class ContadorVida(models.Model):
+    perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE,)
+    numVidasSemanales = models.IntegerField(default=3,validators=[MinValueValidator(0), MaxValueValidator(3)])
+    numVidasCompradas = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    estaActivo=models.BooleanField()
+    def clean(self):
+        if self.estaActivo==True and Premium.objects.filter(perfil_id=self.perfil.id).exists()==True:
+            raise ValidationError(('El usuario es premium, con lo que no puede tener activado el contador.'))
+
+class Premium(models.Model):
+    perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE, null=True,blank=True)
+    fechaSuscripcion = models.DateField()
+    def clean(self):
+        if self.perfil.contadorvida.estaActivo == True:
+            ContadorVida.objects.filter(perfil_id=self.perfil.id).update(estaActivo=False)
+@receiver(models.signals.post_delete, sender=Premium)
+def activar_contador(sender, instance, *args, **kwargs):
+    ContadorVida.objects.filter(perfil_id=instance.perfil.id).update(estaActivo=True)
