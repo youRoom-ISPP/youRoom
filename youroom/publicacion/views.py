@@ -22,6 +22,9 @@ class SubirPublicacionView(FormView):
     def form_valid(self, form):
         publicacion = Publicacion.objects.create()
         publicacion.imagen = form.cleaned_data['imagen']
-        publicacion.fecha_subida = timezone.now()
+        publicacion.fecha_publicacion = timezone.now()
+        publicacion.categoria = form.cleaned_data.get('categoria')
+        print(publicacion.categoria)
+        publicacion.descripcion = form.cleaned_data.get('descripcion')
         publicacion.save()
         return super().form_valid(form)
