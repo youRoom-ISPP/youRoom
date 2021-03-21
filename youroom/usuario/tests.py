@@ -11,6 +11,7 @@ class LoginTestCase(APITestCase):
         self.u = User(username='prueba')
         self.u.set_password('usuario1234')
         self.u.email = 'prueba@gmail.com'
+        self.u.isActive=True
         self.u.save()
 
     def tearDown(self):
@@ -23,9 +24,18 @@ class LoginTestCase(APITestCase):
     def test_login_ok(self):
         answers = {
             'username': 'prueba',
-            'password1': 'usuario1234'
+            'password': 'usuario1234'
         }
         response = self.client.post('', answers)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/timeline/', status_code=302, 
+        target_status_code=200, fetch_redirect_response=True)
 
-    
+    def test_login_fail(self):
+        answers = {
+                'username': 'impostor',
+                'password': 'impostor1234'
+            }
+        response = self.client.post('', answers)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[-1],'usuario/login.html')
