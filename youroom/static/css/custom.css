@@ -1,0 +1,49 @@
+body {
+    background-color: #fafafa;
+}
+
+.titulo-accion {
+    color: #07745A;
+}
+
+@media (max-width: 767px) {
+    .header-mobile {
+        background-color: #fff;
+        border-top: 1px solid #dbdbdb;
+        padding: 1rem 0 ;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    .logo-mobile {
+        background-color: #fff;
+        border-bottom: 1px solid #dbdbdb;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+
+    .item-menu {
+        color: #07745A;
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+
+    .item-menu:hover,
+    .item-menu:active {
+        color: #0ddfad;
+    }
+
+    footer {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .header-mobile,
+    .logo-mobile {
+        display: none;
+    }
+}
