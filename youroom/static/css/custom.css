@@ -6,6 +6,23 @@ body {
     color: #07745A;
 }
 
+.cuerpo-tarjeta {
+    padding-top: 0px;
+}
+
+.timeline-nav {
+    background-color: #0ddfad;
+}
+
+.timeline-nav:hover {
+    background-color: #07745A;
+}
+
+.timeline {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
@@ -21,7 +38,6 @@ body {
     .logo-mobile {
         background-color: #fff;
         border-bottom: 1px solid #dbdbdb;
-        margin-bottom: 1rem;
         padding: 1rem;
     }
 

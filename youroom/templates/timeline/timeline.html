@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% block titulo_pagina %}Timeline{% endblock %}
+
+{% block contenido %}
+<div class="col-sm-8 offset-sm-2 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 timeline">
+    <ul class="nav justify-content-around">
+        <div class="col-6 timeline-nav">
+            <li class="nav-item">
+                <a class="nav-link text-white text-center" href="#">Destacados</a>
+            </li>
+        </div>
+        <div class="col-6 timeline-nav">
+        <li class="nav-item dropdown ">
+            <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Categorías</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Salón</a>
+              <a class="dropdown-item" href="#">Dormitorio</a>
+              <a class="dropdown-item" href="#">Cocina</a>
+              <a class="dropdown-item" href="#">Escritorio</a>
+            </div>
+          </li>
+        </div>
+    </ul>
+    {% for i in n %}
+    <div class="pt-sm-3">
+        <div class="card">
+            <div class="card-header bg-white">
+                username
+            </div>
+            <img src="https://picsum.photos/1920/1080" class="card-img-bottom" alt="...">
+            <div class="card-body cuerpo-tarjeta">
+                <div class="row pl-1 bg-white">
+                    <fieldset class="rating">
+                        <input type="radio" id="star5-r{{i}}" name="rating-r{{i}}" value="5" />
+                        <label class="full" for="star5-r{{i}}" title="5 estrellas"></label>
+                        <input type="radio" id="star4-r{{i}}" name="rating-r{{i}}" value="4" />
+                        <label class="full" for="star4-r{{i}}" title="4 estrellas"></label>
+                        <input type="radio" id="star3-r{{i}}" name="rating-r{{i}}" value="3" />
+                        <label class="full" for="star3-r{{i}}" title="3 estrellas"></label>
+                        <input type="radio" id="star2-r{{i}}" name="rating-r{{i}}" value="2" />
+                        <label class="full" for="star2-r{{i}}" title="2 estrellas"></label>
+                        <input type="radio" id="star1-r{{i}}" name="rating-r{{i}}" value="1" />
+                        <label class="full" for="star1-r{{i}}" title="1 estrella"></label>
+                    </fieldset>
+                </div>
+                <div class="row px-1">
+                    <p>Este texto es la descripción de la publicación.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
