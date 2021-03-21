@@ -1,9 +1,68 @@
 body {
     background-color: #fafafa;
+    padding-bottom: 100px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn-cancelar {
+    background-color: #F9DCE5;
+    color: #6C4B5E;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 0 1.1rem;
+}
+
+.btn-guardar-enlace {
+    background-color: #AFD3E9;
+}
+
+.item-subir-foto {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+#icono-subir-foto {
+    font-size: 35px;
+}
+
+#icono-subir-foto:hover {
+    color: #0ddfad;
+}
+
+#instrucciones-subir-foto {
+    color: #383838;
+    font-size: 12px;
 }
 
 .titulo-accion {
     color: #07745A;
+}
+
+#container-visor {
+    position: relative;
+}
+
+.etiqueta {
+    background-color: #E5E3DC;
+    opacity: 60%;
+    border: 3px solid #524D3D;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.etiqueta:hover {
+    opacity: 40%;
+    width: 2.5rem;
+    height: 2.5rem;
+    transition-duration: 0.4s;
 }
 
 @media (max-width: 767px) {

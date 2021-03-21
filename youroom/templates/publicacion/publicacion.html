@@ -1,0 +1,57 @@
+{% extends 'base/base.html' %}
+
+{% block titulo_pagina %}Publicación nueva{% endblock %}
+
+{% block titulo_accion %}
+<div class="col-8">
+    <strong class="titulo-accion">Nueva publicación</strong>
+</div>
+{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-12">
+        <p id="instrucciones-subir-foto" class="text-center">Selecciona la imagen que deseas publicar</p>
+        <div id="error-tipo-archivo" class="alert alert-danger" role="alert">
+            El archivo seleccionado debe ser .jpg .jpeg o .png
+        </div>
+        <div class="form-inline">
+            <div id="url-etiqueta" class="input-group d-none">
+                <input id="enlace-etiqueta" type="url" class="form-control" placeholder="Añadir enlace">
+                <div class="input-group-append">
+                    <button id="btn-guardar-enlace" class="btn btn-guardar-enlace mb-2">Guardar</button>
+                    <button id="btn-borrar-enlace" class="btn btn-cancelar mb-2">Borrar</button>
+                </div>
+            </div>
+        </div>
+        <form id="form-publicacion">
+            <div class="form-group text-center">
+                <div id="container-visor">
+                    <img id="visor-imagen" class="img-fluid" src=""/>
+                </div>
+                <label class="item-subir-foto titulo-accion" for="imagen">
+                    <input name="imagen" type='file' id="imagen" />
+                    <i id="icono-subir-foto" class="bi bi-plus-square icono-subir-foto"></i>
+                </label>
+            </div>
+            <div id="metadata-publicacion">
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select class="form-control" name="" id="">
+                        <option value="1">Dormitorio</option>
+                        <option value="2">Salón</option>
+                        <option value="3">Entradita</option>
+                        <option value="4">Escritorio</option>
+                        <option value="5">Cocina</option>
+                        <option value="6">Aseo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="descripcion" rows="3" placeholder="Describe tu imagen..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary boton">Publicar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
