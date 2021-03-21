@@ -15,8 +15,17 @@ let contadorEtiqueta = 0;
 let etiqueta = null;
 let listaEtiquetas = [];
 
-function readURL(input) {
+function validaEnlace(enlace) {
     let validador = false;
+    if(/^(http|https|ftp):\/\/?.*$/i.test(enlace)){
+        validador = true;
+    }
+
+    return validador;
+}
+
+function readURL(input) {
+    let validador = true;
     if (input.files && input.files[0]) {
         const tipo = input.files[0].type;
         if (tipo == "image/jpg" || tipo == "image/jpeg" || tipo == "image/png") {
@@ -27,6 +36,8 @@ function readURL(input) {
             }
             reader.readAsDataURL(input.files[0]);
             validador = true;
+        } else {
+            validador = false;
         }
     }
 
@@ -73,10 +84,15 @@ function capturaPulsacion (event) {
     etiqueta = crearEtiqueta(coords);
 }
 
+$("#error-url-enlace").hide();
 $("#error-tipo-archivo").hide();
 $("#metadata-publicacion").hide();
 $('#visor-imagen').toggle();
 $("#imagen").change(function (){
+    $(".etiqueta").remove();
+    $("#enlace-etiqueta").val("");
+    $("#url-etiqueta").addClass("d-none");
+    $("#error-url-enlace").hide();
     const validaImagen = readURL(this);
     if (validaImagen) {
         $("#error-tipo-archivo").hide();
@@ -96,6 +112,11 @@ $("#imagen").change(function (){
 $('#visor-imagen').on('click', capturaPulsacion);
 
 $("#btn-borrar-enlace").click(function () {
+    if ($("#error-url-enlace").is(":visible")) {
+        console.log("entra")
+        $("#error-url-enlace").hide();
+        $(".etiqueta").last().remove();
+    }
     $("#enlace-etiqueta").val("");
     $("#etiqueta" + (contadorEtiqueta - 1)).remove();
     etiqueta = null;
@@ -105,10 +126,16 @@ $("#btn-borrar-enlace").click(function () {
 });
 
 $("#btn-guardar-enlace").click(function () {
-    etiqueta.addEnlace = $("#enlace-etiqueta").val();
-    $("#enlace-etiqueta").val("");
-    $("#instrucciones-subir-foto").show();
-    $("#url-etiqueta").addClass("d-none");
-    listaEtiquetas.push(etiqueta);
-    return $('#visor-imagen').on('click', capturaPulsacion);
+    $("#error-url-enlace").hide();
+    const enlace = $("#enlace-etiqueta").val();
+    if (validaEnlace(enlace)) {
+        etiqueta.addEnlace = enlace;
+        $("#enlace-etiqueta").val("");
+        $("#instrucciones-subir-foto").show();
+        $("#url-etiqueta").addClass("d-none");
+        listaEtiquetas.push(etiqueta);
+        return $('#visor-imagen').on('click', capturaPulsacion);
+    } else {
+        $("#error-url-enlace").show();
+    }
 });
