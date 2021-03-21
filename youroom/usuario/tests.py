@@ -17,7 +17,7 @@ class LoginTestCase(APITestCase):
         self.client = None
 
     def test_login(self):
-        response = self.client.get('/accounts/login/')
+        response = self.client.get('')
         self.assertEqual(response.status_code, 200)
 
     def test_login_ok(self):
@@ -25,7 +25,7 @@ class LoginTestCase(APITestCase):
             'username': 'prueba',
             'password1': 'usuario1234'
         }
-        response = self.client.post('/accounts/login/', answers)
+        response = self.client.post('', answers)
         self.assertEqual(response.status_code, 200)
 
     
