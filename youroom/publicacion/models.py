@@ -4,7 +4,7 @@ from django.db import models
 class Publicacion(models.Model):
     imagen = models.ImageField(upload_to='publicaciones/')
     descripcion = models.TextField(verbose_name='Descripcion', null=True)
-    fecha_publicacion = models.DateTimeField(verbose_name='Fecha publicacion', null=True)
+    fecha_publicacion = models.DateTimeField(auto_now=True)
     categoria = models.CharField(max_length=250, null=True)
 
     def __str__(self):

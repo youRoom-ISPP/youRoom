@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
 from .forms import PublicacionForm
@@ -22,7 +21,6 @@ class SubirPublicacionView(FormView):
     def form_valid(self, form):
         publicacion = Publicacion.objects.create()
         publicacion.imagen = form.cleaned_data['imagen']
-        publicacion.fecha_publicacion = timezone.now()
         publicacion.categoria = form.cleaned_data.get('categoria')
         publicacion.descripcion = form.cleaned_data.get('descripcion')
         publicacion.save()
