@@ -29,30 +29,23 @@
                 </div>
             </div>
         </div>
-        <form id="form-publicacion">
-            <div class="form-group text-center">
+        <form action="{% url 'publicacion_guardar' %}" method="POST" id="form-publicacion" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group text-center anula-margin-bottom">
                 <div id="container-visor">
                     <img id="visor-imagen" class="img-fluid" src=""/>
                 </div>
                 <label class="item-subir-foto titulo-accion" for="imagen">
-                    <input name="imagen" type='file' id="imagen" />
+                    {{ formulario_imagen.imagen }}
                     <i id="icono-subir-foto" class="bi bi-plus-square icono-subir-foto"></i>
                 </label>
             </div>
             <div id="metadata-publicacion">
                 <div class="form-group">
-                    <label>Categoría</label>
-                    <select class="form-control" name="" id="">
-                        <option value="1">Dormitorio</option>
-                        <option value="2">Salón</option>
-                        <option value="3">Entradita</option>
-                        <option value="4">Escritorio</option>
-                        <option value="5">Cocina</option>
-                        <option value="6">Aseo</option>
-                    </select>
+                    {{ formulario_imagen.categoria }}
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" id="descripcion" rows="3" placeholder="Describe tu imagen..."></textarea>
+                    {{ formulario_imagen.descripcion }}
                 </div>
                 <button type="submit" class="btn btn-primary boton">Publicar</button>
             </div>

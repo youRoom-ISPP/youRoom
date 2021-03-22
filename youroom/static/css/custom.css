@@ -1,6 +1,5 @@
 body {
     background-color: #fafafa;
-    height: 100vh;
     padding-bottom: 100px;
 }
 
@@ -37,10 +36,6 @@ input[type="file"] {
 #instrucciones-subir-foto {
     color: #383838;
     font-size: 12px;
-}
-
-.container {
-    height: 100%;
 }
 
 .boton {
@@ -149,3 +144,6 @@ input[type="file"] {
     border-radius: 15px;
 }
 
+.anula-margin-bottom {
+    margin-bottom: 0;
+}
