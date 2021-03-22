@@ -15,6 +15,15 @@ let contadorEtiqueta = 0;
 let etiqueta = null;
 let listaEtiquetas = [];
 
+function procesarEtiquetas(listaEtiquetas){
+    let etiquetasStr = "";
+    for(i = 0; i < listaEtiquetas.length; i++){
+        let etiqueta = listaEtiquetas[i];
+        etiquetasStr += etiqueta.enlace + "," + etiqueta.coordX + "," + etiqueta.coordY + "|"
+    }
+    return etiquetasStr.substring(0, etiquetasStr.length - 1);
+}
+
 function validaEnlace(enlace) {
     let validador = false;
     if(/^(http|https|ftp):\/\/?.*$/i.test(enlace)){
@@ -138,4 +147,9 @@ $("#btn-guardar-enlace").click(function () {
     } else {
         $("#error-url-enlace").show();
     }
+});
+
+$("#btnPublicar").click(function () {
+    const etiquetasStr = procesarEtiquetas(listaEtiquetas);
+    $("#etiquetas").val(etiquetasStr);
 });
