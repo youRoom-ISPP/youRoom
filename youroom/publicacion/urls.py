@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import FormPubView
+from .views import PublicacionView, SubirPublicacionView
 
 urlpatterns = [
-    path('new/', FormPubView.as_view())
+    path('', PublicacionView.as_view(), name='publicacion'),
+    path('subir/', SubirPublicacionView.as_view(), name='publicacion_guardar'),
 ]
