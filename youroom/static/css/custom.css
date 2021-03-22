@@ -40,20 +40,20 @@ input[type="file"] {
 
 .boton {
     background-color: #0DDFAD;
-    border: 2px solid #07745A;
+    border: 2px solid #099A78;
     border-radius: 30px;
-    color: #07745A;
+    color: #099A78;
 }
 
 .boton:hover,
 .boton:active {
-    background-color: #07745A!important;
+    background-color: #099A78!important;
     border-color: #0DDFAD!important;
     color: #0DDFAD!important;
 }
 
 .titulo-accion {
-    color: #07745A;
+    color: #099A78;
 }
 
 #container-visor {
@@ -61,11 +61,11 @@ input[type="file"] {
 }
 
 .etiqueta {
-    background-color: #E5E3DC;
+    background-color: #0ddfad;
     opacity: 60%;
-    border: 3px solid #524D3D;
-    width: 2rem;
-    height: 2rem;
+    border: 3px solid #099A78;
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 50%;
     position: absolute;
     cursor: pointer;
@@ -74,8 +74,8 @@ input[type="file"] {
 
 .etiqueta:hover {
     opacity: 40%;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     transition-duration: 0.4s;
 }
 
@@ -94,12 +94,11 @@ input[type="file"] {
     .logo-mobile {
         background-color: #fff;
         border-bottom: 1px solid #dbdbdb;
-        margin-bottom: 1rem;
         padding: 1rem;
     }
 
     .item-menu {
-        color: #07745A;
+        color: #099A78;
         font-size: 1.2rem;
         padding: 1rem;
     }
@@ -120,6 +119,35 @@ input[type="file"] {
         display: none;
     }
 }
+
+
+/*
+    TIMELINE
+*/
+
+.container-visor-timeline {
+    position: relative;
+}
+
+.cuerpo-tarjeta {
+    padding-top: 0px;
+}
+
+.timeline-nav {
+    background-color: #099A78;
+}
+
+.timeline-nav:hover {
+    background-color: #0ddfad;
+}
+
+.timeline {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+
+
 
 /*
     LOGIN
