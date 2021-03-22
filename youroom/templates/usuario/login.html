@@ -1,18 +1,41 @@
 {% extends 'base/base.html' %}
 
-{% block titulo %}Login youRoom{% endblock %}
+{% block titulo %}youRoom - Login{% endblock %}
 
 {% block contenido %}
-    <div class="row">
-        <div class="col-12">
-            <h3 class="text-center">Inicio de sesion</h3>
-            <div class="login-panel">
-                <form method="post" role="form">{% csrf_token %}
-                    {{ form.username }}
-                    {{ form.password }}
-                    <input type="submit" value="Login"/>
-                </form>
+<div class="container pt-2">
+    <div class="row h-100 pt-4 pb-3">
+        <div class="col-1 col-md-3"></div>
+        <div class="col-10 col-md-6 mt-5 pb-5 login-form">
+            <div class="row pt-5 pb-5 text-center">
+                <div class="col-md-6 text-center"></div>
+                <img src="../static/images/logo-footer.png" class="img-fluid rounded" alt="Logo de youRoom">
+                <div class="col-md-6"></div>
             </div>
+            <form class="row align-items-center pr-3    " method="post" role="form">{% csrf_token %}
+                <div class="col-1 col-md-3"></div>
+                <div class="col-10 col-md-6">
+                    <div class="row pt-2 form-group">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="Usuario">
+                    </div>
+                    <div class="row pt-2 form-group">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña">
+                    </div>
+                    {% if form.errors %}    
+                        <div class="alert alert-warning text-center alerta pl-2 pr-2 mb-1" role="alert">
+                            Usuario o contraseña incorrectos.
+                        </div>
+                    {% endif %}
+                    <div class="row pt-3">
+                        <div class="col-3"></div>
+                        <button class="btn btn-primary boton pl-1 pr-1 col-6" type="submit">Entrar</button>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+                <div class="col-1 col-md-3"></div>
+            </form>
         </div>
+        <div class="col-1 col-md-3"></div>
     </div>
+</div>
 {% endblock %}
