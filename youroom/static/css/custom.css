@@ -25,6 +25,11 @@ html,body {
     color: #07745A;
 }
 
+.alerta {
+    font-size: small;
+    border-radius: 15px;
+}
+
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;

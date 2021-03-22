@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <title>{% block titulo_pagina %} {% endblock %}</title>
 </head>
 <body>
+    {% if user.is_authenticated %}
     <div class="container-fluid">
         <div class="row align-items-center logo-mobile">
             <div class="col-4 mx-auto">
@@ -22,7 +22,9 @@
             {% block titulo_accion %}{% endblock %}
         </div>
     </div>
+    {% endif %}
 
+    {% if user.is_authenticated %}
     <header class="header-mobile">
         <nav class="navbar">
             <div class="container text-center">
@@ -41,12 +43,13 @@
             </div>
         </nav>
     </header>
-
+    {% endif %}
     <div class="container-md">
         {% block contenido %}
         {% endblock %}
     </div>
 
+    {% if user.is_authenticated %}
     <footer>
         <div class="container">
             <div class="row">
@@ -56,6 +59,7 @@
             </div>
         </div>
     </footer>
+    {% endif %}
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
