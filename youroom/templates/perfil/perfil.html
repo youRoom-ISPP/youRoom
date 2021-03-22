@@ -8,15 +8,18 @@
         <div>
             <header class="pb-2">
                 <div class="row col-12">
-                    <h5>Nombre de usuario</h5>
+                    <h5>{{user.username}}</h5>
                 </div>
                 <section class="row col-12">
                     <div>
                         <p>Diseñador/a de interiores <br> Creating a happy home <br> Contacto: diseño@diseño.com <br> Mi tienda: miTienda.com</p>
                     </div>
-                    <div class="row col-12">
+                    <div class="row col-7">
                         <i class="bi bi-heart-fill text-danger"> 5 </i>
                         <i class="bi bi-camera-fill ml-3"> 1 </i>
+                    </div>
+                    <div class="col-5">
+                        <a class="btn btn-primary boton pl-1 pr-1" href="{% url 'logout' %}">Cerrar sesión</a>
                     </div>
                 </section>
             </header>

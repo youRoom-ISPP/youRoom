@@ -10,7 +10,7 @@ before_script:
   - psql -U postgres -c "ALTER USER youroom CREATEDB"
 language: python
 python:
-  - "3.6"
+  - "3.8"
 install:
   - pip install -r requirements.txt
   - pip install codacy-coverage
