@@ -4,11 +4,17 @@ from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
 from publicacion.models import Publicacion
 from publicacion.enum import Categorias
+from django.contrib.auth.models import User
 
 class PublicacionViewTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.u = User(username='prueba')
+        self.u.set_password('usuario1234')
+        self.u.email = 'prueba@gmail.com'
+        self.u.isActive=True
+        self.u.save()
     
     def tearDown(self):
         self.client = None
@@ -23,15 +29,39 @@ class PublicacionViewTest(APITestCase):
         file.seek(0)
         return file
 
+
+    def test_publicacion_view_not_logged(self):
+        response = self.client.get("http://testserver{}".format(reverse("publicacion")))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='usuario/login.html')
+
+        response = self.client.get("http://testserver{}".format(reverse("publicacion_guardar")))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='usuario/login.html')
+
+
+
     def test_publicacion_view(self):
-        response = self.client.get("http://testserver{}".format(reverse('publicacion')))
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        login = self.client.post('', answers)
+        response = self.client.get("http://testserver{}".format(reverse("publicacion")))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/subir_imagen.html')
+
 
     def test_subir_publicacion_view(self):
-        formulario = self.client.get("http://testserver{}".format(reverse('publicacion')))
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        login = self.client.post('', answers)
+        formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse('publicacion_guardar')), {
+        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
             'categoria' : Categorias.SALON, 
@@ -42,6 +72,3 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
         self.assertEqual(objeto_guardado.descripcion,"Prueba")
         
-        
-
-

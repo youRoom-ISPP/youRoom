@@ -1,4 +1,5 @@
 from django.db import models
+from usuario.models import UsuarioPerfil
 
 
 class Publicacion(models.Model):
@@ -6,6 +7,7 @@ class Publicacion(models.Model):
     descripcion = models.TextField(verbose_name='Descripcion', null=True)
     fecha_publicacion = models.DateTimeField(auto_now=True)
     categoria = models.CharField(max_length=250, null=True)
+    usuario = models.ForeignKey(UsuarioPerfil, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.descripcion
