@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionView(TemplateView):
-    template_name = 'publicacion/subir_imagen.html'
+    template_name = 'publicacion/publicacion.html'
 
     def get_context_data(self, **kwargs):
         context = super(PublicacionView, self).get_context_data(**kwargs)
@@ -21,7 +21,7 @@ class PublicacionView(TemplateView):
 @method_decorator(login_required, name='dispatch')
 class SubirPublicacionView(FormView):
     form_class = PublicacionForm
-    template_name = 'publicacion/subir_imagen.html'
+    template_name = 'publicacion/publicacion.html'
     success_url = reverse_lazy('publicacion')
 
     def form_valid(self, form):
