@@ -5,6 +5,7 @@ from django.urls import reverse
 from publicacion.models import Publicacion
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
+from usuario.models import UsuarioPerfil
 
 class PublicacionViewTest(APITestCase):
 
@@ -61,14 +62,18 @@ class PublicacionViewTest(APITestCase):
         formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
+
+        perfil, create = UsuarioPerfil.objects.get_or_create(user = self.u)
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON, 
+            'categoria' : Categorias.SALON,
+            'usuario':  perfil,
             'format': 'multipart/form-data'},follow = True)
         self.assertEqual(response.status_code, 200)
         objeto_guardado = Publicacion.objects.get(id = 1)
         self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + imagen.name)
         self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
         self.assertEqual(objeto_guardado.descripcion,"Prueba")
+        self.assertEqual(objeto_guardado.usuario, perfil)
         
