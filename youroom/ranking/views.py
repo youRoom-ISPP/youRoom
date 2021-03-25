@@ -16,7 +16,6 @@ class ValorarPublicacionView(FormView):
     def form_valid(self, form):
         usuario_perfil , create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
         publicacion_a_valorar , create = Publicacion.objects.get_or_create(id = form.cleaned_data['publicacion_id'])
-        print(publicacion_a_valorar)
         valoracion , create = Valoracion.objects.get_or_create(
             usuario=usuario_perfil,
             publicacion=publicacion_a_valorar
