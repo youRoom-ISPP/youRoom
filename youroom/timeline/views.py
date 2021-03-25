@@ -13,7 +13,9 @@ class TimelineViewCategorias(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
-        context['publicaciones'] = Publicacion.objects.filter(categoria=pk)
+        categoria = Categorias.choices()[int(pk)][0]
+        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria)
+        context['categorias'] = Categorias.choices()
         return context
 
 @method_decorator(login_required, name='dispatch')
@@ -27,4 +29,7 @@ class TimelineView(TemplateView):
         for destacada in res:
             publicaciones.append(destacada.publicacion)
         context['publicaciones'] = publicaciones
+        context['categorias'] = Categorias.choices()
         return context
+
+

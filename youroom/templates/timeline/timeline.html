@@ -16,13 +16,9 @@
                 <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                     aria-haspopup="true" aria-expanded="false">Categorías</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.SALON'%}">Salón</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.DORMITORIO'%}">Dormitorio</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.COCINA'%}">Cocina</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.ESCRITORIO'%}">Escritorio</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.ENTRADITA'%}">Entradita</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.EXTERIOR'%}">Exterior</a>
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk='Categorias.ASEO'%}">Aseo</a>
+                    {% for categoria in categorias %}
+                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk=forloop.counter0 %}">{{ categoria.1}}</a>
+                    {% endfor %}
                 </div>
             </li>
         </div>
