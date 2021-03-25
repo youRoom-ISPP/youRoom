@@ -1,13 +1,5 @@
 @import 'custom.css';
 
-.tit-ranking {
-    text-align: center;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    color: #099a78;
-    font-weight: bold;
-}
-
 .rank-user {
     color:#099a78;
     border: 1px solid #0ddfad;

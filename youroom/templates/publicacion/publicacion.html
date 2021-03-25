@@ -1,16 +1,11 @@
 {% extends 'base/base.html' %}
 
 {% block titulo_pagina %}Publicación nueva{% endblock %}
-
-{% block titulo_accion %}
-<div class="col-8">
-    <strong class="titulo-accion">Nueva publicación</strong>
-</div>
-{% endblock %}
+{% block titulo %}Publicación nueva{% endblock %}}
 
 {% block contenido %}
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 mt-2">
         <p id="instrucciones-subir-foto" class="text-center">Selecciona la imagen que deseas publicar</p>
         <div id="error-tipo-archivo" class="alert alert-danger" role="alert">
             El archivo seleccionado debe ser .jpg .jpeg o .png

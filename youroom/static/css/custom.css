@@ -81,6 +81,14 @@ input[type="file"] {
     transition-duration: 0.4s;
 }
 
+.titulo-web {
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+    color: #099a78;
+    font-weight: bold;
+}
+
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
@@ -110,16 +118,36 @@ input[type="file"] {
         color: #0ddfad;
     }
 
+    .leyenda-icono,
     footer {
         display: none;
     }
+
 }
 
 @media (min-width: 768px) {
-    .header-mobile,
+    /* .header-mobile,
     .logo-mobile {
         display: none;
+    } */
+    .header-mobile,
+    .logo-mobile {
+        background-color: #fff;
+        border-bottom: 1px solid #dbdbdb;
+        padding: 0.5rem;
     }
+
+    .item-menu,
+    .item-menu:hover,
+    .item-menu:active
+     {
+        color: #099A78;
+    }
+
+    .leyenda-icono {
+        margin-right: 0.5em;
+    }
+
 }
 
 
