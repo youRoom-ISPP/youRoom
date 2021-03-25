@@ -1,3 +1,4 @@
+
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,8 @@ from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
 from publicacion.models import Publicacion
 from usuario.models import UsuarioPerfil
+from django.shortcuts import render
+from django.contrib.auth.models import User
 
 
 @method_decorator(login_required, name='dispatch')
@@ -23,3 +26,13 @@ class ValorarPublicacionView(FormView):
         valoracion.puntuacion = form.cleaned_data.get('puntuacion')
         valoracion.save()
         return super().form_valid(form)
+
+
+class RankingView(TemplateView):
+    template_name = 'ranking/ranking.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['usuarios'] = User.objects.all()
+        return context
+

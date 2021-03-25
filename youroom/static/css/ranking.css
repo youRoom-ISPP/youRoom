@@ -1,0 +1,47 @@
+@import 'custom.css';
+
+.tit-ranking {
+    text-align: center;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    color: #099a78;
+    font-weight: bold;
+}
+
+.rank-user {
+    color:#099a78;
+    border: 1px solid #0ddfad;
+}
+
+.pos {
+    background: #099a78;
+    border-radius: 0.8em;
+   -moz-border-radius: 0.8em;
+   -webkit-border-radius: 0.8em;
+   color: #ffffff;
+   display: inline-block;
+   font-weight: bold;
+   line-height: 1.6em;
+   margin-right: 5px;
+   text-align: center;
+   width: 1.6em; 
+}
+
+.primero {
+    color: #efb810;
+    margin-left: 0.8em;
+}
+
+.segundo {
+    color: #c0c0c0;
+    margin-left: 0.8em;
+}
+
+.tercero {
+    color: #cd7f32;
+    margin-left: 0.8em;
+}
+
+.valoracion {
+    font-weight: bold;
+}

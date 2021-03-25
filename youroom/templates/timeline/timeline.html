@@ -1,3 +1,4 @@
+
 {% extends 'base/base.html' %}
 {% load l10n %}
 
@@ -8,18 +9,17 @@
     <ul class="nav justify-content-around">
         <div class="col-6 timeline-nav">
             <li class="nav-item">
-                <a class="nav-link text-white text-center" href="#">Destacados</a>
+                <a class="nav-link text-white text-center" href="{% url 'timeline' %}">Destacados</a>
             </li>
         </div>
         <div class="col-6 timeline-nav">
             <li class="nav-item dropdown ">
-                <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="#" role="button"
+                <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                     aria-haspopup="true" aria-expanded="false">Categorías</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Salón</a>
-                    <a class="dropdown-item" href="#">Dormitorio</a>
-                    <a class="dropdown-item" href="#">Cocina</a>
-                    <a class="dropdown-item" href="#">Escritorio</a>
+                    {% for categoria in categorias %}
+                    <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
+                    {% endfor %}
                 </div>
             </li>
         </div>
@@ -52,7 +52,7 @@
                         <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
                         <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
                     </fieldset>
-                    <form action="{% url 'publicacion_valorar' %}" method="POST" enctype="multipart/form-data">
+                  <form action="{% url 'publicacion_valorar' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ formulario_valoracion.puntuacion }}
                         <input type="hidden"  name="publicacion_id" value="{{p.id}}" />

@@ -21,6 +21,7 @@ from usuario import urls as usuario_urls
 from perfil import urls as perfil_urls
 from timeline import urls as timeline_urls
 from publicacion import urls as publicacion_urls
+from ranking import urls as ranking_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('perfil/', include(perfil_urls)),
     path('timeline/', include(timeline_urls)),
     path('publicacion/', include(publicacion_urls)),
+    path('ranking/', include(ranking_urls)),
 ]
 
 if settings.DEBUG:
