@@ -12,9 +12,14 @@ class TimelineViewCategorias(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs.get('pk')
-        categoria = Categorias.choices()[int(pk)][0]
-        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria)
+        categoria_seleccionada = self.kwargs.get('categoria')
+
+        for tupla in Categorias.choices():
+            if tupla[1] == categoria_seleccionada:
+                categoria = tupla[0]
+                break
+
+        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
         context['categorias'] = Categorias.choices()
         return context
 
@@ -24,10 +29,16 @@ class TimelineView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        res = Destacada.objects.all()
         publicaciones = []
-        for destacada in res:
+        for destacada in Destacada.objects.all():
             publicaciones.append(destacada.publicacion)
+
+        publicaciones.sort(key=lambda x: x.fecha_publicacion, reverse=True)
+
+        for publicacion in Publicacion.objects.all().order_by('-fecha_publicacion'):
+            if publicacion not in publicaciones:
+                publicaciones.append(publicacion)
+
         context['publicaciones'] = publicaciones
         context['categorias'] = Categorias.choices()
         return context

@@ -17,7 +17,7 @@
                     aria-haspopup="true" aria-expanded="false">Categorías</a>
                 <div class="dropdown-menu">
                     {% for categoria in categorias %}
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' pk=forloop.counter0 %}">{{ categoria.1}}</a>
+                    <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
                     {% endfor %}
                 </div>
             </li>
