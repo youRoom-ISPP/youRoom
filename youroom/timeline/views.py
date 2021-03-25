@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
+@method_decorator(login_required, name='dispatch')
 class TimelineViewCategorias(TemplateView):
     template_name = 'timeline/timeline.html'
 
@@ -13,6 +16,7 @@ class TimelineViewCategorias(TemplateView):
         context['publicaciones'] = Publicacion.objects.filter(categoria=pk)
         return context
 
+@method_decorator(login_required, name='dispatch')
 class TimelineView(TemplateView):
     template_name = 'timeline/timeline.html'
 
