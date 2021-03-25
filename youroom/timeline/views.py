@@ -5,29 +5,12 @@ from publicacion.enum import Categorias
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-
-@method_decorator(login_required, name='dispatch')
-class TimelineViewCategorias(TemplateView):
-    template_name = 'timeline/timeline.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categoria_seleccionada = self.kwargs.get('categoria')
-
-        for tupla in Categorias.choices():
-            if tupla[1] == categoria_seleccionada:
-                categoria = tupla[0]
-                break
-
-        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
-        context['categorias'] = Categorias.choices()
-        return context
-
 @method_decorator(login_required, name='dispatch')
 class TimelineView(TemplateView):
     template_name = 'timeline/timeline.html'
 
     def get_context_data(self, **kwargs):
+        
         context = super().get_context_data(**kwargs)
         publicaciones = []
         for destacada in Destacada.objects.all():
@@ -43,4 +26,20 @@ class TimelineView(TemplateView):
         context['categorias'] = Categorias.choices()
         return context
 
+@method_decorator(login_required, name='dispatch')
+class TimelineViewCategorias(TemplateView):
+    template_name = 'timeline/timeline.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categoria_seleccionada = self.kwargs.get('categoria')
+
+        categoria=None
+        for tupla in Categorias.choices():
+            if tupla[1] == categoria_seleccionada:
+                categoria = tupla[0]
+                break
+
+        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
+        context['categorias'] = Categorias.choices()
+        return context
