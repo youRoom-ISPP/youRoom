@@ -2,17 +2,20 @@ import io, os
 from PIL import Image
 from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
-from publicacion.models import Publicacion
-from publicacion.enum import Categorias
-from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from usuario.models import UsuarioPerfil
+from publicacion.enum import Categorias
 
-class PublicacionViewTest(APITestCase):
+# Create your tests here.
+
+class PerfilViewTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
         self.u = User(username='prueba')
-        self.u.set_password('usuario1234')
+        self.u.set_password('prueba')
         self.u.email = 'prueba@gmail.com'
         self.u.isActive=True
         self.u.save()
@@ -31,35 +34,34 @@ class PublicacionViewTest(APITestCase):
         return file
 
 
-    def test_publicacion_view_not_logged(self):
-        response = self.client.get("http://testserver{}".format(reverse("publicacion")))
-        self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed(template_name='usuario/login.html')
-
-        response = self.client.get("http://testserver{}".format(reverse("publicacion_guardar")))
+    def test_perfil_no_logged(self):
+        response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='usuario/login.html')
 
 
 
-    def test_publicacion_view(self):
-        answers = {
-            'username': 'prueba',
-            'password': 'usuario1234'
-        }
-        login = self.client.post('', answers)
-        response = self.client.get("http://testserver{}".format(reverse("publicacion")))
+
+    def test_perfil_logged(self):
+
+        # El usuario se loguea y accede a su perfil
+        self.client.login(username='prueba', password='prueba')
+
+        response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(template_name='publicacion/subir_imagen.html')
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
 
+        # Su perfil es el indicado y no tiene publicaciones hechas
+        perfil = response.context['user']
+        publicaciones = response.context['publicaciones']
 
-    def test_subir_publicacion_view(self):
-        answers = {
-            'username': 'prueba',
-            'password': 'usuario1234'
-        }
-        login = self.client.post('', answers)
+        self.assertEqual(perfil.user, self.u)
+        self.assertEqual(len(publicaciones), 0)
+
+        # El usuario realiza publicación, y al acceder a su perfil obtiene la publicación
         formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
+        self.assertEqual(response.status_code, 200)
+
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
 
@@ -70,13 +72,20 @@ class PublicacionViewTest(APITestCase):
             'categoria' : Categorias.SALON,
             'usuario':  perfil,
             'format': 'multipart/form-data'},follow = True)
+            
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
-        objeto_guardado = Publicacion.objects.last()
-        self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + imagen.name)
-        self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
-        self.assertEqual(objeto_guardado.descripcion,"Prueba")
-        self.assertEqual(objeto_guardado.usuario, perfil)
-        
-        
+        perfil = response.context['user']
+        publicaciones = response.context['publicaciones']
+
+        self.assertEqual(perfil.user, self.u)
+        self.assertEqual(len(publicaciones), 1)
+        self.assertEqual(publicaciones[0].usuario, perfil)
+
+
+
+
