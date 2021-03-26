@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from publicacion.models import Publicacion, Destacada
+from ranking.forms import ValoracionForm
 from publicacion.enum import Categorias
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
 
 @method_decorator(login_required, name='dispatch')
 class TimelineView(TemplateView):
@@ -21,7 +23,7 @@ class TimelineView(TemplateView):
         for publicacion in Publicacion.objects.all().order_by('-fecha_publicacion'):
             if publicacion not in publicaciones:
                 publicaciones.append(publicacion)
-
+        context['formulario_valoracion'] = ValoracionForm()
         context['publicaciones'] = publicaciones
         context['categorias'] = Categorias.choices()
         return context
