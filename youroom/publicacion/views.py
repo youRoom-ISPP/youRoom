@@ -21,7 +21,7 @@ class PublicacionView(TemplateView):
 class SubirPublicacionView(FormView):
     form_class = PublicacionForm
     template_name = 'publicacion/publicacion.html'
-    success_url = reverse_lazy('publicacion')
+    success_url = reverse_lazy('perfil')
 
     def form_valid(self, form):
         usuario_perfil , create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
