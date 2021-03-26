@@ -71,10 +71,12 @@ class PublicacionViewTest(APITestCase):
             'usuario':  perfil,
             'format': 'multipart/form-data'},follow = True)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
 
         objeto_guardado = Publicacion.objects.last()
         self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + imagen.name)
         self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
         self.assertEqual(objeto_guardado.descripcion,"Prueba")
         self.assertEqual(objeto_guardado.usuario, perfil)
+        
         
