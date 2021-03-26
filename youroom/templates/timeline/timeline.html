@@ -52,12 +52,6 @@
                         <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
                         <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
                     </fieldset>
-                  <form action="{% url 'publicacion_valorar' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ formulario_valoracion.puntuacion }}
-                        <input type="hidden"  name="publicacion_id" value="{{p.id}}" />
-                        <button type="submit">Valorar</button>
-                    </form>
                 </div>
                 <div class="row px-1">
                     <p>{{p.descripcion}}</p>
