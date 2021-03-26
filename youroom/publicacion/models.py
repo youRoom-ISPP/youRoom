@@ -5,14 +5,14 @@ from usuario.models import UsuarioPerfil
 class Publicacion(models.Model):
     imagen = models.ImageField(upload_to='publicaciones/')
     descripcion = models.TextField(verbose_name='Descripcion', null=True)
-    fecha_publicacion = models.DateTimeField(auto_now=True)
+    fecha_publicacion = models.DateTimeField(auto_now_add=True)
     categoria = models.CharField(max_length=250)
     usuario = models.ForeignKey(UsuarioPerfil, on_delete=models.CASCADE)
 
 
 class Destacada(models.Model):
     es_destacada = models.BooleanField(verbose_name='Es destacada')
-    fecha_destacada = models.DateTimeField(verbose_name='Fecha destacada')
+    fecha_destacada = models.DateTimeField(auto_now_add=True, verbose_name='Fecha destacada')
     publicacion = models.OneToOneField(Publicacion, on_delete=models.CASCADE, primary_key=True)
 
 
