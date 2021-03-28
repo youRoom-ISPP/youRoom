@@ -2,7 +2,7 @@ import io, os
 from PIL import Image
 from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
-from publicacion.models import Publicacion
+from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil
@@ -63,7 +63,7 @@ class PublicacionViewTest(APITestCase):
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
 
-        perfil, create = UsuarioPerfil.objects.get_or_create(user = self.u)
+        perfil= UsuarioPerfil.objects.get_or_create(user = self.u)[0]
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
@@ -78,5 +78,85 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
         self.assertEqual(objeto_guardado.descripcion,"Prueba")
         self.assertEqual(objeto_guardado.usuario, perfil)
+
+    def test_destacar_not_logged(self):
+        response = self.client.get("/publicacion/destacar/1")
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='usuario/login.html')
+
+    def test_destacar_logged(self):
+
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        login = self.client.post('', answers)
+
+        # Contamos la cantidad de publicaciones destacadas que tenemos inicialmente
+        cantidad_destacados_inicial = Destacada.objects.all().count()
+
+        imagen = self.generate_photo_file()
+        perfil = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
+            'imagen': imagen,
+            'descripcion' : "Prueba",
+            'categoria' : Categorias.SALON,
+            'usuario':  perfil,
+            'format': 'multipart/form-data'},follow = True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+
+        # Al destacar la última publicación, confirmamos que hay una publicación destacada más y que coincide
+        publicacion = Publicacion.objects.last()
+        response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
+
+        ultima_destacada = Destacada.objects.last()
+        self.assertEqual(ultima_destacada.publicacion, publicacion)
+
+        # Intentamos volver a destacar una publicación destacada y no se crea otra vez
+
+        response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
+
+
+    def test_destacar_otro_usuario_logged(self):
+
+        # Creamos nuevo usuario
+        usuario2 = User.objects.get_or_create(username='prueba2', password='prueba2')[0]
+        cantidad_destacados_inicial = Destacada.objects.all().count()
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        login = self.client.post('', answers)
+
+        
+        imagen = self.generate_photo_file()
+
+        # Usuario 1 realiza una publicación
+        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
+            'imagen': imagen,
+            'descripcion' : "Prueba",
+            'categoria' : Categorias.SALON,
+            'format': 'multipart/form-data'},follow = True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+
+        # Usuario 2 intenta destacar la publicación del usuario 1
+        self.client.logout()
+        self.client.login(username='prueba2', password='prueba2')
+
+        publicacion = Publicacion.objects.last()
+        response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial)
+        
+
         
         
