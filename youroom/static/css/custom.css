@@ -1,4 +1,5 @@
 @import 'ranking.css';
+@import 'rating.css';
 
 body {
     background-color: #fafafa;
@@ -29,7 +30,9 @@ input[type="file"] {
     margin-left: 16px;
 }
 
-.btn-cancelar-publicacion:hover {
+.btn-cancelar-publicacion:hover,
+.btn-cancelar-publicacion:active,
+.btn-cancelar-publicacion:focus {
     background-color: #6C4B5E;
     color: #F9DCE5;
 }
@@ -49,7 +52,9 @@ input[type="file"] {
     font-size: 35px;
 }
 
-#icono-subir-foto:hover {
+#icono-subir-foto:hover,
+#icono-subir-foto:focus,
+#icono-subir-foto:active {
     color: #0ddfad;
 }
 
@@ -67,7 +72,8 @@ input[type="file"] {
 }
 
 .boton:hover,
-.boton:active {
+.boton:active,
+.boton:focus {
     background-color: #099A78!important;
     border-color: #0DDFAD!important;
     color: #0DDFAD!important;
@@ -83,6 +89,10 @@ input[type="file"] {
 
 #url-etiqueta {
     margin-top: 16px;
+}
+
+#btnPublicar {
+    float: right;
 }
 
 .etiqueta {
@@ -104,7 +114,13 @@ input[type="file"] {
     transition-duration: 0.4s;
 }
 
-@media (max-width: 767px) {
+.container-pegajoso {
+    position: sticky;
+    top:0px;
+    z-index:100;
+}
+
+@media (max-width: 768px) {
     .header-mobile {
         background-color: #fff;
         border-top: 1px solid #dbdbdb;
@@ -114,14 +130,6 @@ input[type="file"] {
         bottom: 0;
         left: 0;
         z-index: 100;
-    }
-
-    .titulo-web {
-        text-align: center;
-        padding-top: 1em;
-        padding-bottom: 0.5em;
-        color: #099a78;
-        font-weight: bold;
     }
 
     .logo-mobile {
@@ -137,12 +145,15 @@ input[type="file"] {
     }
 
     .item-menu:hover,
-    .item-menu:active {
+    .item-menu:active,
+    .item-menu:focus {
         color: #0ddfad;
     }
 
     .leyenda-icono,
     .header-pc,
+    .titulo-web,
+    .opciones-timeline-pc,
     footer {
         display: none;
     }
@@ -150,7 +161,8 @@ input[type="file"] {
 }
 
 @media (min-width: 768px) {
-    .header-mobile {
+    .header-mobile,
+    .opciones-timeline-mobile {
         display: none;
     }
 
@@ -159,11 +171,11 @@ input[type="file"] {
     }
     
     .titulo-web {
-        text-align: left;
-        padding-top: 1em;
-        padding-bottom: 0.5em;
-        color: #099a78;
+        text-align: center;
+        background-color: #099a78;
+        color: #fff;
         font-weight: bold;
+        vertical-align: middle;
     }
 
     .logo-mobile {
@@ -189,6 +201,7 @@ input[type="file"] {
         padding: 0.5rem;
         padding-left: 1.25em;
     }
+
 }
 
 
@@ -208,7 +221,22 @@ input[type="file"] {
     background-color: #099A78;
 }
 
-.timeline-nav:hover {
+.timeline-nav:hover,
+.timeline-nav:active,
+.timeline-nav:focus {
+    background-color: #0ddfad;
+}
+
+.timeline-nav-pc {
+    background-color: #099A78;
+    color: #fff;
+    padding: 0.5rem;
+    padding-left: 1.25em;
+}
+
+.timeline-nav-pc:hover,
+.timeline-nav-pc:active,
+.timeline-nav-pc:focus {
     background-color: #0ddfad;
 }
 

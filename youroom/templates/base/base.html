@@ -11,23 +11,18 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/rating.css' %}">
 
-
     <title>{% block titulo_pagina %} {% endblock %}</title>
 </head>
 <body>
-    {% if user.is_authenticated %}
-    <div class="container-fluid">
+    <div class="container-fluid container-pegajoso">
         <div class="row logo-mobile">
-            <div class="col-4 col-md-2 mx-auto">
-                <img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="">
+            <div class="col-4 col-md-2 ml-md-2 mx-auto">
+                <img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="Logo de la aplicación">
             </div>
             <div class="col-md-10"></div>
-            {% block titulo_accion %}{% endblock %}
         </div>
     </div>
-    {% endif %}
 
-    {% if user.is_authenticated %}
     <header class="header-mobile">
         <nav class="navbar">
             <div class="container text-center">
@@ -46,22 +41,22 @@
             </div>
         </nav>
     </header>   
-    {% endif %}
 
     <div class="container-md align-items-center">
-        <div class="container-fluid container-md">
-            <div class="row titulo-web">
-                <div class="col-12 col-md-10 offset-md-1">{% block titulo %}{% endblock %}</div>
-            </div>
-        </div> 
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-8">
+            <div class="col-md-8 mt-md-3">
             {% block contenido %}
             {% endblock %}
             </div>
-            {% if user.is_authenticated %}
-            <div class="col-md-3">
+            <div class="col-md-3 mt-md-3">
+                <div class="container">
+                    <div class="row mb-1">
+                        <div class="col-12 pt-1 pb-1 titulo-web">
+                            {% block titulo %} {% endblock %}
+                        </div>
+                    </div>
+                </div>
                 <div class="header-pc">
                     <div class="col-12">
                         <div class="row">
@@ -86,6 +81,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-2 opciones-timeline-pc">
+                {% block opciones-timeline %}{% endblock %}
+                </div>
                 <footer>
                     <div class="container">
                         <div class="row mt-3">
@@ -96,7 +94,6 @@
                     </div>
                 </footer>
             </div>
-            {% endif %}
         </div>
     </div>
 
