@@ -9,6 +9,11 @@ class Publicacion(models.Model):
     categoria = models.CharField(max_length=250)
     usuario = models.ForeignKey(UsuarioPerfil, on_delete=models.CASCADE)
 
+    def delete(self, *args, **kwargs):
+        storage, path = self.imagen.storage, self.imagen.path
+        super(Publicacion, self).delete(*args, **kwargs)
+        storage.delete(path)
+
 
 class Destacada(models.Model):
     es_destacada = models.BooleanField(verbose_name='Es destacada')
