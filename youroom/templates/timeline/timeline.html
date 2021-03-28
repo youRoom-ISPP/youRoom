@@ -10,18 +10,17 @@
         <ul class="nav justify-content-around">
             <div class="col-6 timeline-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white text-center" href="#">Destacados</a>
+                    <a class="nav-link text-white text-center" href="{% url 'timeline' %}">Destacados</a>
                 </li>
             </div>
             <div class="col-6 timeline-nav">
                 <li class="nav-item dropdown ">
-                    <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="#" role="button"
+                    <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                         aria-haspopup="true" aria-expanded="false">Categorías</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Salón</a>
-                        <a class="dropdown-item" href="#">Dormitorio</a>
-                        <a class="dropdown-item" href="#">Cocina</a>
-                        <a class="dropdown-item" href="#">Escritorio</a>
+                        {% for categoria in categorias %}
+                        <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
+                        {% endfor %}
                     </div>
                 </li>
             </div>
@@ -30,7 +29,7 @@
         <div class="pt-sm-3">
             <div class="card">
                 <div class="card-header bg-white">
-                    {{p.user.username}}
+                    {{p.usuario.user.username}}
                 </div>
                 <div class="container-visor-timeline">
                     <img src="{{p.imagen.url}}" class="card-img-bottom">
@@ -62,6 +61,6 @@
             </div>
         </div>
         {% endfor %}
-    </div>    
+    </div>
 </div>
 {% endblock %}

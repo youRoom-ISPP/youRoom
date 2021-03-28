@@ -21,10 +21,24 @@ input[type="file"] {
     background-color: #AFD3E9;
 }
 
+.btn-cancelar-publicacion {
+    background-color: #F9DCE5;
+    color: #6C4B5E;
+    border: 2px solid #6C4B5E;
+    border-radius: 30px;
+    margin-left: 16px;
+}
+
+.btn-cancelar-publicacion:hover {
+    background-color: #6C4B5E;
+    color: #F9DCE5;
+}
+
 .item-subir-foto {
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
+    margin-bottom: 0;
 }
 
 #url-etiqueta {
@@ -42,13 +56,14 @@ input[type="file"] {
 #instrucciones-subir-foto {
     color: #383838;
     font-size: 12px;
+    margin-top: 16px;
 }
 
 .boton {
     background-color: #0DDFAD;
     border: 2px solid #099A78;
     border-radius: 30px;
-    color: #099A78;
+    color: #086952;
 }
 
 .boton:hover,
@@ -64,6 +79,10 @@ input[type="file"] {
 
 #container-visor {
     position: relative;
+}
+
+#url-etiqueta {
+    margin-top: 16px;
 }
 
 .etiqueta {
