@@ -5,7 +5,7 @@ from django.urls import reverse
 from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
-from usuario.models import UsuarioPerfil
+from usuario.models import UsuarioPerfil, ContadorVida
 
 class PublicacionViewTest(APITestCase):
 
@@ -16,6 +16,8 @@ class PublicacionViewTest(APITestCase):
         self.u.email = 'prueba@gmail.com'
         self.u.isActive=True
         self.u.save()
+        self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
     
     def tearDown(self):
         self.client = None
@@ -64,6 +66,7 @@ class PublicacionViewTest(APITestCase):
         imagen = self.generate_photo_file()
 
         perfil= UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        cont= ContadorVida.objects.get_or_create(perfil=perfil,estaActivo=True)[0]
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
@@ -97,6 +100,7 @@ class PublicacionViewTest(APITestCase):
 
         imagen = self.generate_photo_file()
         perfil = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        cont= ContadorVida.objects.get_or_create(perfil=perfil,estaActivo=True)[0]
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
@@ -128,6 +132,7 @@ class PublicacionViewTest(APITestCase):
 
         # Creamos nuevo usuario
         usuario2 = User.objects.get_or_create(username='prueba2', password='prueba2')[0]
+        
         cantidad_destacados_inicial = Destacada.objects.all().count()
         answers = {
             'username': 'prueba',

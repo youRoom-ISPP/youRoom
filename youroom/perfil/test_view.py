@@ -5,7 +5,7 @@ from django.urls import reverse
 from usuario.models import UsuarioPerfil
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from usuario.models import UsuarioPerfil
+from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
 
 # Create your tests here.
@@ -66,6 +66,7 @@ class PerfilViewTest(APITestCase):
         imagen = self.generate_photo_file()
 
         perfil, create = UsuarioPerfil.objects.get_or_create(user = self.u)
+        cont= ContadorVida.objects.get_or_create(perfil=perfil,estaActivo=True)[0]
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
