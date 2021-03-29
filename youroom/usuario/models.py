@@ -20,7 +20,7 @@ class ContadorVida(models.Model):
 
 class Premium(models.Model):
     perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE, null=True,blank=True)
-    fechaSuscripcion = models.DateField()
+    fechaSuscripcion = models.DateField(auto_now_add=True)
     def clean(self):
         if self.perfil.contadorvida.estaActivo == True:
             ContadorVida.objects.filter(perfil_id=self.perfil.id).update(estaActivo=False)

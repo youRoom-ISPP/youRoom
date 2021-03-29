@@ -6,7 +6,8 @@ from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionView(TemplateView):
@@ -46,7 +47,7 @@ class SubirPublicacionView(FormView):
             cont.save()
             puede = True
         else:
-            raise ValidationError(('Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!'))
+            messages.info(request,'Necesitas 1 vida mínimo para poder publicar. Puedes comprarla en la tienda!')
 
         if puede:
             publicacion = Publicacion.objects.create(
@@ -73,11 +74,10 @@ class SubirPublicacionView(FormView):
 @method_decorator(login_required, name='dispatch')
 class DestacarPublicacionView(TemplateView):
     template_name = 'perfil/perfil.html'
-    success_url = reverse_lazy('perfil')
+    
 
-    def get_context_data(self, **kwargs):
-        context = super(DestacarPublicacionView, self).get_context_data(**kwargs)
-        publicacion_id = context['publicacion_id']
+    def get(self, request, publicacion_id):
+        publicacion_id = publicacion_id
         publicacion = Publicacion.objects.get(id=publicacion_id)
         perfil = UsuarioPerfil.objects.get_or_create(user = self.request.user)[0]
         destacada_contador = Destacada.objects.filter(publicacion=publicacion).count()
@@ -90,9 +90,10 @@ class DestacarPublicacionView(TemplateView):
                 if perfil.totalPuntos>=50:  
                     perfil.totalPuntos = int(perfil.totalPuntos*0.9)
                     perfil.save()
+                    messages.info(request,'Has perdido el 10% de tus puntos. Tranquilo, los recuperarás!')
                     destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
                 else:
-                    raise ValidationError(('Necesitas 50 puntos mínimo para poder destacar la publicación. ¡Sigue publicando :D!'))
+                    messages.info(request,'Necesitas 50 puntos mínimo para poder destacar la publicación. ¡Sigue publicando :D!')
             else:
                 #Si es gratuito, comprobamos que tenga suficientes vidas, restando primero siempre las semanales gratuitas
                 cont = ContadorVida.objects.get(perfil=perfil)
@@ -101,6 +102,7 @@ class DestacarPublicacionView(TemplateView):
                 if cont.numVidasSemanales >=2:
                     cont.numVidasSemanales-=2
                     cont.save()
+                    messages.info(request,'Has destacado usando 2 vidas semanales. Tú sí que sabes!')
                     destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
 
                 #Caso 2: tiene 1 vida semanal y mínimo una vida comprada
@@ -108,6 +110,7 @@ class DestacarPublicacionView(TemplateView):
                     cont.numVidasSemanales-=1
                     cont.numVidasCompradas-=1
                     cont.save()
+                    messages.info(request,'Has hecho uso de una vida gratuita y otra comprada. Aprovechando los recursos!')
                     destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
 
                 #No tiene vidas semanales pero si compradas
@@ -115,7 +118,8 @@ class DestacarPublicacionView(TemplateView):
                     cont.numVidasCompradas-=2
                     cont.save()
                     destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
+                    messages.info(request,'Has destadado la publicación con 2 vidas compradas. Enhorabuena!')
                 else:
-                    raise ValidationError(('Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!'))
+                    messages.info(request,'Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!')
         
-        return context
+        return HttpResponseRedirect('/perfil/')
