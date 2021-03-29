@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             name='Premium',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fechaSuscripcion', models.DateField()),
+                ('fechaSuscripcion', models.DateField(auto_now_add=True)),
                 ('perfil', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='usuario.UsuarioPerfil')),
             ],
         ),
