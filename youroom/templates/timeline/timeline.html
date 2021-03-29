@@ -1,63 +1,66 @@
+
 {% extends 'base/base.html' %}
 {% load l10n %}
 
 {% block titulo_pagina %}Timeline{% endblock %}
 
 {% block contenido %}
-<div class="col-sm-8 offset-sm-2 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 timeline">
-    <ul class="nav justify-content-around">
-        <div class="col-6 timeline-nav">
-            <li class="nav-item">
-                <a class="nav-link text-white text-center" href="{% url 'timeline' %}">Destacados</a>
-            </li>
-        </div>
-        <div class="col-6 timeline-nav">
-            <li class="nav-item dropdown ">
-                <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
-                    aria-haspopup="true" aria-expanded="false">Categorías</a>
-                <div class="dropdown-menu">
-                    {% for categoria in categorias %}
-                    <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
+<div class="row">
+    <div class="col-12 timeline">
+        <ul class="nav justify-content-around">
+            <div class="col-6 timeline-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white text-center" href="{% url 'timeline' %}">Destacados</a>
+                </li>
+            </div>
+            <div class="col-6 timeline-nav">
+                <li class="nav-item dropdown ">
+                    <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
+                        aria-haspopup="true" aria-expanded="false">Categorías</a>
+                    <div class="dropdown-menu">
+                        {% for categoria in categorias %}
+                        <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+            </div>
+        </ul>
+        {% for p in publicaciones %}
+        <div class="pt-sm-3">
+            <div class="card">
+                <div class="card-header bg-white">
+                    {{p.usuario.user.username}}
+                </div>
+                <div class="container-visor-timeline">
+                    <img src="{{p.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.etiqueta_set.all %}
+                    {% localize off %}
+                    <a target="_blank" href="{{e.enlace}}"><div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;"></div></a>
+                    {% endlocalize %}
                     {% endfor %}
                 </div>
-            </li>
-        </div>
-    </ul>
-    {% for p in publicaciones %}
-    <div class="pt-sm-3">
-        <div class="card">
-            <div class="card-header bg-white">
-                {{p.usuario.user.username}}
-            </div>
-            <div class="container-visor-timeline">
-                <img src="{{p.imagen.url}}" class="card-img-bottom">
-                {% for e in p.etiqueta_set.all %}
-                {% localize off %}
-                <a target="_blank" href="{{e.enlace}}"><div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;"></div></a>
-                {% endlocalize %}
-                {% endfor %}
-            </div>
-            <div class="card-body cuerpo-tarjeta">
-                <div class="row pl-1 bg-white">
-                    <fieldset class="rating">
-                        <input type="radio" id="star5-r{{p.id}}" name="rating-r{{p.id}}" value="5" />
-                        <label class="full" for="star5-r{{p.id}}" title="5 estrellas"></label>
-                        <input type="radio" id="star4-r{{p.id}}" name="rating-r{{p.id}}" value="4" />
-                        <label class="full" for="star4-r{{p.id}}" title="4 estrellas"></label>
-                        <input type="radio" id="star3-r{{p.id}}" name="rating-r{{p.id}}" value="3" />
-                        <label class="full" for="star3-r{{p.id}}" title="3 estrellas"></label>
-                        <input type="radio" id="star2-r{{p.id}}" name="rating-r{{p.id}}" value="2" />
-                        <label class="full" for="star2-r{{p.id}}" title="2 estrellas"></label>
-                        <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
-                        <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
-                    </fieldset>
-                </div>
-                <div class="row px-1">
-                    <p>{{p.descripcion}}</p>
+                <div class="card-body cuerpo-tarjeta">
+                    <div class="row pl-1 bg-white">
+                        <fieldset class="rating">
+                            <input type="radio" id="star5-r{{p.id}}" name="rating-r{{p.id}}" value="5" />
+                            <label class="full" for="star5-r{{p.id}}" title="5 estrellas"></label>
+                            <input type="radio" id="star4-r{{p.id}}" name="rating-r{{p.id}}" value="4" />
+                            <label class="full" for="star4-r{{p.id}}" title="4 estrellas"></label>
+                            <input type="radio" id="star3-r{{p.id}}" name="rating-r{{p.id}}" value="3" />
+                            <label class="full" for="star3-r{{p.id}}" title="3 estrellas"></label>
+                            <input type="radio" id="star2-r{{p.id}}" name="rating-r{{p.id}}" value="2" />
+                            <label class="full" for="star2-r{{p.id}}" title="2 estrellas"></label>
+                            <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
+                            <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
+                        </fieldset>
+                    </div>
+                    <div class="row px-1">
+                        <p>{{p.descripcion}}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

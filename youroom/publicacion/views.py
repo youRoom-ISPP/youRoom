@@ -1,11 +1,11 @@
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
 from .forms import PublicacionForm
-from .models import Publicacion, Etiqueta
+from .models import Publicacion, Etiqueta, Destacada
 from usuario.models import UsuarioPerfil
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
+from django.views import View
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionView(TemplateView):
@@ -21,10 +21,10 @@ class PublicacionView(TemplateView):
 class SubirPublicacionView(FormView):
     form_class = PublicacionForm
     template_name = 'publicacion/publicacion.html'
-    success_url = reverse_lazy('publicacion')
+    success_url = reverse_lazy('perfil')
 
     def form_valid(self, form):
-        usuario_perfil , create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+        usuario_perfil = UsuarioPerfil.objects.get_or_create(user = self.request.user)[0]
         publicacion = Publicacion.objects.create(
             usuario=usuario_perfil,
             imagen=form.cleaned_data['imagen'],
@@ -45,3 +45,23 @@ class SubirPublicacionView(FormView):
                     publicacion=publicacion
                 )
         return super().form_valid(form)
+
+@method_decorator(login_required, name='dispatch')
+class DestacarPublicacionView(TemplateView):
+    template_name = 'perfil/perfil.html'
+    success_url = reverse_lazy('perfil')
+
+    def get_context_data(self, **kwargs):
+        context = super(DestacarPublicacionView, self).get_context_data(**kwargs)
+        publicacion_id = context['publicacion_id']
+        publicacion = Publicacion.objects.get(id=publicacion_id)
+        perfil = UsuarioPerfil.objects.get_or_create(user = self.request.user)[0]
+        destacada_contador = Destacada.objects.filter(publicacion=publicacion).count()
+        
+        if (publicacion.usuario == perfil) and (destacada_contador == 0):
+            destacada = Destacada.objects.create(
+                es_destacada=True,
+                publicacion=publicacion
+            )
+        
+        return context
