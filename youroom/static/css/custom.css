@@ -69,6 +69,8 @@ input[type="file"] {
     border: 2px solid #099A78;
     border-radius: 30px;
     color: #086952;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
 }
 
 .boton:hover,
@@ -114,11 +116,16 @@ input[type="file"] {
     transition-duration: 0.4s;
 }
 
-.container-pegajoso {
+.b-publicar {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+/* .container-pegajoso {
     position: sticky;
     top:0px;
     z-index:100;
-}
+} */
 
 @media (max-width: 768px) {
     .header-mobile {
@@ -245,6 +252,9 @@ input[type="file"] {
     padding-left: 0px;
 }
 
+.timeline-user {
+    color: #099A78;
+}
 
 /*
     LOGIN
@@ -253,9 +263,19 @@ input[type="file"] {
 .login-form {
     border-color: #0DDFAD;
     background-color: white;
-    border-radius: 40px;
+    border-radius: 10px;
     border-width: 2px;
     border-style: solid;
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 400px;
+    height: 100%;
+    margin: auto;
+}
+
+.logo-login {
+    width: 275px;
+    margin-bottom: 3rem;
 }
 
 .form-control {

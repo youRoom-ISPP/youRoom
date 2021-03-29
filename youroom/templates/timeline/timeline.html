@@ -27,9 +27,9 @@
         </ul>
         {% for p in publicaciones %}
         <div class="">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header bg-white">
-                    {{p.usuario.user.username}}
+                    <strong class="timeline-user">{{p.usuario.user.username}}</strong>
                 </div>
                 <div class="container-visor-timeline">
                     <img src="{{p.imagen.url}}" class="card-img-bottom">
