@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ranking',
     'timeline',
     'usuario',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,6 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = 'timeline'
 LOGOUT_REDIRECT_URL = 'logout'
 LOGIN_URL='login'
+CRONJOBS = [
+    ('0 0 * * 1', 'usuario.cron.restablecerVidas'),
+]

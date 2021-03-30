@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from usuario.models import UsuarioPerfil
+from usuario.models import UsuarioPerfil, ContadorVida
 from ranking.models import Valoracion
 from publicacion.models import Publicacion
 from rest_framework.test import APIClient
@@ -13,15 +13,13 @@ class ValorarTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
-        u = User(username='prueba')
-        u.set_password('usuario1234')
-        u.email = 'prueba@gmail.com'
-        u.isActive = True
-        u.save()
-        perfil = UsuarioPerfil(user=u)
-        perfil.save()
-        self.usuario = perfil
-        self.usuario.save()
+        self.u = User(username='prueba')
+        self.u.set_password('usuario1234')
+        self.u.email = 'prueba@gmail.com'
+        self.u.isActive=True
+        self.u.save()
+        self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
 
     def tearDown(self):
         self.client = None
@@ -39,7 +37,7 @@ class ValorarTestCase(APITestCase):
             'imagen': imagen,
             'descripcion' : "Prueba",
             'categoria' : Categorias.SALON,
-            'usuario':  self.usuario,
+            'usuario':  self.u,
             'format': 'multipart/form-data'},follow = True)
 
         answers = {
