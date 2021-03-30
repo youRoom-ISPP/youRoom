@@ -164,7 +164,6 @@ input[type="file"] {
     footer {
         display: none;
     }
-
 }
 
 @media (min-width: 768px) {
@@ -176,7 +175,7 @@ input[type="file"] {
     .header-pc {
         position: sticky;
     }
-    
+
     .titulo-web {
         text-align: center;
         background-color: #099a78;
@@ -209,8 +208,11 @@ input[type="file"] {
         padding-left: 1.25em;
     }
 
+    .login-form {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
 }
-
 
 /*
     TIMELINE
@@ -260,6 +262,13 @@ input[type="file"] {
     LOGIN
 */
 
+.container-login {
+    height: 100vh;
+    margin-top: -3rem;
+    display: flex;
+    justify-content: center;
+}
+
 .login-form {
     border-color: #0DDFAD;
     background-color: white;
@@ -269,7 +278,6 @@ input[type="file"] {
     text-align: center;
     padding: 2.5rem;
     max-width: 400px;
-    height: 100%;
     margin: auto;
 }
 
