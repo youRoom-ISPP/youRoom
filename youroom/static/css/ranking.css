@@ -1,13 +1,5 @@
 @import 'custom.css';
 
-.tit-ranking {
-    text-align: center;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    color: #099a78;
-    font-weight: bold;
-}
-
 .rank-user {
     color:#099a78;
     border: 1px solid #0ddfad;
@@ -29,17 +21,17 @@
 
 .primero {
     color: #efb810;
-    margin-left: 0.8em;
+    margin-right: 0.5em;
 }
 
 .segundo {
     color: #c0c0c0;
-    margin-left: 0.8em;
+    margin-right: 0.5em;
 }
 
 .tercero {
     color: #cd7f32;
-    margin-left: 0.8em;
+    margin-right: 0.5em;
 }
 
 .valoracion {

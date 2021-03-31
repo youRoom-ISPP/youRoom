@@ -1,35 +1,38 @@
-
 {% extends 'base/base.html' %}
 {% load l10n %}
 
 {% block titulo_pagina %}Timeline{% endblock %}
+{% block titulo %}Timeline{% endblock %}
+
+{% block mobile-sticky-menu %}
+<ul class="nav justify-content-around opciones-timeline-mobile mb-3 sticky-top">
+    <div class="col-6 timeline-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white text-center" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill mr-2"></i>Destacados</a>
+        </li>
+    </div>
+    <div class="col-6 timeline-nav">
+        <li class="nav-item dropdown ">
+            <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
+                aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list mr-2"></i>Categorías</a>
+            <div class="dropdown-menu">
+                {% for categoria in categorias %}
+                <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1 }}</a>
+                {% endfor %}
+            </div>
+        </li>
+    </div>
+</ul>
+{% endblock %}
 
 {% block contenido %}
 <div class="row">
     <div class="col-12 timeline">
-        <ul class="nav justify-content-around">
-            <div class="col-6 timeline-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white text-center" href="{% url 'timeline' %}">Destacados</a>
-                </li>
-            </div>
-            <div class="col-6 timeline-nav">
-                <li class="nav-item dropdown ">
-                    <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
-                        aria-haspopup="true" aria-expanded="false">Categorías</a>
-                    <div class="dropdown-menu">
-                        {% for categoria in categorias %}
-                        <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
-                        {% endfor %}
-                    </div>
-                </li>
-            </div>
-        </ul>
         {% for p in publicaciones %}
-        <div class="pt-sm-3">
-            <div class="card">
+        <div class="">
+            <div class="card mb-3">
                 <div class="card-header bg-white">
-                    {{p.usuario.user.username}}
+                    <strong class="timeline-user">{{p.usuario.user.username}}</strong>
                 </div>
                 <div class="container-visor-timeline">
                     <img src="{{p.imagen.url}}" class="card-img-bottom">
@@ -61,6 +64,29 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block opciones-timeline %}
+<div class="col-12">
+    <div class="row">
+        <div class="col-12">
+            <div class="row timeline-nav-pc">
+                <a class="text-white" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill"></i><span class="ml-1 ml-lg-4">Destacados</span></a>
+            </div>
+            <div class="row mt-1 timeline-nav-pc">
+                <div class="nav-item dropdown">
+                    <a class="dropdown-toggle text-white text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
+                        aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list"></i><span class="ml-1 ml-lg-4">Categorías</span></a>
+                    <div class="dropdown-menu">
+                        {% for categoria in categorias %}
+                        <a class="dropdown-item text-center" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
