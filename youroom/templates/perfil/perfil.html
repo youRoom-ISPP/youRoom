@@ -1,60 +1,65 @@
 {% extends 'base/base.html' %}
 {% load l10n %}
 
-{% block titulo_pagina %}Perfil{% endblock %}
+{% block titulo_pagina %}Perfil de usuario{% endblock %}
 {% block titulo %}Perfil de usuario{% endblock %}
 
 {% block contenido %}
-<div class="container-fluid">
+<div class="col-sm-8 offset-sm-2 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
     <main>
-        <div>
-            <header class="pb-2">
-                <div class="row col-12">
-                    <h5>{{user.username}}</h5>
+        <header class="pb-2">
+            <div class="row col-12">
+                <h5>{{user.user.username}}</h5>
+            </div>
+            <section class="row">
+                <div class="col-12">
+                    <pre>{{user.descripcion}}</pre>
                 </div>
-                <section class="row col-12">
-                    <div>
-                        <p>Diseñador/a de interiores <br> Creating a happy home <br> Contacto: diseño@diseño.com <br> Mi tienda: miTienda.com</p>
+                <div class="col-6">
+                    <i class="bi bi-heart-fill text-danger"> 5 </i>
+                    <i class="bi bi-camera-fill ml-3"> 1 </i>
+                </div>
+                <div class="col-6 d-flex justify-content-end pr-5">
+                    <a class="btn btn-primary boton pl-1 pr-1" href="{% url 'logout' %}">Cerrar sesión</a>
+                </div>
+            </section>
+        </header>
+        {% for p in publicaciones %}
+        <div class="pt-sm-3 timeline">
+            <div class="card">
+                <div class="card-header bg-white">
+                    {{p.usuario.user.username}}
+                </div>
+                <div class="container-visor-timeline">
+                    <img src="{{p.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.etiqueta_set.all %}
+                    {% localize off %}
+                    <a target="_blank" href="{{e.enlace}}"><div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;"></div></a>
+                    {% endlocalize %}
+                    {% endfor %}
+                </div>
+                <div class="card-body cuerpo-tarjeta">
+                    <div class="row pl-1 bg-white">
+                        <fieldset class="rating">
+                            <input type="radio" id="star5-r{{p.id}}" name="rating-r{{p.id}}" value="5" />
+                            <label class="full" for="star5-r{{p.id}}" title="5 estrellas"></label>
+                            <input type="radio" id="star4-r{{p.id}}" name="rating-r{{p.id}}" value="4" />
+                            <label class="full" for="star4-r{{p.id}}" title="4 estrellas"></label>
+                            <input type="radio" id="star3-r{{p.id}}" name="rating-r{{p.id}}" value="3" />
+                            <label class="full" for="star3-r{{p.id}}" title="3 estrellas"></label>
+                            <input type="radio" id="star2-r{{p.id}}" name="rating-r{{p.id}}" value="2" />
+                            <label class="full" for="star2-r{{p.id}}" title="2 estrellas"></label>
+                            <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
+                            <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
+                        </fieldset>
                     </div>
-                    <div class="row col-7">
-                        <i class="bi bi-heart-fill text-danger"> 5 </i>
-                        <i class="bi bi-camera-fill ml-3"> 1 </i>
-                    </div>
-                    <div class="col-5">
-                        <a class="btn btn-primary boton pl-1 pr-1" href="{% url 'logout' %}">Cerrar sesión</a>
-                    </div>
-                </section>
-            </header>
-        </div>
-        <div class="row border-top">
-            <div class="pt-sm-3">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        username
-                    </div>
-                    <img src="https://picsum.photos/1920/1080" class="card-img-bottom" alt="...">
-                    <div class="card-body cuerpo-tarjeta">
-                        <div class="row pl-1 bg-white">
-                            <fieldset class="rating">
-                                <input type="radio" id="star5-r{{i}}" name="rating-r{{i}}" value="5" />
-                                <label class="full" for="star5-r{{i}}" title="5 estrellas"></label>
-                                <input type="radio" id="star4-r{{i}}" name="rating-r{{i}}" value="4" />
-                                <label class="full" for="star4-r{{i}}" title="4 estrellas"></label>
-                                <input type="radio" id="star3-r{{i}}" name="rating-r{{i}}" value="3" />
-                                <label class="full" for="star3-r{{i}}" title="3 estrellas"></label>
-                                <input type="radio" id="star2-r{{i}}" name="rating-r{{i}}" value="2" />
-                                <label class="full" for="star2-r{{i}}" title="2 estrellas"></label>
-                                <input type="radio" id="star1-r{{i}}" name="rating-r{{i}}" value="1" />
-                                <label class="full" for="star1-r{{i}}" title="1 estrella"></label>
-                            </fieldset>
-                        </div>
-                        <div class="row px-1">
-                            <p>Este texto es la descripción de la publicación.</p>
-                        </div>
+                    <div class="row px-1">
+                        <p>{{p.descripcion}}</p>
                     </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </main>
 </div>
 {% endblock %}

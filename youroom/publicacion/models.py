@@ -1,5 +1,6 @@
 from django.db import models
 from usuario.models import UsuarioPerfil
+from django.core.validators import  MinValueValidator
 
 
 class Publicacion(models.Model):
@@ -8,6 +9,7 @@ class Publicacion(models.Model):
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
     categoria = models.CharField(max_length=250)
     usuario = models.ForeignKey(UsuarioPerfil, on_delete=models.CASCADE)
+    totalValoraciones = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])
 
     def delete(self, *args, **kwargs):
         storage, path = self.imagen.storage, self.imagen.path
