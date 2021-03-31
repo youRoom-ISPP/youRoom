@@ -54,3 +54,44 @@ class ValorarTestCase(APITestCase):
         self.assertEqual(objeto_guardado.usuario.user.username,'prueba' )
         self.assertEqual(objeto_guardado.publicacion.id,Publicacion.objects.last().id)
         self.assertEqual(objeto_guardado.puntuacion,4)
+
+class RankingTestCase(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.u1 = User(username='prueba1')
+        self.u1.set_password('usuario1234')
+        self.u1.email = 'prueba1@gmail.com'
+        self.u1.isActive=True
+        self.u1.save()
+        self.p1 = UsuarioPerfil.objects.get_or_create(user = self.u1)[0]
+        self.p1.totalPuntos = 300
+        self.c1= ContadorVida.objects.get_or_create(perfil=self.p1,estaActivo=True)[0]
+
+        self.u2 = User(username='prueba2')
+        self.u2.set_password('usuario1234')
+        self.u2.email = 'prueba2@gmail.com'
+        self.u2.isActive=True
+        self.u2.save()
+        self.p2 = UsuarioPerfil.objects.get_or_create(user = self.u2)[0]
+        self.p2.totalPuntos = 200
+        self.c2= ContadorVida.objects.get_or_create(perfil=self.p2,estaActivo=True)[0]
+
+    def tearDown(self):
+        self.client = None
+
+    def test_ranking(self):
+        answers = {
+            'username': 'prueba1',
+            'password': 'usuario1234'
+        }
+        login = self.client.post('', answers)
+        self.assertTemplateUsed(template_name='timeline/timeline.html')
+
+        response = self.client.get("http://testserver{}".format(reverse("ranking")))
+        self.assertEqual(response.status_code, 200)
+
+        lista_usuarios = response.context['usuarios']
+        self.assertEqual(len(lista_usuarios), 2)
+        self.assertEqual(lista_usuarios[0], self.p1)
+        self.assertEqual(lista_usuarios[1], self.p2)

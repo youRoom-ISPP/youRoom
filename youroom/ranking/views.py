@@ -42,6 +42,10 @@ class RankingView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['usuarios'] = User.objects.all()
+        lista_usuarios = UsuarioPerfil.objects.order_by('-totalPuntos')
+        if lista_usuarios.count() > 50:
+            context['usuarios'] = lista_usuarios[:50]
+        else:
+            context['usuarios'] = lista_usuarios
         return context
 
