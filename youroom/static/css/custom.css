@@ -334,3 +334,10 @@ input[type="file"] {
 .descripcion-usuario {
     font-size: 0.9rem;
 }
+
+@media (max-width: 335px) {
+    .dest,
+    .categs {
+        display: none;
+    }
+}
