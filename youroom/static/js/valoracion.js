@@ -42,5 +42,9 @@ function enviarValoracion(valoracion) {
         $("#" + valoracion.id).prop("checked", true);
     }).fail(function () {
         console.log("error");
+    }).then(response => {
+        if(response['valid']){
+          console.log(response['message']);
+        }
     });
 }

@@ -97,7 +97,7 @@ class TimelineViewTest(APITestCase):
         response = self.client.get("http://testserver{}".format(reverse("timeline")))
         publicaciones = response.context['publicaciones']
         self.assertEqual(len(publicaciones), 1)
-        self.assertEqual(publicaciones[0].categoria, str(Categorias.DORMITORIO))
+        self.assertEqual(publicaciones[0][0].categoria, str(Categorias.DORMITORIO))
 
         # El usuario entra a la categoría Escritorio y no encuentra ninguna publicación
         response = self.client.get('/timeline/Escritorio')
@@ -108,7 +108,7 @@ class TimelineViewTest(APITestCase):
         response = self.client.get('/timeline/Dormitorio')
         publicaciones = response.context['publicaciones']
         self.assertEqual(len(publicaciones), 1)
-        self.assertEqual(publicaciones[0].categoria, str(Categorias.DORMITORIO))
+        self.assertEqual(publicaciones[0][0].categoria, str(Categorias.DORMITORIO))
 
 def test_timeline_logged(self):
         # El usuario se loguea y accede a su perfil

@@ -46,9 +46,7 @@ class ValorarTestCase(APITestCase):
             }
 
         response = self.client.post('/timeline/valorar/', answers)
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/timeline/', status_code=302,
-        target_status_code=200, fetch_redirect_response=True)
+        self.assertEqual(response.status_code, 200)
 
         objeto_guardado = Valoracion.objects.last()
         self.assertEqual(objeto_guardado.usuario.user.username,'prueba' )

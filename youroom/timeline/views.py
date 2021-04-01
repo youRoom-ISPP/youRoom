@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from publicacion.models import Publicacion, Destacada
 from ranking.forms import ValoracionForm
+from ranking.models import Valoracion
+from usuario.models import UsuarioPerfil
 from publicacion.enum import Categorias
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -23,8 +25,21 @@ class TimelineView(TemplateView):
         for publicacion in Publicacion.objects.all().order_by('-fecha_publicacion'):
             if publicacion not in publicaciones:
                 publicaciones.append(publicacion)
+
+        totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
+        finalVals=[]
+        
+        for p in publicaciones:
+            valorada = False
+            for val in totalVals:
+                if val.publicacion.id == p.id:
+                    finalVals.append(val.puntuacion)
+                    valorada = True
+            if not valorada:
+                finalVals.append(0)
+
         context['formulario_valoracion'] = ValoracionForm()
-        context['publicaciones'] = publicaciones
+        context['publicaciones'] = list(zip(publicaciones, finalVals))
         context['categorias'] = Categorias.choices()
         return context
 
@@ -41,7 +56,19 @@ class TimelineViewCategorias(TemplateView):
             if tupla[1] == categoria_seleccionada:
                 categoria = tupla[0]
                 break
+        publicaciones = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
 
-        context['publicaciones'] = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
+        totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
+        finalVals=[]
+        for p in publicaciones:
+            valorada = False
+            for val in totalVals:
+                if val.publicacion.id == p.id:
+                    finalVals.append(val.puntuacion)
+                    valorada = True
+            if not valorada:
+                finalVals.append(0)
+
+        context['publicaciones'] = list(zip(publicaciones,finalVals))
         context['categorias'] = Categorias.choices()
         return context

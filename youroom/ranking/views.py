@@ -9,6 +9,7 @@ from publicacion.models import Publicacion
 from usuario.models import UsuarioPerfil
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 
 @method_decorator(login_required, name='dispatch')
@@ -34,7 +35,7 @@ class ValorarPublicacionView(FormView):
         usuario_perfil.save()
         publicacion_a_valorar.totalValoraciones += puntos
         publicacion_a_valorar.save()
-        return super().form_valid(form)
+        return JsonResponse({'message':'Create Successfully','valid':True})
 
 
 class RankingView(TemplateView):

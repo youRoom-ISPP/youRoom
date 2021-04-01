@@ -32,11 +32,11 @@
         <div class="">
             <div class="card mb-3">
                 <div class="card-header bg-white">
-                    <strong class="timeline-user">{{p.usuario.user.username}}</strong>
+                    <strong class="timeline-user">{{p.0.usuario.user.username}}</strong>
                 </div>
                 <div class="container-visor-timeline">
-                    <img src="{{p.imagen.url}}" class="card-img-bottom">
-                    {% for e in p.etiqueta_set.all %}
+                    <img src="{{p.0.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.0.etiqueta_set.all %}
                     {% localize off %}
                     <a target="_blank" href="{{e.enlace}}">
                         <div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;">
@@ -47,23 +47,23 @@
                 </div>
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pl-1 bg-white">
-                        <form id="v{{p.id}}">{% csrf_token %}
+                        <form id="v{{p.0.id}}">{% csrf_token %}
                             <fieldset class="rating">
-                                <input type="radio" id="star5P{{p.id}}" name="valoracionP{{p.id}}" value="5" />
-                                <label class="full" for="star5P{{p.id}}" title="5 estrellas"></label>
-                                <input type="radio" id="star4P{{p.id}}" name="valoracionP{{p.id}}" value="4" />
-                                <label class="full" for="star4P{{p.id}}" title="4 estrellas"></label>
-                                <input type="radio" id="star3P{{p.id}}" name="valoracionP{{p.id}}" value="3" />
-                                <label class="full" for="star3P{{p.id}}" title="3 estrellas"></label>
-                                <input type="radio" id="star2P{{p.id}}" name="valoracionP{{p.id}}" value="2" />
-                                <label class="full" for="star2P{{p.id}}" title="2 estrellas"></label>
-                                <input type="radio" id="star1P{{p.id}}" name="valoracionP{{p.id}}" value="1" />
-                                <label class="full" for="star1P{{p.id}}" title="1 estrella"></label>
+                                <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="5" />
+                                <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
+                                <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="4" />
+                                <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
+                                <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="3" />
+                                <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
+                                <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="2" />
+                                <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
+                                <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="1" />
+                                <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
                             </fieldset>
                         </form>
                     </div>
                     <div class="row px-1">
-                        <p>{{p.descripcion}}</p>
+                        <p>{{p.0.descripcion}}</p>
                     </div>
                 </div>
             </div>
