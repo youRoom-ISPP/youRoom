@@ -5,6 +5,7 @@ from ranking.forms import ValoracionForm
 from publicacion.enum import Categorias
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timezone
 
 
 @method_decorator(login_required, name='dispatch')
@@ -16,7 +17,11 @@ class TimelineView(TemplateView):
         context = super().get_context_data(**kwargs)
         publicaciones = []
         for destacada in Destacada.objects.all():
-            publicaciones.append(destacada.publicacion)
+            if (datetime.now(timezone.utc) - destacada.fecha_destacada).total_seconds()>86400:
+                destacada.delete()
+            else:
+                publicaciones.append(destacada.publicacion)
+
 
         publicaciones.sort(key=lambda x: x.fecha_publicacion, reverse=True)
 
