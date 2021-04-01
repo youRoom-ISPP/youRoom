@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from publicacion.enum import Categorias
-from usuario.models import UsuarioPerfil
+from usuario.models import UsuarioPerfil, ContadorVida
 
 # Create your tests here.
 
@@ -19,6 +19,8 @@ class TimelineViewTest(APITestCase):
         self.u.email = 'prueba@gmail.com'
         self.u.isActive=True
         self.u.save()
+        self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
+        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
     
     def tearDown(self):
         self.client = None

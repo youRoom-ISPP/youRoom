@@ -23,8 +23,17 @@ class ValorarPublicacionView(FormView):
             usuario=usuario_perfil,
             publicacion=publicacion_a_valorar
         )
-        valoracion.puntuacion = form.cleaned_data.get('puntuacion')
+        if not create:
+            previo = valoracion.puntuacion
+            usuario_perfil.totalPuntos -= previo
+            publicacion_a_valorar.totalValoraciones -= previo
+        puntos = int(form.cleaned_data.get('puntuacion'))
+        valoracion.puntuacion = puntos
         valoracion.save()
+        usuario_perfil.totalPuntos += puntos
+        usuario_perfil.save()
+        publicacion_a_valorar.totalValoraciones += puntos
+        publicacion_a_valorar.save()
         return super().form_valid(form)
 
 

@@ -1,8 +1,13 @@
 @import 'ranking.css';
+@import 'rating.css';
 
 body {
     background-color: #fafafa;
     padding-bottom: 100px;
+}
+
+footer {
+    font-size: 12px;
 }
 
 input[type="file"] {
@@ -29,7 +34,9 @@ input[type="file"] {
     margin-left: 16px;
 }
 
-.btn-cancelar-publicacion:hover {
+.btn-cancelar-publicacion:hover,
+.btn-cancelar-publicacion:active,
+.btn-cancelar-publicacion:focus {
     background-color: #6C4B5E;
     color: #F9DCE5;
 }
@@ -41,11 +48,17 @@ input[type="file"] {
     margin-bottom: 0;
 }
 
+#url-etiqueta {
+    width: 100%;
+}
+
 #icono-subir-foto {
     font-size: 35px;
 }
 
-#icono-subir-foto:hover {
+#icono-subir-foto:hover,
+#icono-subir-foto:focus,
+#icono-subir-foto:active {
     color: #0ddfad;
 }
 
@@ -60,10 +73,13 @@ input[type="file"] {
     border: 2px solid #099A78;
     border-radius: 30px;
     color: #086952;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
 }
 
 .boton:hover,
-.boton:active {
+.boton:active,
+.boton:focus {
     background-color: #099A78!important;
     border-color: #0DDFAD!important;
     color: #0DDFAD!important;
@@ -79,6 +95,10 @@ input[type="file"] {
 
 #url-etiqueta {
     margin-top: 16px;
+}
+
+#btnPublicar {
+    float: right;
 }
 
 .etiqueta {
@@ -100,7 +120,18 @@ input[type="file"] {
     transition-duration: 0.4s;
 }
 
-@media (max-width: 767px) {
+.b-publicar {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+/* .container-pegajoso {
+    position: sticky;
+    top:0px;
+    z-index:100;
+} */
+
+@media (max-width: 768px) {
     .header-mobile {
         background-color: #fff;
         border-top: 1px solid #dbdbdb;
@@ -125,10 +156,16 @@ input[type="file"] {
     }
 
     .item-menu:hover,
-    .item-menu:active {
+    .item-menu:active,
+    .item-menu:focus {
         color: #0ddfad;
     }
 
+    .leyenda-icono,
+    .header-pc,
+    .titulo-web,
+    .logo-pc,
+    .opciones-timeline-pc,
     footer {
         display: none;
     }
@@ -136,11 +173,54 @@ input[type="file"] {
 
 @media (min-width: 768px) {
     .header-mobile,
+    .opciones-timeline-mobile,
     .logo-mobile {
         display: none;
     }
-}
 
+    .header-pc {
+        position: sticky;
+        top: 72px;
+    }
+
+    .titulo-web {
+        text-align: center;
+        background-color: #099a78;
+        color: #fff;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+
+    .logo-mobile,
+    .logo-pc {
+        background-color: #fff;
+        border-bottom: 1px solid #dbdbdb;
+        padding: 0.5rem;
+    }
+
+    .item-menu,
+    .item-menu:hover,
+    .item-menu:active
+     {
+        color: #099A78;
+    }
+
+    .leyenda-icono {
+        margin-left: 1.5em;
+    }
+
+    .lat-menu {
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
+        padding: 0.5rem;
+        padding-left: 1.25em;
+    }
+
+    .login-form {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
 
 /*
     TIMELINE
@@ -156,10 +236,29 @@ input[type="file"] {
 
 .timeline-nav {
     background-color: #099A78;
+    transition-duration: 0.8s;
 }
 
-.timeline-nav:hover {
+.timeline-nav:hover,
+.timeline-nav:active,
+.timeline-nav:focus {
     background-color: #0ddfad;
+    transition-duration: 0.8s;
+}
+
+.timeline-nav-pc {
+    background-color: #099A78;
+    color: #fff;
+    padding: 0.5rem;
+    padding-left: 1.25em;
+    transition-duration: 0.8s;
+}
+
+.timeline-nav-pc:hover,
+.timeline-nav-pc:active,
+.timeline-nav-pc:focus {
+    background-color: #0ddfad;
+    transition-duration: 0.8s;
 }
 
 .timeline {
@@ -167,17 +266,36 @@ input[type="file"] {
     padding-left: 0px;
 }
 
+.timeline-user {
+    color: #099A78;
+}
 
 /*
     LOGIN
 */
 
+.container-login {
+    height: 100vh;
+    margin-top: -3rem;
+    display: flex;
+    justify-content: center;
+}
+
 .login-form {
     border-color: #0DDFAD;
     background-color: white;
-    border-radius: 40px;
+    border-radius: 10px;
     border-width: 2px;
     border-style: solid;
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 400px;
+    margin: auto;
+}
+
+.logo-login {
+    width: 275px;
+    margin-bottom: 3rem;
 }
 
 .form-control {
@@ -193,4 +311,14 @@ input[type="file"] {
 
 .anula-margin-bottom {
     margin-bottom: 0;
+}
+
+.header-pc a {
+    transition-duration: 0.8s;
+}
+
+.header-pc a:hover {
+    text-decoration: none;
+    color: #0ddfad;
+    transition-duration: 0.8s;
 }
