@@ -44,25 +44,11 @@
                     {{ formulario_imagen.descripcion }}
                 </div>
                 {{ formulario_imagen.etiquetas }}
-                <button id="btnPublicar" type="button" class="btn btn-primary boton b-publicar" data-toggle="modal" data-target="#exampleModal">Publicar</button>
+                <button id="btnPublicar" type="button" class="btn btn-primary boton b-publicar" data-toggle="modal" data-target="#modalPublicar">Publicar</button>
             </div>
-            <div class="modal fade" id="exampleModal" tabindex="-1" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p class="text-center">¿Seguro que quieres subir esta publicación?<br>Después no podrás modificarla o eliminarla.</p>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary boton">Confirmar</button>
-                                        <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'publicacion/modalpublicacion.html' %}
+            {% include 'publicacion/modalinfo.html' %}
+            {% include 'publicacion/modaletiquetas.html' %}
         </form>
     </div>
 </div>
