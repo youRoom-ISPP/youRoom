@@ -153,3 +153,8 @@ $("#btnPublicar").click(function () {
     const etiquetasStr = procesarEtiquetas(listaEtiquetas);
     $("#etiquetas").val(etiquetasStr);
 });
+
+$(document).ready(function(){
+    const infoUsuario = JSON.parse(document.getElementById("infoUsuario").value)[0].fields;
+    console.log(infoUsuario.estaActivo);
+});
