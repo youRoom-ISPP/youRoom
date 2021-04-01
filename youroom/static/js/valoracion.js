@@ -26,7 +26,6 @@ $(document).on('click', "[id^=star5P]", function (e) {
 
 function enviarValoracion(valoracion) {
     let idPublicacion = valoracion.id.substring(6);
-    console.log($('#v' + idPublicacion));
     let csrf = $('#v' + idPublicacion)[0][0];
     $.ajax({
         type: 'POST',
@@ -38,13 +37,13 @@ function enviarValoracion(valoracion) {
             csrfmiddlewaretoken: csrf.value
         }
     }).done(function () {
-        console.log("enviada valoración de la publicación " + idPublicacion);
-        $("#" + valoracion.id).prop("checked", true);
-    }).fail(function () {
-        console.log("error");
+        console.log("Enviada valoración de la publicación " + idPublicacion);
     }).then(response => {
-        if(response['valid']){
-          console.log(response['message']);
+        if (response['valid']) {
+            console.log(response['message']);
+            $("#" + valoracion.id).prop("checked", true);
         }
+    }).fail(function () {
+        console.log("Error");
     });
 }

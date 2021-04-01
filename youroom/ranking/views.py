@@ -35,7 +35,7 @@ class ValorarPublicacionView(FormView):
         usuario_perfil.save()
         publicacion_a_valorar.totalValoraciones += puntos
         publicacion_a_valorar.save()
-        return JsonResponse({'message':'Create Successfully','valid':True})
+        return JsonResponse({'message':'Valoración guardada correctamente','valid':True})
 
 
 class RankingView(TemplateView):
