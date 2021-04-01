@@ -25,12 +25,12 @@ class PublicacionViewTest(APITestCase):
         self.u2.save()
         self.p2 = UsuarioPerfil.objects.get_or_create(user = self.u2,totalPuntos=100)[0]
         self.c2= ContadorVida.objects.get_or_create(perfil=self.p2,estaActivo=True)[0]
-    
-    
+
+
     def tearDown(self):
         self.client = None
-        if os.path.exists('./media/publicaciones/test.png') :
-            os.remove('./media/publicaciones/test.png')
+        if os.path.exists('./static/media/publicaciones/test.png') :
+            os.remove('./static/media/publicaciones/test.png')
 
     def generate_photo_file(self):
         file = io.BytesIO()
@@ -73,7 +73,7 @@ class PublicacionViewTest(APITestCase):
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
 
-        
+
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
@@ -119,14 +119,14 @@ class PublicacionViewTest(APITestCase):
 
         # Al destacar la última publicación, confirmamos que hay una publicación destacada más y que coincide
         publicacion = Publicacion.objects.last()
-        
+
         response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
         cont = ContadorVida.objects.get(perfil=self.p)
         self.assertEqual(cont.numVidasSemanales,0)
-       
+
 
         ultima_destacada = Destacada.objects.last()
         self.assertEqual(ultima_destacada.publicacion, publicacion)
@@ -137,13 +137,13 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
-        
+
 
     def test_destacar_otro_usuario_logged(self):
 
         # Creamos nuevo usuario
         usuario2 = User.objects.get_or_create(username='prueba2', password='prueba2')[0]
-        
+
         cantidad_destacados_inicial = Destacada.objects.all().count()
         answers = {
             'username': 'prueba',
@@ -151,7 +151,7 @@ class PublicacionViewTest(APITestCase):
         }
         login = self.client.post('', answers)
 
-        
+
         imagen = self.generate_photo_file()
 
         # Usuario 1 realiza una publicación
@@ -172,7 +172,7 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial)
-        
+
     def test_destacar_premium_logged(self):
 
         answers = {
@@ -201,7 +201,7 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
-        
+
 
         ultima_destacada = Destacada.objects.last()
         self.assertEqual(ultima_destacada.publicacion, publicacion)
