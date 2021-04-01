@@ -131,7 +131,7 @@ input[type="file"] {
     z-index:100;
 } */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
         border-top: 1px solid #dbdbdb;
@@ -168,6 +168,10 @@ input[type="file"] {
     .opciones-timeline-pc,
     footer {
         display: none;
+    }
+
+    .detalles-usuario {
+        margin: 1rem 0;
     }
 }
 
@@ -321,4 +325,12 @@ input[type="file"] {
     text-decoration: none;
     color: #0ddfad;
     transition-duration: 0.8s;
+}
+
+.detalles-usuario {
+    padding: 1.2rem 1.5rem;
+}
+
+.descripcion-usuario {
+    font-size: 0.9rem;
 }
