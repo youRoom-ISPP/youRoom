@@ -19,4 +19,5 @@ class PerfilView(TemplateView):
         context['publicaciones'] = publicaciones
         context['numPublicaciones'] = publicaciones.count()
         context['user'] = usuario
+        context['vidasTotales'] = cont.numVidasCompradas + cont.numVidasSemanales
         return context
