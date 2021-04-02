@@ -11,6 +11,9 @@ class Etiqueta {
     }
 }
 
+const maximoEtiquetas = 2;
+let usuarioFree = false;
+let puedePublicar = true;
 let contadorEtiqueta = 0;
 let etiqueta = null;
 let listaEtiquetas = [];
@@ -68,16 +71,21 @@ function getCoords(event, element) {
 }
 
 function crearEtiqueta(coords) {
-    const x = coords[0] * 100;
-    const y = coords[1] * 100;
-    const etiquetaID = "#etiqueta" + contadorEtiqueta;
-    $("#container-visor").append('<div class="etiqueta" id="etiqueta'
-        + contadorEtiqueta + '"><div>');
-    $(etiquetaID).css("left", x + '%');
-    $(etiquetaID).css("top", y + '%');
-    $("#url-etiqueta").removeClass("d-none");
-    contadorEtiqueta++;
-    return new Etiqueta(etiquetaID, null, x, y);
+    if (usuarioFree && maximoEtiquetas == contadorEtiqueta) {
+        $("#visor-imagen").attr("data-target", "#modalEtiquetas");
+        $("#visor-imagen").attr("data-toggle", "modal");
+    } else {
+        const x = coords[0] * 100;
+        const y = coords[1] * 100;
+        const etiquetaID = "#etiqueta" + contadorEtiqueta;
+        $("#container-visor").append('<div class="etiqueta" id="etiqueta'
+            + contadorEtiqueta + '"><div>');
+        $(etiquetaID).css("left", x + '%');
+        $(etiquetaID).css("top", y + '%');
+        $("#url-etiqueta").removeClass("d-none");
+        contadorEtiqueta++;
+        return new Etiqueta(etiquetaID, null, x, y);
+    }
 }
 
 function capturaPulsacion (event) {
@@ -140,8 +148,8 @@ $("#btn-guardar-enlace").click(function () {
     if (validaEnlace(enlace)) {
         etiqueta.addEnlace = enlace;
         $("#enlace-etiqueta").val("");
-        $("#instrucciones-subir-foto").show();
         $("#url-etiqueta").addClass("d-none");
+        $("#instrucciones-subir-foto").show();
         listaEtiquetas.push(etiqueta);
         return $('#visor-imagen').on('click', capturaPulsacion);
     } else {
@@ -150,6 +158,21 @@ $("#btn-guardar-enlace").click(function () {
 });
 
 $("#btnPublicar").click(function () {
-    const etiquetasStr = procesarEtiquetas(listaEtiquetas);
-    $("#etiquetas").val(etiquetasStr);
+    if (puedePublicar) {
+        const etiquetasStr = procesarEtiquetas(listaEtiquetas);
+        $("#etiquetas").val(etiquetasStr);
+    }
+});
+
+$(document).ready(function(){
+    const infoUsuario = JSON.parse(document.getElementById("infoUsuario").value)[0].fields;
+    $("#infoUsuario").remove();
+    if (infoUsuario.estaActivo) {
+        usuarioFree = infoUsuario.estaActivo;
+        const numVidas = infoUsuario.numVidasSemanales + infoUsuario.numVidasCompradas;
+        if (numVidas < 1) {
+            puedePublicar = false;
+            $("#btnPublicar").attr("data-target", "#modalInfo");
+        }
+    }
 });

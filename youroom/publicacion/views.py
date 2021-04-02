@@ -5,9 +5,11 @@ from .models import Publicacion, Etiqueta, Destacada
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views import View
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.core import serializers
+from django.shortcuts import get_object_or_404
+
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionView(TemplateView):
@@ -16,6 +18,10 @@ class PublicacionView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PublicacionView, self).get_context_data(**kwargs)
         context['formulario_imagen'] = PublicacionForm()
+        usuario = get_object_or_404(UsuarioPerfil, user=self.request.user)
+        info_usuario = ContadorVida.objects.filter(perfil=usuario)
+        data = serializers.serialize('json', info_usuario)
+        context['info_usuario'] = data
         return context
 
 
@@ -26,7 +32,7 @@ class SubirPublicacionView(FormView):
     success_url = reverse_lazy('perfil')
 
     def form_valid(self, form):
-        usuario_perfil = UsuarioPerfil.objects.get_or_create(user = self.request.user)[0]
+        usuario_perfil = UsuarioPerfil.objects.get_or_create(user=self.request.user)[0]
         #Si es gratuito, comprobamos que tenga suficientes vidas, restando primero siempre las semanales gratuitas
         cont = ContadorVida.objects.get(perfil=usuario_perfil)
         #Creamos la variable para después decidir si puede publicar
@@ -74,7 +80,7 @@ class SubirPublicacionView(FormView):
 @method_decorator(login_required, name='dispatch')
 class DestacarPublicacionView(TemplateView):
     template_name = 'perfil/perfil.html'
-    
+
 
     def get(self, request, publicacion_id):
         publicacion_id = publicacion_id
@@ -87,7 +93,7 @@ class DestacarPublicacionView(TemplateView):
 
             #Si es premium, comprobamos que tenga 50 puntos y le restamos el 10% de sus puntos
             if Premium.objects.filter(perfil=perfil).exists():
-                if perfil.totalPuntos>=50:  
+                if perfil.totalPuntos>=50:
                     perfil.totalPuntos = int(perfil.totalPuntos*0.9)
                     perfil.save()
                     messages.info(request,'Has perdido el 10% de tus puntos. Tranquilo, los recuperarás!')
@@ -121,5 +127,5 @@ class DestacarPublicacionView(TemplateView):
                     messages.info(request,'Has destadado la publicación con 2 vidas compradas. Enhorabuena!')
                 else:
                     messages.info(request,'Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!')
-        
+
         return HttpResponseRedirect('/perfil/')
