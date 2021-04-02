@@ -126,12 +126,6 @@ input[type="file"] {
     padding-right: 1.2rem;
 }
 
-/* .container-pegajoso {
-    position: sticky;
-    top:0px;
-    z-index:100;
-} */
-
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
