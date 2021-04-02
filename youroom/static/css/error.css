@@ -1,0 +1,16 @@
+
+.title-error {
+    color: #099a78;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.enlace-error {
+    color: #086952;
+}
+
+.enlace-error:hover,
+.enlace-error:active,
+.enlace-error:focus {
+    color: #0ddfad;
+}
