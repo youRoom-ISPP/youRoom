@@ -12,54 +12,77 @@
         </div>
         <section class="row">
             <div class="col-12">
-                <p class="descripcion-usuario">{{user.descripcion}}Hola Mundo esta es la descripcion</p>
+                <p class="descripcion-usuario">{{user.descripcion}}</p>
             </div>
             <div class="col-6 align-self-center">
-                <i class="bi bi-heart-fill text-danger"> 5 </i>
-                <i class="bi bi-camera-fill ml-3"> 1 </i>
+                {% if cont.estaActivo is True %}
+                <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
+                    data-content="Keys semanales">
+                    <i class="bi bi-key-fill vida-semanal" alt> {{cont.numVidasSemanales}} </i>
+                </span>
+                <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click" data-placement="top"
+                    data-content="Keys compradas">
+                    <i class="bi bi-key-fill ml-2 vida-comprada"> {{cont.numVidasCompradas}} </i>
+                </span>
+                {% endif %}
+                <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
+                    data-placement="top" data-content="Publicaciones totales">
+                    <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
+                </span>
+                <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
+                    data-content="Roomies">
+                    <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
+                </span>
             </div>
             <div class="col-6 d-flex justify-content-end">
-                <a class="btn btn-primary btn-cancelar-publicacion" href="{% url 'logout' %}">Cerrar sesión</a>
+                <a class="btn btn-primary btn-sm btn-cancelar-publicacion" href="{% url 'logout' %}">Cerrar sesión</a>
             </div>
         </section>
     </header>
 </div>
 <div class="row">
-    {% for p in publicaciones %}
     <div class="pt-sm-3 timeline">
-        <div class="card">
-            <div class="card-header bg-white">
-                {{p.usuario.user.username}}
-            </div>
-            <div class="container-visor-timeline">
-                <img src="{{p.imagen.url}}" class="card-img-bottom">
-                {% for e in p.etiqueta_set.all %}
-                {% localize off %}
-                <a target="_blank" href="{{e.enlace}}"><div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;"></div></a>
-                {% endlocalize %}
-                {% endfor %}
-            </div>
-            <div class="card-body cuerpo-tarjeta">
-                <div class="row pl-1 bg-white">
-                    <fieldset class="rating">
-                        <input type="radio" id="star5-r{{p.id}}" name="rating-r{{p.id}}" value="5" />
-                        <label class="full" for="star5-r{{p.id}}" title="5 estrellas"></label>
-                        <input type="radio" id="star4-r{{p.id}}" name="rating-r{{p.id}}" value="4" />
-                        <label class="full" for="star4-r{{p.id}}" title="4 estrellas"></label>
-                        <input type="radio" id="star3-r{{p.id}}" name="rating-r{{p.id}}" value="3" />
-                        <label class="full" for="star3-r{{p.id}}" title="3 estrellas"></label>
-                        <input type="radio" id="star2-r{{p.id}}" name="rating-r{{p.id}}" value="2" />
-                        <label class="full" for="star2-r{{p.id}}" title="2 estrellas"></label>
-                        <input type="radio" id="star1-r{{p.id}}" name="rating-r{{p.id}}" value="1" />
-                        <label class="full" for="star1-r{{p.id}}" title="1 estrella"></label>
-                    </fieldset>
+        {% for p in publicaciones %}
+        <div>
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <strong class="timeline-user">{{p.usuario.user.username}}</strong>
                 </div>
-                <div class="row px-1">
-                    <p>{{p.descripcion}}</p>
+                <div class="container-visor-timeline">
+                    <img src="{{p.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.etiqueta_set.all %}
+                    {% localize off %}
+                    <a target="_blank" href="{{e.enlace}}">
+                        <div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;">
+                        </div>
+                    </a>
+                    {% endlocalize %}
+                    {% endfor %}
+                </div>
+                <div class="card-body cuerpo-tarjeta">
+                    <div class="row pt-2 bg-white">
+                        <div class="col-6">
+                            <p class="puntos">{{p.totalValoraciones}} roomies</p>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <!-- Publicacion destacada -->
+                            {% if p.destacada.es_destacada %}
+                            <p class="destacada">Destacada</p>
+                            {% else %}
+                            <!-- Publicación no destacada -->
+                            <button class="btn btn-primary btn-sm boton-destacar"
+                                type="button" data-toggle="modal" data-target="#modalDestacarP{{p.id}}">   Destacar</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% include 'perfil/destacado.html' %}
+                    <div class="row px-1 pt-1">
+                        <p>{{p.descripcion}}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

@@ -39,6 +39,7 @@ input[type="file"] {
 .btn-cancelar-publicacion:focus {
     background-color: #6C4B5E;
     color: #F9DCE5;
+    border: 2px solid #F9DCE5;
 }
 
 .item-subir-foto {
@@ -68,8 +69,35 @@ input[type="file"] {
     margin-top: 16px;
 }
 
+.boton-destacar {
+    background-color: #77fdde!important;
+    border: 2px solid #099A78!important;
+    border-radius: 30px;
+    color: #086952;
+    padding: 0 0.8rem;
+    height: 80%;
+}
+
+.boton-destacar:hover,
+.boton-destacar:active {
+    background-color: #099A78!important;
+    border-color: #77fdde!important;
+    color: #77fdde!important;
+}
+
+.destacada {
+    color: #099A78;
+    font-size: 1em;
+}
+
+.puntos{
+    color: #099A78;
+    font-size: 1em;
+    margin-left: -0.65rem;
+}
+
 .boton {
-    background-color: #0DDFAD;
+    background-color: #77fdde;
     border: 2px solid #099A78;
     border-radius: 30px;
     color: #086952;
@@ -81,8 +109,8 @@ input[type="file"] {
 .boton:active,
 .boton:focus {
     background-color: #099A78!important;
-    border-color: #0DDFAD!important;
-    color: #0DDFAD!important;
+    border-color: #77fdde!important;
+    color: #77fdde!important;
 }
 
 .titulo-accion {
@@ -120,16 +148,18 @@ input[type="file"] {
     transition-duration: 0.4s;
 }
 
+.vida-semanal {
+    color: #099A78!important;
+}
+
+.vida-comprada {
+    color: #DE3F72 !important;
+}
+
 .b-publicar {
     padding-left: 1.2rem;
     padding-right: 1.2rem;
 }
-
-/* .container-pegajoso {
-    position: sticky;
-    top:0px;
-    z-index:100;
-} */
 
 @media (max-width: 767px) {
     .header-mobile {
