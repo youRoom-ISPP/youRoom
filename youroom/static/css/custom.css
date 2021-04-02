@@ -1,5 +1,6 @@
 @import 'ranking.css';
 @import 'rating.css';
+@import 'error.css';
 
 body {
     background-color: #fafafa;

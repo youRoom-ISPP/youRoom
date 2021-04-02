@@ -1,0 +1,26 @@
+.error-main {
+    padding: 1.25rem 1rem;
+    margin-top: 0.3rem;
+    text-align: justify;
+}
+
+.title-error {
+    color: #099a78;
+    text-align: center;
+}
+
+.enlace-error {
+    color: #086952;
+    transition-duration: 0.8s;
+}
+
+.enlace-error:hover {
+    color: #0ddfad;
+    transition-duration: 0.8s;
+    text-decoration: none;
+}
+
+.boton-error {
+    margin:auto;
+    text-align: center;
+}
