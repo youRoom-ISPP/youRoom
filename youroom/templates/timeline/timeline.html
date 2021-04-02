@@ -8,13 +8,13 @@
 <ul class="nav justify-content-around opciones-timeline-mobile mb-3 sticky-top">
     <div class="col-6 timeline-nav">
         <li class="nav-item">
-            <a class="nav-link text-white text-center" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill mr-2"></i>Destacados</a>
+            <a class="nav-link text-white text-center" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill dest mr-2"></i>Destacados</a>
         </li>
     </div>
     <div class="col-6 timeline-nav">
         <li class="nav-item dropdown ">
             <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
-                aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list mr-2"></i>Categorías</a>
+                aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list categs mr-2"></i>Categorías</a>
             <div class="dropdown-menu">
                 {% for categoria in categorias %}
                 <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1 }}</a>
