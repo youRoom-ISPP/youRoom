@@ -15,7 +15,7 @@ class ContadorVida(models.Model):
     perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE,)
     numVidasSemanales = models.IntegerField(default=3,validators=[MinValueValidator(0), MaxValueValidator(3)])
     numVidasCompradas = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    estaActivo = models.BooleanField()
+    estaActivo = models.BooleanField(default=True)
 
     def clean(self):
         if self.estaActivo == True and Premium.objects.filter(perfil_id=self.perfil.id).exists() == True:
