@@ -122,6 +122,10 @@ input[type="file"] {
     position: relative;
 }
 
+#visor-imagen {
+    width: 100%;
+}
+
 #url-etiqueta {
     margin-top: 16px;
 }
@@ -347,6 +351,20 @@ input[type="file"] {
 .anula-margin-bottom {
     margin-bottom: 0;
 }
+
+.enlace-registro {
+    text-align: center;
+    font-size: small;
+    color: #086952;
+    transition-duration: 0.8s;
+}
+
+.enlace-registro:hover {
+    color: #0ddfad;
+    transition-duration: 0.8s;
+    text-decoration: none;
+}
+
 
 .header-pc a {
     transition-duration: 0.8s;

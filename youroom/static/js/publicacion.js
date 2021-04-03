@@ -58,11 +58,16 @@ function readURL(input) {
 
 function getCoords(event, element) {
     const clickLeft = event.clientX;
+    let clickTop = 0;
     const elementLeft = element.offsetLeft;
     let x = (clickLeft - elementLeft) / element.width;
-    x = (Math.round(x * 1000) / 1000) - 0.02;
+    x = (Math.round(x * 1000) / 1000) - 0.013;
 
-    const clickTop = event.clientY + $(window).scrollTop() + 5;
+    if ($(window).scrollTop() > 0) {
+        clickTop = event.clientY + $(window).scrollTop() + 50;
+    } else {
+        clickTop = event.clientY + $(window).scrollTop();
+    }
     const elementTop = element.offsetTop;
     let y = (clickTop - elementTop) / element.height;
     y = (Math.round(y * 1000) / 1000) - 0.02;
