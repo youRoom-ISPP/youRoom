@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('numVidasSemanales', models.IntegerField(default=3, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(3)])),
                 ('numVidasCompradas', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)])),
-                ('estaActivo', models.BooleanField()),
+                ('estaActivo', models.BooleanField(default=True)),
                 ('perfil', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='usuario.UsuarioPerfil')),
             ],
         ),
