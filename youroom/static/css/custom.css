@@ -1,0 +1,392 @@
+@import 'ranking.css';
+@import 'rating.css';
+@import 'error.css';
+
+body {
+    background-color: #fafafa;
+    padding-bottom: 100px;
+}
+
+footer {
+    font-size: 12px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn-cancelar {
+    background-color: #F9DCE5;
+    color: #6C4B5E;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 0 1.1rem;
+}
+
+.btn-guardar-enlace {
+    background-color: #AFD3E9;
+}
+
+.btn-cancelar-publicacion {
+    background-color: #F9DCE5;
+    color: #6C4B5E;
+    border: 2px solid #6C4B5E;
+    border-radius: 30px;
+    margin-left: 16px;
+}
+
+.btn-cancelar-publicacion:hover,
+.btn-cancelar-publicacion:active,
+.btn-cancelar-publicacion:focus {
+    background-color: #6C4B5E;
+    color: #F9DCE5;
+    border: 2px solid #F9DCE5;
+}
+
+.item-subir-foto {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+#url-etiqueta {
+    width: 100%;
+}
+
+#icono-subir-foto {
+    font-size: 35px;
+}
+
+#icono-subir-foto:hover,
+#icono-subir-foto:focus,
+#icono-subir-foto:active {
+    color: #0ddfad;
+}
+
+#instrucciones-subir-foto {
+    color: #383838;
+    font-size: 12px;
+    margin-top: 16px;
+}
+
+.boton-destacar {
+    background-color: #77fdde!important;
+    border: 2px solid #099A78!important;
+    border-radius: 30px;
+    color: #086952;
+    padding: 0 0.8rem;
+    height: 80%;
+}
+
+.boton-destacar:hover,
+.boton-destacar:active {
+    background-color: #099A78!important;
+    border-color: #77fdde!important;
+    color: #77fdde!important;
+}
+
+.destacada {
+    color: #099A78;
+    font-size: 1em;
+}
+
+.puntos{
+    color: #099A78;
+    font-size: 1em;
+    margin-left: -0.65rem;
+}
+
+.boton {
+    background-color: #77fdde;
+    border: 2px solid #099A78;
+    border-radius: 30px;
+    color: #086952;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+.boton:hover,
+.boton:active,
+.boton:focus {
+    background-color: #099A78!important;
+    border-color: #77fdde!important;
+    color: #77fdde!important;
+}
+
+.titulo-accion {
+    color: #099A78;
+}
+
+#container-visor {
+    position: relative;
+}
+
+#visor-imagen {
+    width: 100%;
+}
+
+#url-etiqueta {
+    margin-top: 16px;
+}
+
+#btnPublicar {
+    float: right;
+}
+
+.etiqueta {
+    background-color: #0ddfad;
+    opacity: 60%;
+    border: 3px solid #099A78;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.etiqueta:hover {
+    opacity: 40%;
+    width: 1.5rem;
+    height: 1.5rem;
+    transition-duration: 0.4s;
+}
+
+.vida-semanal {
+    color: #099A78!important;
+}
+
+.vida-comprada {
+    color: #DE3F72 !important;
+}
+
+.b-publicar {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+@media (max-width: 767px) {
+    .header-mobile {
+        background-color: #fff;
+        border-top: 1px solid #dbdbdb;
+        padding: 1rem 0 ;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    .logo-mobile {
+        background-color: #fff;
+        border-bottom: 1px solid #dbdbdb;
+        padding: 1rem;
+    }
+
+    .item-menu {
+        color: #099A78;
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+
+    .item-menu:hover,
+    .item-menu:active,
+    .item-menu:focus {
+        color: #0ddfad;
+    }
+
+    .leyenda-icono,
+    .header-pc,
+    .titulo-web,
+    .logo-pc,
+    .opciones-timeline-pc,
+    footer {
+        display: none;
+    }
+
+    .detalles-usuario {
+        margin: 1rem 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .header-mobile,
+    .opciones-timeline-mobile,
+    .logo-mobile {
+        display: none;
+    }
+
+    .header-pc {
+        position: sticky;
+        top: 72px;
+    }
+
+    .titulo-web {
+        text-align: center;
+        background-color: #099a78;
+        color: #fff;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+
+    .logo-mobile,
+    .logo-pc {
+        background-color: #fff;
+        border-bottom: 1px solid #dbdbdb;
+        padding: 0.5rem;
+    }
+
+    .item-menu,
+    .item-menu:hover,
+    .item-menu:active
+     {
+        color: #099A78;
+    }
+
+    .leyenda-icono {
+        margin-left: 1.5em;
+    }
+
+    .lat-menu {
+        background-color: #fff;
+        border: 1px solid #dbdbdb;
+        padding: 0.5rem;
+        padding-left: 1.25em;
+    }
+
+    .login-form {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+
+/*
+    TIMELINE
+*/
+
+.container-visor-timeline {
+    position: relative;
+}
+
+.cuerpo-tarjeta {
+    padding-top: 0px;
+}
+
+.timeline-nav {
+    background-color: #099A78;
+    transition-duration: 0.8s;
+}
+
+.timeline-nav:hover,
+.timeline-nav:active,
+.timeline-nav:focus {
+    background-color: #0ddfad;
+    transition-duration: 0.8s;
+}
+
+.timeline-nav-pc {
+    background-color: #099A78;
+    color: #fff;
+    padding: 0.5rem;
+    padding-left: 1.25em;
+    transition-duration: 0.8s;
+}
+
+.timeline-nav-pc:hover,
+.timeline-nav-pc:active,
+.timeline-nav-pc:focus {
+    background-color: #0ddfad;
+    transition-duration: 0.8s;
+}
+
+.timeline {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.timeline-user {
+    color: #099A78;
+}
+
+/*
+    LOGIN
+*/
+
+.container-login {
+    height: 100vh;
+    margin-top: -3rem;
+    display: flex;
+    justify-content: center;
+}
+
+.login-form {
+    border-color: #0DDFAD;
+    background-color: white;
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 400px;
+    margin: auto;
+}
+
+.logo-login {
+    width: 275px;
+    margin-bottom: 3rem;
+}
+
+.form-control {
+    background-color: #F6F6F3;
+    border: 1px solid #D4D0C4;
+    border-radius: 15px;
+}
+
+.alerta {
+    font-size: small;
+    border-radius: 15px;
+}
+
+.anula-margin-bottom {
+    margin-bottom: 0;
+}
+
+.enlace-registro {
+    text-align: center;
+    font-size: small;
+    color: #086952;
+    transition-duration: 0.8s;
+}
+
+.enlace-registro:hover {
+    color: #0ddfad;
+    transition-duration: 0.8s;
+    text-decoration: none;
+}
+
+
+.header-pc a {
+    transition-duration: 0.8s;
+}
+
+.header-pc a:hover {
+    text-decoration: none;
+    color: #0ddfad;
+    transition-duration: 0.8s;
+}
+
+.detalles-usuario {
+    padding: 1.2rem 1.5rem;
+}
+
+.descripcion-usuario {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 335px) {
+    .dest,
+    .categs {
+        display: none;
+    }
+}

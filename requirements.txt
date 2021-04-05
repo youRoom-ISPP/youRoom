@@ -1,0 +1,12 @@
+Django==2.2.18
+Pillow
+requests
+psycopg2==2.8.4
+coverage==4.5.2
+djangorestframework==3.12.2
+django-crontab
+
+#Almacenamiento en la nube
+python-dotenv
+django-storages
+boto3

@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% block titulo_pagina %}Publicación nueva{% endblock %}
+{% block titulo %}Publicación nueva{% endblock %}}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-12">
+        <input type="hidden" id="infoUsuario" value="{{info_usuario}}" />
+        <p id="instrucciones-subir-foto" class="text-center">Selecciona la imagen que deseas publicar</p>
+        <div id="error-tipo-archivo" class="alert alert-danger" role="alert">
+            El archivo seleccionado debe ser .jpg .jpeg o .png
+        </div>
+        <div class="form-inline">
+            <div id="url-etiqueta" class="input-group d-none">
+                <input id="enlace-etiqueta" type="url" class="form-control" placeholder="Añadir enlace">
+                <div class="input-group-append">
+                    <button id="btn-guardar-enlace" class="btn btn-guardar-enlace mb-2">Guardar</button>
+                    <button id="btn-borrar-enlace" class="btn btn-cancelar mb-2">Borrar</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <div id="error-url-enlace" class="alert alert-danger" role="alert">
+                    La etiqueta debe ser un enlace de internet
+                </div>
+            </div>
+        </div>
+        <form action="{% url 'publicacion_guardar' %}" method="POST" id="form-publicacion" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group text-center anula-margin-bottom">
+                <div id="container-visor">
+                    <img id="visor-imagen" class="img-fluid" src=""/>
+                </div>
+                <label class="item-subir-foto titulo-accion" for="imagen">
+                    {{ formulario_imagen.imagen }}
+                    <i id="icono-subir-foto" class="bi bi-plus-square icono-subir-foto"></i>
+                </label>
+            </div>
+            <div id="metadata-publicacion">
+                <div class="form-group">
+                    {{ formulario_imagen.categoria }}
+                </div>
+                <div class="form-group">
+                    {{ formulario_imagen.descripcion }}
+                </div>
+                {{ formulario_imagen.etiquetas }}
+                <button id="btnPublicar" type="button" class="btn btn-primary boton b-publicar" data-toggle="modal" data-target="#modalPublicar">Publicar</button>
+            </div>
+            {% include 'publicacion/modalpublicacion.html' %}
+            {% include 'publicacion/modalinfo.html' %}
+            {% include 'publicacion/modaletiquetas.html' %}
+        </form>
+    </div>
+</div>
+{% endblock %}

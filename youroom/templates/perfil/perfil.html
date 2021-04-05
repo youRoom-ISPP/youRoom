@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load l10n %}
+
+{% block titulo_pagina %}Perfil de usuario{% endblock %}
+{% block titulo %}Perfil de usuario{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <header class="col-12 detalles-usuario card">
+        <div>
+            <h5>{{user.user.username}}</h5>
+        </div>
+        <section class="row">
+            <div class="col-12">
+                <p class="descripcion-usuario">{{user.descripcion}}</p>
+            </div>
+            <div class="col-6 align-self-center">
+                {% if cont.estaActivo is True %}
+                <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
+                    data-content="Keys semanales">
+                    <i class="bi bi-key-fill vida-semanal" alt> {{cont.numVidasSemanales}} </i>
+                </span>
+                <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click" data-placement="top"
+                    data-content="Keys compradas">
+                    <i class="bi bi-key-fill ml-2 vida-comprada"> {{cont.numVidasCompradas}} </i>
+                </span>
+                {% endif %}
+                <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
+                    data-placement="top" data-content="Publicaciones totales">
+                    <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
+                </span>
+                <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
+                    data-content="Roomies">
+                    <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
+                </span>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <a class="btn btn-primary btn-sm btn-cancelar-publicacion" href="{% url 'logout' %}">Cerrar sesión</a>
+            </div>
+        </section>
+    </header>
+</div>
+<div class="row">
+    <div class="col-12 pt-sm-3 timeline">
+        {% for p in publicaciones %}
+        <div>
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <strong class="timeline-user">{{p.usuario.user.username}}</strong>
+                </div>
+                <div class="container-visor-timeline">
+                    <img src="{{p.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.etiqueta_set.all %}
+                    {% localize off %}
+                    <a target="_blank" href="{{e.enlace}}">
+                        <div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;">
+                        </div>
+                    </a>
+                    {% endlocalize %}
+                    {% endfor %}
+                </div>
+                <div class="card-body cuerpo-tarjeta">
+                    <div class="row pt-2 bg-white">
+                        <div class="col-6">
+                            <p class="puntos">{{p.totalValoraciones}} roomies</p>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <!-- Publicacion destacada -->
+                            {% if p.destacada.es_destacada %}
+                            <p class="destacada">Destacada</p>
+                            {% else %}
+                            <!-- Publicación no destacada -->
+                            <button class="btn btn-primary btn-sm boton-destacar"
+                                type="button" data-toggle="modal" data-target="#modalDestacarP{{p.id}}">   Destacar</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% include 'perfil/destacado.html' %}
+                    <div class="row px-1 pt-1">
+                        <p>{{p.descripcion}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
