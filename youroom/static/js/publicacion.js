@@ -76,34 +76,34 @@ function getCoords(event, element) {
 }
 
 function crearEtiqueta(coords) {
+    const x = coords[0] * 100;
+    const y = coords[1] * 100;
+    const etiquetaID = "#etiqueta" + contadorEtiqueta;
+    $("#container-visor").append('<div class="etiqueta" id="etiqueta'
+        + contadorEtiqueta + '"><div>');
+    $(etiquetaID).css("left", x + '%');
+    $(etiquetaID).css("top", y + '%');
+    $("#url-etiqueta").removeClass("d-none");
+    contadorEtiqueta++;
+    return new Etiqueta(etiquetaID, null, x, y);
+}
+
+function capturaPulsacion (event) {
     if (usuarioFree && maximoEtiquetas == contadorEtiqueta) {
         $("#visor-imagen").attr("data-target", "#modalEtiquetas");
         $("#visor-imagen").attr("data-toggle", "modal");
     } else {
-        const x = coords[0] * 100;
-        const y = coords[1] * 100;
-        const etiquetaID = "#etiqueta" + contadorEtiqueta;
-        $("#container-visor").append('<div class="etiqueta" id="etiqueta'
-            + contadorEtiqueta + '"><div>');
-        $(etiquetaID).css("left", x + '%');
-        $(etiquetaID).css("top", y + '%');
-        $("#url-etiqueta").removeClass("d-none");
-        contadorEtiqueta++;
-        return new Etiqueta(etiquetaID, null, x, y);
+        const visor = {
+            width: $("#visor-imagen").innerWidth(),
+            height: $("#visor-imagen").innerHeight(),
+            offsetLeft: $("#visor-imagen").offset().left,
+            offsetTop: $("#visor-imagen").offset().top
+        };
+        $("#instrucciones-subir-foto").hide();
+        $('#visor-imagen').off()
+        const coords = getCoords(event, visor);
+        etiqueta = crearEtiqueta(coords);
     }
-}
-
-function capturaPulsacion (event) {
-    const visor = {
-        width: $("#visor-imagen").innerWidth(),
-        height: $("#visor-imagen").innerHeight(),
-        offsetLeft: $("#visor-imagen").offset().left,
-        offsetTop: $("#visor-imagen").offset().top
-    };
-    $("#instrucciones-subir-foto").hide();
-    $('#visor-imagen').off()
-    const coords = getCoords(event, visor);
-    etiqueta = crearEtiqueta(coords);
 }
 
 $("#error-url-enlace").hide();
@@ -117,6 +117,8 @@ $("#imagen").change(function (){
     $("#error-url-enlace").hide();
     const validaImagen = readURL(this);
     if (validaImagen) {
+        $("#visor-imagen").removeAttr("data-target");
+        $("#visor-imagen").removeAttr("data-toggle");
         $("#error-tipo-archivo").hide();
         $("#icono-subir-foto").removeClass("bi-plus-square");
         $("#icono-subir-foto").addClass("bi-arrow-clockwise");
@@ -135,13 +137,13 @@ $('#visor-imagen').on('click', capturaPulsacion);
 
 $("#btn-borrar-enlace").click(function () {
     if ($("#error-url-enlace").is(":visible")) {
-        console.log("entra")
         $("#error-url-enlace").hide();
         $(".etiqueta").last().remove();
     }
     $("#enlace-etiqueta").val("");
     $("#etiqueta" + (contadorEtiqueta - 1)).remove();
     etiqueta = null;
+    contadorEtiqueta--;
     $("#url-etiqueta").addClass("d-none");
     $("#instrucciones-subir-foto").show();
     return $('#visor-imagen').on('click', capturaPulsacion);
