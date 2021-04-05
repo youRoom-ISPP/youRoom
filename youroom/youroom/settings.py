@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -148,7 +149,10 @@ CRONJOBS = [
     ('0 0 * * 1', 'usuario.cron.restablecerVidas'),
 ]
 
-if os.getenv('PROD') is True:
+if os.getenv('PROD') == 'True':
+    import django_heroku
+    django_heroku.settings(locals())
+
     # S3 BUCKETS CONFIG
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', os.getenv('AWS_ACCESS_KEY_ID'))
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', os.getenv('AWS_SECRET_ACCESS_KEY'))

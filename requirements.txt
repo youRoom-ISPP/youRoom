@@ -10,3 +10,6 @@ django-crontab
 python-dotenv
 django-storages
 boto3
+
+django-heroku
+gunicorn
