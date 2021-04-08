@@ -1,0 +1,66 @@
+project:
+  name: 'youRoom'
+  owner: 'morning'
+  teamId: '7'
+  identities:
+    github:
+      url: 'https://github.com/youRoom-ISPP/youRoom'
+#    heroku:
+#      url: 'a la espera de despliegue para usuarios piloto'
+    travis:
+      url: 'https://travis-ci.com/github/youRoom-ISPP/youRoom'
+  members:
+    member1:
+      name: 'Governify'
+      surname: 'Auditor'
+      githubUsername: 'governifyauditor'
+      pivotalUsername: 'governifyauditor'
+      herokuEmail: 'governify.auditor@gmail.com'
+    member2:
+      name: 'Jorge'
+      surname: 'Andrea Molina'
+      githubUsername: 'jorandmol'
+    member3:
+      name: 'Juan Carlos'
+      surname: 'Cortés Muñoz'
+      githubUsername: 'juacormun'
+    member4:
+      name: 'José Manuel'
+      surname: 'Escobar Ruesga'
+      githubUsername: 'Jomer1998'
+    member5:
+      name: 'Alfonso'
+      surname: 'González Fernández'
+      githubUsername: 'alfgonfer'
+    member6:
+      name: 'Francisco Javier'
+      surname: 'González Lugo'
+      githubUsername: 'fragonlug'
+    member7:
+      name: 'María Elena'
+      surname: 'Molino Peña'
+      githubUsername: 'marmolpen3'
+    member8:
+      name: 'Alejandro José'
+      surname: 'Muñoz Aranda'
+      githubUsername: 'alemunara'
+    member9:
+      name: 'Diego Miguel'
+      surname: 'Rodríguez Camino'
+      githubUsername: 'dierodcam'
+    member10:
+      name: 'Mario'
+      surname: 'Ruano Fernández'
+      githubUsername: 'mrf1989'
+    member11:
+      name: 'Fernando'
+      surname: 'Ruiz Robles'
+      githubUsername: 'ferruirob'
+    member12:
+      name: 'Rafael'
+      surname: 'Salas Castizo'
+      githubUsername: 'rafsalcas1'
+    member13:
+      name: 'Javier'
+      surname: 'Solís García'
+      githubUsername: 'javsolgar'
