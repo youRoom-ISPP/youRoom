@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida
 from .forms import RegistroForm
 from django.urls import reverse_lazy
+from django.core.exceptions import ValidationError
+
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
@@ -14,6 +16,11 @@ class RegistroView(FormView):
     form_class = RegistroForm
     template_name = 'usuario/registro.html'
     success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super(RegistroView, self).get_context_data(**kwargs)
+        context['users'] =User.objects.all()
+        return context
 
     def form_valid(self, form):
         try:
@@ -30,7 +37,13 @@ class RegistroView(FormView):
                     perfil.save()
                     cv = ContadorVida(perfil=perfil)
                     cv.save()
-            return super().form_valid(form)
+                    return super().form_valid(form)
+                else:
+                    contex = self.get_context_data(form=form)
+                    return self.render_to_response(context)
+            else:
+                context = self.get_context_data(form=form)
+                return self.render_to_response(context)
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)

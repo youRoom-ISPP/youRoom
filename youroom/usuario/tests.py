@@ -61,7 +61,7 @@ class LoginTestCase(APITestCase):
                 'descripcion': 'soy de prueba'
             }
         response = self.client.post('/registro/', answers)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().username, 'usuario_ok')
     
     def test_registro_fail_username(self):
@@ -73,7 +73,7 @@ class LoginTestCase(APITestCase):
                 'descripcion': 'soy de prueba'
             }
         response = self.client.post('/registro/', answers)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().email, 'test@test.com')
     
     def test_registro_fail_email(self):
@@ -85,5 +85,5 @@ class LoginTestCase(APITestCase):
                 'descripcion': 'soy de prueba'
             }
         response = self.client.post('/registro/', answers)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().username, 'usuario_ok')
