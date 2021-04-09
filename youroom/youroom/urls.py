@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from usuario import urls as usuario_urls
 from perfil import urls as perfil_urls
+from tienda import urls as tienda_urls
 from timeline import urls as timeline_urls
 from publicacion import urls as publicacion_urls
 from ranking import urls as ranking_urls
@@ -27,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(usuario_urls)),
     path('perfil/', include(perfil_urls)),
+    path('tienda/', include(tienda_urls)),
     path('timeline/', include(timeline_urls)),
     path('publicacion/', include(publicacion_urls)),
     path('ranking/', include(ranking_urls)),
