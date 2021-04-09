@@ -1,11 +1,13 @@
-<h2>Buy subcription for 2.99 EUR</h2>
-<form action="{% url 'charge' %}" method = "post">
+{% for product in products %}
+<h2>Compra {{ product.name }} por {{ product.get_display_price}} EUR</h2>
+<form action="{% url 'charge' pk=product.id %}" method = "post">
     {% csrf_token %}
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="{{ key }}"
         data-description = "Payment Gateway"
-        data-amount="299"
+        data-amount="{{ product.price }}"
         data-locale="auto"
         data-currency= "EUR">
     </script>
 </form>
+{% endfor %}
