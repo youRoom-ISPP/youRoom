@@ -1,15 +1,9 @@
   
 from django.contrib import admin
 from django.urls import path
-from tienda.views import (
-    CreateCheckoutSessionView,
-    ProductLandingPageView,
-    SuccessView,
-    CancelView,
-    stripe_webhook,
-    StripeIntentView
-)
+from . import views
 
 urlpatterns = [
-   
+   path('',views.HomePageView.as_view(),name='home'),
+   path('charge/', views.HomePageView.charge, name='charge')
 ]
