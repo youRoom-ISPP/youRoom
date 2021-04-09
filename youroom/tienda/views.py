@@ -51,7 +51,7 @@ class HomePageView(TemplateView):
             
                 return render(request, 'tienda/charge.html')
 
-@method_decorator(login_required, name='dispatch')
+
 def pay(request, product):
     try:
         charge = stripe.Charge.create(
