@@ -5,6 +5,7 @@
     justify-content: center;
 }
 
+.reg-form,
 .login-form {
     border-color: #0DDFAD;
     background-color: white;
@@ -15,6 +16,11 @@
     padding: 2.5rem;
     max-width: 400px;
     margin: auto;
+}
+
+.reg-form {
+    padding: 2rem;
+    margin-top: 2rem;
 }
 
 .logo-login {
@@ -62,4 +68,6 @@
     color: #156956;
 }
 
-
+#descripcion-reg {
+    resize: none;
+}
