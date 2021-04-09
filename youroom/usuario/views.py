@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida
 from .forms import RegistroForm
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
-
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
@@ -17,12 +15,7 @@ class RegistroView(FormView):
     template_name = 'usuario/registro.html'
     success_url = reverse_lazy('login')
 
-    def get_context_data(self, **kwargs):
-        context = super(RegistroView, self).get_context_data(**kwargs)
-        context['users'] =User.objects.all()
-        return context
-
-    def form_valid(self, form):
+    def form_valid(self, form, **kwargs):
         try:
             username = form.cleaned_data['username']
             password1 = form.cleaned_data['password1']
@@ -31,6 +24,7 @@ class RegistroView(FormView):
             descripcion = form.cleaned_data['descripcion']
             if password1 == password2:
                 if not User.objects.filter(username=username).exists() and not User.objects.filter(email=email).exists():
+                    print('LLego aqui')
                     user = User.objects.create_user(username=username, email=email, password=password1)
                     user.save()
                     perfil = UsuarioPerfil(user=user, descripcion=descripcion)
@@ -39,7 +33,7 @@ class RegistroView(FormView):
                     cv.save()
                     return super().form_valid(form)
                 else:
-                    contex = self.get_context_data(form=form)
+                    context = self.get_context_data(form=form)
                     return self.render_to_response(context)
             else:
                 context = self.get_context_data(form=form)
