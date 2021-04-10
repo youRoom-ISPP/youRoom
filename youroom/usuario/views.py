@@ -24,7 +24,6 @@ class RegistroView(FormView):
             descripcion = form.cleaned_data['descripcion']
             if password1 == password2:
                 if not User.objects.filter(username=username).exists() and not User.objects.filter(email=email).exists():
-                    print('LLego aqui')
                     user = User.objects.create_user(username=username, email=email, password=password1)
                     user.save()
                     perfil = UsuarioPerfil(user=user, descripcion=descripcion)

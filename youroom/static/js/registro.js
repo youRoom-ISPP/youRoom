@@ -19,7 +19,9 @@ function longPass() {
         $("#boton-registro").attr("disabled", true);
     } else {
         $("#password-reg").css("background-color","#78f8da");
-        $("#boton-registro").attr("disabled", false);
+        if ($("#password-confirm-reg").val().length != 0) {
+            $("#boton-registro").attr("disabled", false);
+        }
     }
 }
 
