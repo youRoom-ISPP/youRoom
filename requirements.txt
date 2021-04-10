@@ -13,3 +13,6 @@ boto3
 
 django-heroku
 gunicorn
+
+#Pago
+stripe
