@@ -22,7 +22,6 @@ class TimelineView(TemplateView):
                 if (datetime.now(timezone.utc) - destacada.fecha_destacada).total_seconds()>86400:
                     destacada.delete()
                 else:
-                    print(destacada.fecha_destacada)
                     publicaciones.append(destacada.publicacion)
     
     
