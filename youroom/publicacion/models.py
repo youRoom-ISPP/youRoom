@@ -1,6 +1,13 @@
+import os
+import boto3
 from django.db import models
 from usuario.models import UsuarioPerfil
-from django.core.validators import  MinValueValidator
+from django.core.validators import MinValueValidator
+from dotenv import load_dotenv
+
+load_dotenv()
+BUCKET_NAME = os.environ.get("S3_BUCKET")
+s3 = boto3.client('s3')
 
 
 class Publicacion(models.Model):
@@ -12,9 +19,13 @@ class Publicacion(models.Model):
     totalValoraciones = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])
 
     def delete(self, *args, **kwargs):
-        storage, path = self.imagen.storage, self.imagen.path
-        super(Publicacion, self).delete(*args, **kwargs)
-        storage.delete(path)
+        if os.getenv('PROD') == 'True':
+            s3.delete_object(Bucket=BUCKET_NAME, Key=str(self.imagen.name))
+            super(Publicacion, self).delete(*args, **kwargs)
+        else:
+            storage, path = self.imagen.storage, self.imagen.path
+            super(Publicacion, self).delete(*args, **kwargs)
+            storage.delete(path)
 
 
 class Destacada(models.Model):
