@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Vidas
+from tienda.models import Vida
 
-admin.site.register(Vidas)
+admin.site.register(Vida)
 

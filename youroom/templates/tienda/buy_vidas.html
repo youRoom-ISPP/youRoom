@@ -1,0 +1,13 @@
+{% for vida in vidas %}
+<h2>Compra {{ vida.name }} por {{ vida.get_display_price}} EUR</h2>
+<form action="{% url 'charge' pk=vida.id %}" method = "post">
+    {% csrf_token %}
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ key }}"
+        data-description = "Payment Gateway"
+        data-amount="{{ vida.price }}"
+        data-locale="auto"
+        data-currency= "EUR">
+    </script>
+</form>
+{% endfor %}

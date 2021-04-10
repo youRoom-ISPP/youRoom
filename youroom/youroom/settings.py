@@ -165,8 +165,3 @@ if os.getenv('PROD') == 'True':
     AWS_S3_HOST = 'youroom.s3.amazonaws.com'
     AWS_S3_REGION_NAME = 'eu-west-3'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-
-STRIPE_SECRET_KEY = "sk_test_51IdzxKDQeZjKA2R4kWWkAlzT4He8P0Dy8NV7lTz8oJ8oLE62UGXuDtT1CvQ7XNwDYzqX1F4sdHwhtl2BLSs3EkM700RvRuV5ZK"
-STRIPE_PUBLISHABLE_KEY = "pk_test_51IdzxKDQeZjKA2R441Ors9ToLtIgKRNgBDi2ep6DzpZ4LAf1WeTLsTAY6dQgBrLvslFUGFPRec40TMtIC7c8Pw6400DscFqnLZ"
-STRIPE_PAGO_VIDA = "price_1Ie16vDQeZjKA2R4Exav8ATo"

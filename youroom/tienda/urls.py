@@ -1,9 +1,9 @@
+import os  
+from django.contrib import admin
 from django.urls import path
-from tienda.views import CreateCheckoutSessionView, ProductLandingPageView
+from . import views
 
 urlpatterns = [
-    path('vidas/', ProductLandingPageView.as_view(), name='landing_page')
-   # path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create_checkout_session')
-
-
+   path('vidas/',views.BuyVidaView.as_view(),name='home'),
+   path('charge/<pk>/', views.BuyVidaView.charge, name='charge')
 ]

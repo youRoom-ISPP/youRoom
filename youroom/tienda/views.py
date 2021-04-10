@@ -1,65 +1,79 @@
+import os
 from django.shortcuts import render
-import json
-import stripe
-from django.core.mail import send_mail
+from django.views.generic.base import TemplateView
 from django.conf import settings
-from django.views.generic import TemplateView
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
-from django.views import View
-from .models import Vidas
+from tienda.models import Vida
+from usuario.models import UsuarioPerfil, Premium, ContadorVida
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+import stripe
 
-# Create your views here.
-stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
-class SuccessView(TemplateView):
-    template_name = "success.html"
-
-
-class CancelView(TemplateView):
-    template_name = "cancel.html"
-
-
-class ProductLandingPageView(TemplateView):
-    template_name = "landing.html"
+@method_decorator(login_required, name='dispatch')
+class BuyVidaView(TemplateView):
+    template_name = 'tienda/buy_vidas.html'
 
     def get_context_data(self, **kwargs):
-        product = Vidas.objects.get(name="Test Product")
-        context = super(ProductLandingPageView, self).get_context_data(**kwargs)
-        context.update({
-            "product": vidas,
-            "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
-        })
+        vidas = Vida.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
+        context['vidas'] = vidas
         return context
-        
 
-class CreateCheckoutSessionView(View):
-    def post(self, request, *args, **kwargs):
-        product_id = self.kwargs["pk"]
-        product = Product.objects.get(id=product_id)
-        YOUR_DOMAIN = "http://127.0.0.1:8000"
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'euros',
-                        'unit_amount': vidas.price,
-                        'product_data': {
-                            'name': product.name,
-                            # 'images': ['https://i.imgur.com/EHyR2nP.png'],
-                        },
-                    },
-                    'quantity': 1,
-                },
-            ],
-            metadata={
-                "product_id": vidas.id
-            },
-            mode='payment',
-            success_url=YOUR_DOMAIN + '/success/',
-            cancel_url=YOUR_DOMAIN + '/cancel/',
+    def charge(request, pk):
+        if request.method == 'POST':
+
+            perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
+            vida = Vida.objects.get(id=pk)
+
+            if Premium.objects.filter(perfil=perfil).exists():
+                message='El usuario es premium, con lo que no puede tener activado el contador.'
+                return render(request, 'tienda/fail.html', {'message':message})
+
+            # realizar pago
+            estado = pay(request, vida)
+
+            # redirigir si ha habido un error en el pago de la tarjeta
+            if estado == 'credit_card_error':
+                message='Ha habido un error con el pago de su tarjeta'
+                return render(request, 'tienda/fail.html', {'message':message})
+
+            elif estado == 'success':
+                
+                # Añadir objeto vida si se ha hecho la compra correctamente
+                if vida.name == 'vida1':
+                    contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
+                    contador.numVidasCompradas += 1
+                    contador.save()
+                
+                if vida.name == 'vida2':
+                    contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
+                    contador.numVidasCompradas += 3
+                    contador.save()
+                
+                if vida.name == 'vida3':
+                    contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
+                    contador.numVidasCompradas += 5
+                    contador.save()
+                
+                if vida.name == 'vida4':
+                    contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
+                    contador.numVidasCompradas += 10
+                    contador.save()
+            
+                return render(request, 'tienda/charge.html')
+
+
+def pay(request, vida):
+    try:
+        charge = stripe.Charge.create(
+            amount=vida.price,
+            currency='EUR',
+            description='Payment Gateway',
+            source=request.POST['stripeToken']
         )
-        return JsonResponse({
-            'id': checkout_session.id
-        })
+        return 'success'
+
+    except stripe.error.CardError as e:
+        return 'credit_card_error'
