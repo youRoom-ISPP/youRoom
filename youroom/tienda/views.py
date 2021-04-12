@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from tienda.models import Product
+from django.http import HttpResponseRedirect
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -69,10 +70,13 @@ class HomePageView(TemplateView):
 
                 # Crear objeto premium si se ha hecho la suscripción correctamente
                 if product.name == 'suscripcion':
-                    premium = Premium.objects.create(perfil=perfil)
+                    premium = Premium(perfil=perfil)
+                    cv = ContadorVida.objects.get_or_create(perfil=perfil)[0]
+                    cv.estaActivo = False
                     premium.save()
+                    cv.save()
             
-                return render(request, 'tienda/charge.html')
+                return HttpResponseRedirect('/perfil/')
 
 
 def pay(request, product):
