@@ -39,3 +39,51 @@ class LoginTestCase(APITestCase):
         response = self.client.post('', answers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[-1],'usuario/login.html')
+    
+    def test_registro_ok(self):
+        answers = {
+                'username': 'usuario_ok',
+                'password1': 'usuario1234',
+                'password2': 'usuario1234',
+                'email': 'test@test.com',
+                'descripcion': 'soy de prueba'
+            }
+        response = self.client.post('/registro/', answers)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(User.objects.last().username, 'usuario_ok')
+
+    def test_registro_fail_password(self):
+        answers = {
+                'username': 'usuario_ok',
+                'password1': 'usuario123',
+                'password2': 'usuario1234',
+                'email': 'test@test.com',
+                'descripcion': 'soy de prueba'
+            }
+        response = self.client.post('/registro/', answers)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(User.objects.last().username, 'usuario_ok')
+    
+    def test_registro_fail_username(self):
+        answers = {
+                'username': 'prueba',
+                'password1': 'usuario1234',
+                'password2': 'usuario1234',
+                'email': 'test@test.com',
+                'descripcion': 'soy de prueba'
+            }
+        response = self.client.post('/registro/', answers)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(User.objects.last().email, 'test@test.com')
+    
+    def test_registro_fail_email(self):
+        answers = {
+                'username': 'usuario_ok',
+                'password1': 'usuario1234',
+                'password2': 'usuario1234',
+                'email': 'prueba@gmail.com',
+                'descripcion': 'soy de prueba'
+            }
+        response = self.client.post('/registro/', answers)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(User.objects.last().username, 'usuario_ok')
