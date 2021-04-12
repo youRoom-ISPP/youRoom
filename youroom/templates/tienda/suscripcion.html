@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+
+{% block titulo_pagina %}Suscripción a youRoom{% endblock %}
+{% block titulo %}Suscripción a youRoom{% endblock %}}
+
+{% block contenido %}
+{% if esPremium is True %}
+<p>Tu cuenta premium está activa</p>
+<p>¿Quieres cancelar tu suscripción?</p>
+{% else %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Suscripción mensual</h5>
+        <p class="card-text">
+            <ul>
+                <li>Publicaciones ilimitadas</li>
+                <li>Etiqueta productos sin límites</li>
+                <li>Progresa más rápido en el ranking</li>
+            </ul>
+        </p>
+        <div class="row">
+            <div class="col-6">
+                <p class="lead font-weight-bold">2,99 €</p>
+            </div>
+            <div class="col-6 text-right">
+                <form action="{% url 'charge' %}" method = "post">
+                    {% csrf_token %}
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="{{ key }}"
+                    data-description = "Suscripción mensual a youRoom"
+                    data-amount="299"
+                    data-locale="auto"
+                    data-currency= "EUR">
+                    </script>
+                    <script>
+                        document.getElementsByClassName("stripe-button-el")[0].style.display = "none";
+                    </script>
+                    <button type="submit" class="btn btn-primary boton">Pagar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

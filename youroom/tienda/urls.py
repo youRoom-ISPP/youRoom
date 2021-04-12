@@ -1,9 +1,9 @@
-import os  
+import os
 from django.contrib import admin
 from django.urls import path
 from . import views
 
 urlpatterns = [
-   path('',views.HomePageView.as_view(),name='home'),
-   path('charge/<pk>/', views.HomePageView.charge, name='charge')
+   path('suscripcion/',views.SuscripcionView.as_view(), name='suscripcion'),
+   path('suscripcion/pagar', views.SuscripcionView.charge, name='charge')
 ]
