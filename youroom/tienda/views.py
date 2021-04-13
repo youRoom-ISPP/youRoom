@@ -8,6 +8,7 @@ from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 import stripe
+from django.utils import timezone
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
@@ -38,7 +39,8 @@ class HomePageView(TemplateView):
                 return render(request, 'tienda/fail.html', {'message':message})
 
             # realizar pago
-            estado = pay(request, product)
+           # estado = pay(request, product)
+            estado = suscribirse(request, product, perfil)
 
             # redirigir si ha habido un error en el pago de la tarjeta
             if estado == 'credit_card_error':
@@ -85,8 +87,35 @@ def pay(request, product):
             amount=product.price,
             currency='EUR',
             description='Payment Gateway',
-            source=request.POST['stripeToken']
+            source=request.POST['stripeToken'],
+            invoice_item='price_1Ie0pPDQeZjKA2R4jxF19gqE'
         )
+        
+        return 'success'
+
+    except stripe.error.CardError as e:
+        return 'credit_card_error'
+
+def suscribirse(request, product, perfil):
+    try:
+        stripe.SubscriptionSchedule.create(
+        customer="cus_JIRGQK7T3KvNSI",
+        start_date=timezone.now(),
+        end_behavior="cancel",
+        phases=[
+            {
+            "items": [
+                {
+                "price":
+                "price_1Ie0pPDQeZjKA2R4jxF19gqE",
+                "quantity": 1,
+                },
+            ],
+            "iterations": 1,
+            },
+        ],
+        )
+        
         return 'success'
 
     except stripe.error.CardError as e:
