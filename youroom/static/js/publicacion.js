@@ -183,3 +183,11 @@ $(document).ready(function(){
         }
     }
 });
+
+$("#btnConfirmarPub").click(function () {
+    $("#btnConfirmarPub").html("<span id=\"spinnerBtn\"></span> Publicando...")
+    $("#spinnerBtn").addClass("spinner-border");
+    $("#spinnerBtn").addClass("spinner-border-sm");
+    $("#spinnerBtn").attr("role", "status");
+    $("#spinnerBtn").attr("aria-hidden", "true");
+});

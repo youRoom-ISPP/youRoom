@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'perfil',
     'publicacion',
     'ranking',
+    'tienda',
     'timeline',
     'usuario',
     'django_crontab',
