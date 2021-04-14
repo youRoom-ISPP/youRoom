@@ -7,8 +7,15 @@
 {% block contenido %}
 <div class="row">
     <header class="col-12 detalles-usuario card">
-        <div>
-            <h5>{{user.user.username}}</h5>
+        <div class="row mb-2 align-items-center">
+            <div class="col-6"><h5>{{user.user.username}}</h5></div>
+            <div class="col-6 d-flex justify-content-end">
+                {% if cont.estaActivo is True %}
+                <a class="btn btn-primary btn-sm boton-suscripcion" href=""><i class="bi bi-stars icon-suscripcion"></i>Suscríbete</a>
+                {% else %}
+                <a class="btn btn-primary btn-sm boton-cancelar-suscripcion" href="">Cancelar suscripción</a>
+                {% endif %}
+            </div>
         </div>
         <section class="row">
             <div class="col-12">

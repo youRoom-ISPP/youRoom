@@ -39,9 +39,9 @@ input[type="file"] {
 .btn-cancelar-publicacion:hover,
 .btn-cancelar-publicacion:active,
 .btn-cancelar-publicacion:focus {
-    background-color: #6C4B5E;
-    color: #F9DCE5;
-    border: 2px solid #F9DCE5;
+    background-color: #6C4B5E!important;
+    color: #F9DCE5!important;
+    border: 2px solid #F9DCE5!important;
 }
 
 .item-subir-foto {
@@ -167,6 +167,46 @@ input[type="file"] {
     padding-right: 1.2rem;
 }
 
+.icon-suscripcion {
+    margin-right: 0.5em;
+    color: yellow;
+}
+
+.boton-suscripcion {
+    background-color: #099A78;
+    border: 2px solid #77fdde;
+    border-radius: 30px;
+    color: white;
+    padding-left: 0.5rem;
+    padding-right: 0.8rem;
+    font-weight: bold;
+}
+
+.boton-suscripcion:hover,
+.boton-suscripcion:active,
+.boton-suscripcion:focus {
+    background-color: #06755b!important;
+    border-color: #77fdde!important;
+    color: #77fdde!important;
+}
+
+.boton-cancelar-suscripcion {
+    background-color: #F9DCE5;
+    color: #6C4B5E;
+    border: 2px solid #6C4B5E;
+    border-radius: 30px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.boton-cancelar-suscripcion:hover,
+.boton-cancelar-suscripcion:active,
+.boton-cancelar-suscripcion:focus {
+    background-color: #8f647d!important;
+    color: #F9DCE5!important;
+    border: 2px solid #F9DCE5!important;
+}
+
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
@@ -209,6 +249,7 @@ input[type="file"] {
     .detalles-usuario {
         margin: 1rem 0;
     }
+
 }
 
 @media (min-width: 768px) {
