@@ -68,7 +68,6 @@ class HomePageView(TemplateView):
         premium = Premium.objects.filter(perfil=perfil)
 
         if premium.exists()  and premium[0].fechaCancelacion==None:
-            print('entra')
             customer = stripe.Customer.retrieve(perfil.id_stripe)
             suscription_id = stripe.Subscription.list(customer=customer.id)['data'][0]['id']
             stripe.Subscription.modify(suscription_id, cancel_at_period_end=True)
