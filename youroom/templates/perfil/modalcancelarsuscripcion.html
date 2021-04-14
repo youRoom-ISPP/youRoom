@@ -1,0 +1,17 @@
+<div class="modal fade" id="modalSuscripcion" tabindex="-1" data-backdrop="static" aria-labelledby="modalSuscripcion" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-center">¿Seguro que quieres cancelar la suscripción?<br>Seguirás contando con las ventajas de un usuario premium hasta el XX/XX/XX.</p>
+                        <div class="text-center">
+                            <a id="btnCancelarSus" class="btn btn-primary boton" href="{% url 'cancel' %}">Confirmar</a>
+                            <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
