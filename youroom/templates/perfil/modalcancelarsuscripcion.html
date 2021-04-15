@@ -4,11 +4,25 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
+                        {% if cont.estaActivo is True %}
+                        <p class="text-justify">La suscripción te permitirá publicar ilimitadamente, destacar imágenes de forma gratuita y colocar enlaces sin límite en tus publicaciones, pudiendo cancelar la suscripción en cualquier momento.</p>
+                        <form action="{% url 'charge' pk=product.id %}" method = "post" class="text-center">
+                            {% csrf_token %}
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button align-self-center"
+                                data-key="{{ key }}"
+                                data-description = "Payment Gateway"
+                                data-amount="{{ product.price }}"
+                                data-locale="auto"
+                                data-currency= "EUR">
+                            </script>
+                        </form>
+                        {% else %}
                         <p class="text-center">¿Seguro que quieres cancelar la suscripción?<br>Seguirás contando con las ventajas de un usuario premium hasta el XX/XX/XX.</p>
                         <div class="text-center">
                             <a id="btnCancelarSus" class="btn btn-primary boton" href="{% url 'cancel' %}">Confirmar</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
