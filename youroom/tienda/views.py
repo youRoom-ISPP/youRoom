@@ -115,7 +115,7 @@ class HomePageView(TemplateView):
                 fecha_cancelacion = date.fromtimestamp(suscripcion['current_period_end'])
                 return JsonResponse({'fechaCancelacion':fecha_cancelacion,'valid':True})
             else:
-                return JsonResponse({'fechaCancelacion':'','valid':True})
+                return JsonResponse({'fechaCancelacion':'','valid':False})
         
         except:
             message = 'Ha ocurrido un error al comprobar tu suscripción'

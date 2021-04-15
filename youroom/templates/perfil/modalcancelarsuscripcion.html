@@ -1,0 +1,35 @@
+<div class="modal fade" id="modalSuscripcion" tabindex="-1" data-backdrop="static" aria-labelledby="modalSuscripcion" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        {% if cont.estaActivo is True %}
+                        <p class="text-justify">La suscripción te permitirá publicar ilimitadamente, destacar imágenes de forma gratuita y colocar enlaces sin límite en tus publicaciones, pudiendo cancelar la suscripción en cualquier momento.</p>
+                        <form action="{% url 'charge' pk=product.id %}" method="post" class="text-center" style="display: none;">
+                            {% csrf_token %}
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button align-self-center"
+                                data-key="{{ key }}"
+                                data-description = "Payment Gateway"
+                                data-amount="{{ product.price }}"
+                                data-locale="auto"
+                                data-currency= "EUR">
+                            </script>
+                        </form>
+                        <div class="text-center">
+                            <button type="button" id="btnSus" class="btn btn-primary boton">Confirmar</button>
+                            <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
+                        </div>
+                        {% else %}
+                        <p class="text-center">¿Seguro que quieres cancelar la suscripción?<br>Seguirás contando con las ventajas premium hasta que finalice el periodo de suscripción <span id="fechaCancelacion">.</span></p>
+                        <div class="text-center">
+                            <a id="btnCancelarSus" class="btn btn-primary boton" href="{% url 'cancel' %}">Confirmar</a>
+                            <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

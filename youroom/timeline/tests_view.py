@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from publicacion.enum import Categorias
 from usuario.models import UsuarioPerfil, ContadorVida
+from tienda.models import Product
 
 # Create your tests here.
 
@@ -20,7 +21,8 @@ class TimelineViewTest(APITestCase):
         self.u.isActive=True
         self.u.save()
         self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
-        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
+        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]       
+        self.suscripcion = Product.objects.get_or_create(name="suscripcion",price="399",numVidas=0)
     
     def tearDown(self):
         self.client = None
