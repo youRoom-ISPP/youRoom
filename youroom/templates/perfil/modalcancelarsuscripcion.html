@@ -21,7 +21,7 @@
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
                         </div>
                         {% else %}
-                        <p class="text-center">¿Seguro que quieres cancelar la suscripción?<br>Seguirás contando con las ventajas premium hasta que pasen los 30 días desde que te suscribiste.</p>
+                        <p class="text-center">¿Seguro que quieres cancelar la suscripción?<br>Seguirás contando con las ventajas premium hasta que finalice el periodo de suscripción <span id="fechaCancelacion">.</span></p>
                         <div class="text-center">
                             <a id="btnCancelarSus" class="btn btn-primary boton" href="{% url 'cancel' %}">Confirmar</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>

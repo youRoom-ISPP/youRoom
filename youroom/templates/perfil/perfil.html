@@ -17,7 +17,7 @@
                     {% if cont.estaActivo is True %}
                     <a class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-stars icon-suscripcion"></i>Suscríbete</a>
                     {% else %}
-                    <a class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
+                    <a id="cancelSusModal" class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
                     {% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item btn-dropdown-user" href="{% url 'logout' %}"><i class="bi bi-power icon-suscripcion"></i>Cerrar sesión</a>
