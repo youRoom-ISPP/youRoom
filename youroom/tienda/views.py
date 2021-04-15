@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from tienda.models import Product
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -84,6 +84,8 @@ class HomePageView(TemplateView):
             
                 return HttpResponseRedirect('/perfil/')
 
+        return HttpResponseRedirect('/perfil/')
+
     def cancel_suscription(request):
         try:
             perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
@@ -107,23 +109,13 @@ class HomePageView(TemplateView):
             perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
             premium = Premium.objects.filter(perfil=perfil)
 
-            cont = ContadorVida.objects.get_or_create(perfil=perfil)[0]
-            publicaciones = Publicacion.objects.filter(usuario=perfil).order_by('-fecha_publicacion')
-            context = {
-                'cont':cont,
-                'publicaciones': publicaciones,
-                'numPublicaciones': publicaciones.count(),
-                'user': perfil,
-                'vidasTotales': cont.numVidasCompradas + cont.numVidasSemanales}
-
             if premium.exists()  and premium[0].fechaCancelacion==None:
                 customer = stripe.Customer.retrieve(perfil.id_stripe)
                 suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
                 fecha_cancelacion = date.fromtimestamp(suscripcion['current_period_end'])
-                context['fechaCancelacion'] = fecha_cancelacion
-                return render(request, 'perfil/perfil.html', context)
+                return JsonResponse({'fechaCancelacion':fecha_cancelacion,'valid':True})
             else:
-                return render(request, 'perfil/perfil.html', context)
+                return JsonResponse({'fechaCancelacion':'','valid':True})
         
         except:
             message = 'Ha ocurrido un error al comprobar tu suscripción'
