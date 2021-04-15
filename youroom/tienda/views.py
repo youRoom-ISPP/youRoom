@@ -1,4 +1,5 @@
 import os
+import stripe
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.conf import settings
@@ -7,8 +8,10 @@ from django.http import HttpResponseRedirect
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-import stripe
 from django.utils import timezone
+from datetime import datetime, timedelta, date
+from dateutil import relativedelta
+from publicacion.models import Publicacion
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
@@ -65,39 +68,40 @@ class HomePageView(TemplateView):
 
     def cancel_suscription(request):
         perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
-        premium = Premium.objects.filter(perfil=perfil)
-
-        if premium.exists()  and premium[0].fechaCancelacion==None:
+        premium_query = Premium.objects.filter(perfil=perfil)
+        if premium_query.exists()  and premium_query[0].fechaCancelacion==None:
+            premium = premium_query[0]
             customer = stripe.Customer.retrieve(perfil.id_stripe)
-            suscription_id = stripe.Subscription.list(customer=customer.id)['data'][0]['id']
-            stripe.Subscription.modify(suscription_id, cancel_at_period_end=True)
-
-            premium = Premium.objects.filter(perfil=perfil)[0]
-            premium = calcula_cancelacion(request, premium)
+            suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
+            stripe.Subscription.modify(suscripcion['id'], cancel_at_period_end=True)
+            premium.fechaCancelacion = date.fromtimestamp(suscripcion['current_period_end'])
             premium.save()
 
         return HttpResponseRedirect('/perfil/')
 
+    def obtiene_fecha_cancelacion(request):
+        perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
+        premium = Premium.objects.filter(perfil=perfil)
 
-def calcula_cancelacion(request, premium):
-    dia_sus = premium.fechaSuscripcion.day
-    hoy = timezone.now().date().day
+        cont = ContadorVida.objects.get_or_create(perfil=perfil)[0]
+        publicaciones = Publicacion.objects.filter(usuario=perfil).order_by('-fecha_publicacion')
+        context = {
+            'cont':cont,
+            'publicaciones': publicaciones,
+            'numPublicaciones': publicaciones.count(),
+            'user': perfil,
+            'vidasTotales': cont.numVidasCompradas + cont.numVidasSemanales}
 
-    if dia_sus <= hoy:
-        fechaCancelacion = timezone.datetime(
-            timezone.now().date().year,
-            timezone.now().date().month + 1, 
-            dia_sus
-            )
-    else:
-        fechaCancelacion = timezone.datetime(
-            timezone.now().date().year,
-            timezone.now().date().month, 
-            dia_sus
-            )
+        if premium.exists()  and premium[0].fechaCancelacion==None:
+            customer = stripe.Customer.retrieve(perfil.id_stripe)
+            suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
+            fecha_cancelacion = date.fromtimestamp(suscripcion['current_period_end'])
+            context['fechaCancelacion'] = fecha_cancelacion
+            return render(request, 'perfil/perfil.html', context)
+        else:
+            return render(request, 'perfil/perfil.html', context)
 
-    premium.fechaCancelacion = fechaCancelacion
-    return premium
+        
 
 
 def pay(request, product):
@@ -135,7 +139,7 @@ def suscribirse(request, product, perfil):
         customer=perfil.id_stripe,
         items=[
                 {
-                "price":"price_1IftjiDQeZjKA2R4JbxQtvpx",
+                "price": os.getenv('SUSCRIPTION_PRICE_KEY'),
                 "quantity": 1,
                 },
         ],
