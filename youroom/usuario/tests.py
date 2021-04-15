@@ -87,3 +87,23 @@ class LoginTestCase(APITestCase):
         response = self.client.post('/registro/', answers)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().username, 'usuario_ok')
+
+    def test_listar_usuarios(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        response = self.client.post('', answers)
+        response = self.client.get('/usuarios/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[-1],'usuario/usuarios.html')
+    
+    def test_mostrar_usuario(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        response = self.client.post('', answers)
+        response = self.client.get('/usuarios/prueba')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[-1],'usuario/usuario.html')

@@ -3,8 +3,12 @@ from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida
+from publicacion.models import Publicacion
 from .forms import RegistroForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.db.models.functions import Lower
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
@@ -37,6 +41,39 @@ class RegistroView(FormView):
             else:
                 context = self.get_context_data(form=form)
                 return self.render_to_response(context)
+        except Exception as e:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+            
+@method_decorator(login_required, name='dispatch')
+class UsuariosView(TemplateView):
+    template_name = 'usuario/usuarios.html'
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
+            lista_usuarios = UsuarioPerfil.objects.all().order_by(Lower('user__username'))
+            context['usuarios'] = lista_usuarios
+            return context
+        except Exception as e:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
+@method_decorator(login_required, name='dispatch')
+class UsuarioShowView(TemplateView):
+    template_name = 'usuario/usuario.html'
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
+            username = self.kwargs.get('username')
+            user = User.objects.get_or_create(username = username)[0]
+            perfil = UsuarioPerfil.objects.get_or_create(user = user)[0]
+            publicaciones = Publicacion.objects.filter(usuario=perfil)
+            context['publicaciones'] = publicaciones
+            context['numPublicaciones'] = publicaciones.count()
+            context['user'] = perfil
+            return context
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
