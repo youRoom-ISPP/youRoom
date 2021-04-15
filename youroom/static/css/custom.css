@@ -194,6 +194,7 @@ input[type="file"] {
 .btn-dropdown-user:hover,
 .btn-dropdown-user:focus {
     color: #0ddfad;
+    background-color: white;
 }
 
 @media (max-width: 767px) {

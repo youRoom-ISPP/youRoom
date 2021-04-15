@@ -28,6 +28,7 @@ $("#btnCancelarSus").click(function () {
 });
 
 $("#btnSus").click(function () {
+    $(".stripe-button-el").click();
     $("#btnSus").html("<span id=\"spinnerBtn\"></span> Abriendo formulario...")
     $("#spinnerBtn").addClass("spinner-border");
     $("#spinnerBtn").addClass("spinner-border-sm");

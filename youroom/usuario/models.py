@@ -25,7 +25,7 @@ class ContadorVida(models.Model):
 class Premium(models.Model):
     perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE, null=True, blank=True)
     fechaSuscripcion = models.DateField(auto_now_add=True)
-    fechaCancelacion = models.DateField(null=True)
+    fechaCancelacion = models.DateField(null=True,blank = True)
 
     def clean(self):
         if self.perfil.contadorvida.estaActivo == True:
