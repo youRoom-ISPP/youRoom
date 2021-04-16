@@ -47,7 +47,7 @@ class RegistroView(FormView):
 
 def restablecer_vidas():
     fecha_hoy = datetime.today()
-    if fecha_hoy.weekday() == 4 and fecha_hoy.hour == 18 and fecha_hoy.minute == 40:
+    if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
         for contador in ContadorVida.objects.all():
             contador.numVidasSemanales = 3
             contador.save()
