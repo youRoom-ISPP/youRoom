@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
-from .models import UsuarioPerfil, ContadorVida
+from .models import UsuarioPerfil, ContadorVida, Premium
 from .forms import RegistroForm
 from django.urls import reverse_lazy
+from datetime import datetime
+
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
@@ -40,3 +42,14 @@ class RegistroView(FormView):
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+
+def cancelar_suscripcion():
+    fecha_hoy = datetime.today()
+    if fecha_hoy.hour == 18 and fecha_hoy.minute == 40:
+        for premium in Premium.objects.filter(fechaCancelacion=fecha_hoy.date()):
+            perfil = premium.perfil
+            premium.delete()
+            contador_vidas = get_object_or_404(ContadorVida, perfil=perfil)
+            contador_vidas.estaActivo = True
+            contador_vidas.save()
