@@ -6,6 +6,7 @@ from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida, Premium
+from tienda.models import Product
 
 class PublicacionViewTest(APITestCase):
 
@@ -25,6 +26,7 @@ class PublicacionViewTest(APITestCase):
         self.u2.save()
         self.p2 = UsuarioPerfil.objects.get_or_create(user = self.u2,totalPuntos=100)[0]
         self.c2= ContadorVida.objects.get_or_create(perfil=self.p2,estaActivo=True)[0]
+        self.suscripcion = Product.objects.get_or_create(name="suscripcion",price="399",numVidas=0)
 
 
     def tearDown(self):

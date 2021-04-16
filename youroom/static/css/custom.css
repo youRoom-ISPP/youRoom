@@ -39,9 +39,9 @@ input[type="file"] {
 .btn-cancelar-publicacion:hover,
 .btn-cancelar-publicacion:active,
 .btn-cancelar-publicacion:focus {
-    background-color: #6C4B5E;
-    color: #F9DCE5;
-    border: 2px solid #F9DCE5;
+    background-color: #6C4B5E!important;
+    color: #F9DCE5!important;
+    border: 2px solid #F9DCE5!important;
 }
 
 .item-subir-foto {
@@ -167,6 +167,36 @@ input[type="file"] {
     padding-right: 1.2rem;
 }
 
+.icon-suscripcion {
+    margin-right: 0.5em;
+}
+
+.user-options {
+    color: #099a78;
+    background-color: white;
+    border-color: white;
+}
+
+.user-options:hover,
+.user-options:active,
+.user-options:focus {
+    color: #0ddfad!important;
+    background-color: white!important;
+    border-color: white!important;
+    box-shadow: transparent;
+}
+
+.btn-dropdown-user {
+    color: #099a78;
+}
+
+.btn-dropdown-user:active,
+.btn-dropdown-user:hover,
+.btn-dropdown-user:focus {
+    color: #0ddfad;
+    background-color: white;
+}
+
 @media (max-width: 767px) {
     .header-mobile {
         background-color: #fff;
@@ -209,6 +239,7 @@ input[type="file"] {
     .detalles-usuario {
         margin: 1rem 0;
     }
+
 }
 
 @media (min-width: 768px) {
