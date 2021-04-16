@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from tienda.models import Product
@@ -13,14 +13,17 @@ from django.utils import timezone
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 @method_decorator(login_required, name='dispatch')
-class HomePageView(TemplateView):
-    template_name = 'tienda/home.html'
+class TiendaView(TemplateView):
+    template_name = 'tienda/tienda.html'
 
     def get_context_data(self, **kwargs):
         products = Product.objects.all()
         context = super().get_context_data(**kwargs)
         context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
         context['products'] = products
+        usuario = get_object_or_404(UsuarioPerfil, user = self.request.user)
+        contador_vidas = get_object_or_404(ContadorVida, perfil=usuario)
+        context['contador_vidas'] = contador_vidas
         return context
 
     def charge(request, pk):
@@ -31,8 +34,8 @@ class HomePageView(TemplateView):
 
             # Si es una suscripción, y el usuario ya esta suscrito, rechazar suscripción
             if Premium.objects.filter(perfil=perfil).exists():
-                message='Ya tiene una suscripción activa en su perfil'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error = 'Ya tienes una suscripción activa en tu perfil'
+                return render(request, 'base/error.html', {'mensaje_error':mensaje_error})
 
             # realizar pago
             if product.numVidas == 0:
@@ -42,11 +45,11 @@ class HomePageView(TemplateView):
 
             # redirigir si ha habido un error en el pago de la tarjeta
             if estado == 'credit_card_error':
-                message='Ha habido un error con el pago de su tarjeta'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error = 'Ha habido un error con el pago de tu tarjeta'
+                return render(request, 'base/error.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'success':
-                
+
                 # Añadir objeto vida si se ha hecho la compra correctamente
                 if product.numVidas != 0:
                     contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
@@ -60,7 +63,7 @@ class HomePageView(TemplateView):
                     cv.estaActivo = False
                     premium.save()
                     cv.save()
-            
+
                 return HttpResponseRedirect('/perfil/')
 
     def cancel_suscription(request):
@@ -79,6 +82,22 @@ class HomePageView(TemplateView):
 
         return HttpResponseRedirect('/perfil/')
 
+    def cancelar_suscripcion_tienda(request):
+        perfil = get_object_or_404(UsuarioPerfil, user = request.user)
+        premium = Premium.objects.filter(perfil=perfil)
+
+        if premium.exists()  and premium[0].fechaCancelacion==None:
+            print('entra')
+            customer = stripe.Customer.retrieve(perfil.id_stripe)
+            suscription_id = stripe.Subscription.list(customer=customer.id)['data'][0]['id']
+            stripe.Subscription.modify(suscription_id, cancel_at_period_end=True)
+
+            premium = Premium.objects.filter(perfil=perfil)[0]
+            premium = calcula_cancelacion(request, premium)
+            premium.save()
+
+        return HttpResponseRedirect('/tienda/')
+
 
 def calcula_cancelacion(request, premium):
     dia_sus = premium.fechaSuscripcion.day
@@ -87,13 +106,13 @@ def calcula_cancelacion(request, premium):
     if dia_sus <= hoy:
         fechaCancelacion = timezone.datetime(
             timezone.now().date().year,
-            timezone.now().date().month + 1, 
+            timezone.now().date().month + 1,
             dia_sus
             )
     else:
         fechaCancelacion = timezone.datetime(
             timezone.now().date().year,
-            timezone.now().date().month, 
+            timezone.now().date().month,
             dia_sus
             )
 
@@ -109,7 +128,7 @@ def pay(request, product):
             description='Pago de ' + str(product.numVidas) + ' vidas',
             source=request.POST['stripeToken'],
         )
-        
+
         return 'success'
 
     except stripe.error.CardError as e:
@@ -141,7 +160,7 @@ def suscribirse(request, product, perfil):
                 },
         ],
         )
-        
+
         return 'success'
 
     except stripe.error.CardError as e:

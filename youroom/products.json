@@ -3,7 +3,7 @@
   "model": "tienda.product",
   "pk": 1,
   "fields": {
-    "name": "suscripcion",
+    "name": "Suscripción mensual",
     "price": 399,
     "numVidas": 0
   }
@@ -12,7 +12,7 @@
   "model": "tienda.product",
   "pk": 2,
   "fields": {
-    "name": "1 vida",
+    "name": "1 Key",
     "price": 50,
     "numVidas": 1
   }
@@ -21,7 +21,7 @@
   "model": "tienda.product",
   "pk": 3,
   "fields": {
-    "name": "3 vidas",
+    "name": "3 Keys",
     "price": 99,
     "numVidas": 3
   }
@@ -30,16 +30,16 @@
   "model": "tienda.product",
   "pk": 4,
   "fields": {
-    "name": "5 vidas",
+    "name": "5 Keys",
     "price": 149,
     "numVidas": 5
   }
 },
 {
   "model": "tienda.product",
-  "pk": 6,
+  "pk": 5,
   "fields": {
-    "name": "10 vidas",
+    "name": "10 Keys",
     "price": 249,
     "numVidas": 10
   }
