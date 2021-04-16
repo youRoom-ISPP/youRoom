@@ -30,7 +30,7 @@ class TiendaViewTest(APITestCase):
         self.assertTemplateUsed(template_name='usuario/login.html')
 
     def test_charge_view_not_logged(self):
-        response = self.client.get('/tienda/charge/1')
+        response = self.client.get('/tienda/pago/1')
         self.assertEqual(response.status_code, 301)
         self.assertTemplateUsed(template_name='usuario/login.html')
 
