@@ -1,14 +1,17 @@
 from django.shortcuts import render
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida
 from .forms import RegistroForm
 from django.urls import reverse_lazy
+from datetime import datetime
+
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
-    redirect_authenticated_user=True
+    redirect_authenticated_user = True
+
 
 class RegistroView(FormView):
     form_class = RegistroForm
@@ -37,6 +40,14 @@ class RegistroView(FormView):
             else:
                 context = self.get_context_data(form=form)
                 return self.render_to_response(context)
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+
+def restablecer_vidas():
+    fecha_hoy = datetime.today()
+    if fecha_hoy.weekday() == 4 and fecha_hoy.hour == 18 and fecha_hoy.minute == 40:
+        for contador in ContadorVida.objects.all():
+            contador.numVidasSemanales = 3
+            contador.save()
