@@ -46,7 +46,7 @@ class RegistroView(FormView):
 
 def cancelar_suscripcion():
     fecha_hoy = datetime.today()
-    if fecha_hoy.hour == 18 and fecha_hoy.minute == 40:
+    if fecha_hoy.hour == 00 and fecha_hoy.minute == 00:
         for premium in Premium.objects.filter(fechaCancelacion=fecha_hoy.date()):
             perfil = premium.perfil
             premium.delete()
