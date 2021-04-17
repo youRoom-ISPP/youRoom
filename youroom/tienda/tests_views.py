@@ -38,6 +38,6 @@ class TiendaViewTest(APITestCase):
     def test_tienda_view(self):
         self.client.login(username='prueba', password='usuario1234')
 
-        response = self.client.get("http://testserver{}".format(reverse("home")))
+        response = self.client.get("http://testserver{}".format(reverse("tienda")))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='tienda/tienda.html')
