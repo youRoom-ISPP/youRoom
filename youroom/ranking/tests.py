@@ -20,8 +20,9 @@ class ValorarTestCase(APITestCase):
         self.u.isActive=True
         self.u.save()
         self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
-        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-        self.suscripcion = Product.objects.get_or_create(name="suscripcion",price="399",numVidas=0)
+        self.c = ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
+        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
+
 
     def tearDown(self):
         self.client = None
@@ -51,9 +52,9 @@ class ValorarTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         objeto_guardado = Valoracion.objects.last()
-        self.assertEqual(objeto_guardado.usuario.user.username,'prueba' )
+        self.assertEqual(objeto_guardado.usuario.user.username,'prueba')
         self.assertEqual(objeto_guardado.publicacion.id,Publicacion.objects.last().id)
-        self.assertEqual(objeto_guardado.puntuacion,4)
+        self.assertEqual(objeto_guardado.puntuacion, 4)
 
 class RankingTestCase(APITestCase):
 

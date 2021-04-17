@@ -365,3 +365,12 @@ input[type="file"] {
         display: none;
     }
 }
+
+/*
+    TIENDA
+*/
+
+.px-minimo {
+    padding-right: 1% !important;
+    padding-left: 1% !important;
+}
