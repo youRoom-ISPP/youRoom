@@ -17,7 +17,7 @@ class PerfilView(TemplateView):
             context = super().get_context_data(**kwargs)
             usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
             cont = ContadorVida.objects.get_or_create(perfil=usuario)[0]
-            product = Product.objects.get(name="suscripcion")
+            product = Product.objects.get(id=1)
             # Datos necesarios para la suscripcion
             context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
             context['product'] = product

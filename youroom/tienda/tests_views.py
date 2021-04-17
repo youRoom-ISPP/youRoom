@@ -21,11 +21,12 @@ class TiendaViewTest(APITestCase):
         call_command('loaddata', 'products.json', verbosity=0)
 
 
+
     def tearDown(self):
         self.client = None
 
     def test_tienda_view_not_logged(self):
-        response = self.client.get("http://testserver{}".format(reverse("home")))
+        response = self.client.get("http://testserver{}".format(reverse("tienda")))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='usuario/login.html')
 
@@ -39,24 +40,4 @@ class TiendaViewTest(APITestCase):
 
         response = self.client.get("http://testserver{}".format(reverse("home")))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(template_name='tienda/home.html')
-
-    def test_cancelar_premium_logged(self):
-
-        self.client.login(username='prueba', password='usuario1234')
-    
-        prem = Premium.objects.get_or_create(perfil=self.p)[0]
-        perfil = UsuarioPerfil.objects.get(user=self.u)
-        perfil.id_stripe = 'cus_JIUr31c2MApWC6'
-        perfil.save()
-        self.assertIsNone(prem.fechaCancelacion)
-        
-        response = self.client.get("http://testserver{}".format(reverse("cancel")))
-        prem = Premium.objects.get_or_create(perfil=self.p)[0]
-
-        self.assertEqual(response.status_code, 302)
-        self.assertIsNotNone(prem.fechaCancelacion)
-        self.assertTemplateUsed(template_name='perfil/perfil.html')
-
-
-
+        self.assertTemplateUsed(template_name='tienda/tienda.html')

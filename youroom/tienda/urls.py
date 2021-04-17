@@ -4,8 +4,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-   path('',views.HomePageView.as_view(),name='home'),
-   path('pago/<pk>/', views.HomePageView.charge, name='charge'),
-   path('cancelar_suscripcion/', views.HomePageView.cancel_suscription, name='cancel'),
-   path('obtener_fecha_cancelacion/',views.HomePageView.obtiene_fecha_cancelacion, name='obtieneFecha')
+   path('', views.TiendaView.as_view(), name='tienda'),
+   path('pago/<pk>/', views.TiendaView.charge, name='charge'),
+   path('cancelar_suscripcion/', views.TiendaView.cancelar_suscripcion, name='cancelar'),
+   path('obtener_fecha_cancelacion/', views.TiendaView.obtener_fecha_cancelacion, name='obtener_fecha')
 ]

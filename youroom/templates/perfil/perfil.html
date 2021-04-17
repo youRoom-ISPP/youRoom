@@ -23,7 +23,7 @@
                     <a class="dropdown-item btn-dropdown-user" href="{% url 'logout' %}"><i class="bi bi-power icon-suscripcion"></i>Cerrar sesión</a>
                 </div>
             </div>
-            {% include 'perfil/modalcancelarsuscripcion.html' %}
+            {% include 'perfil/modal_suscripcion.html' %}
         </div>
         <section class="row">
             <div class="col-12">
@@ -87,7 +87,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% include 'perfil/modaldestacado.html' %}
+                    {% include 'perfil/modal_destacado.html' %}
                     <div class="row px-1 pt-1">
                         <p>{{p.descripcion}}</p>
                     </div>
