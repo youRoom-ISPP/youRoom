@@ -8,14 +8,9 @@
 <div class="row">
     <div class="error-main card col-12 mt-md-0">
         <h2 class="title-error pb-2">Vaya, parece que ha ocurrido un error...</h2>
-        {% if mensaje_error %}
+        {% block error-pago %}{% endblock %}
         <p class="desc-error pb-1">
-            {{ mensaje_error }}.
-        </p>
-        {% endif %}
-        <p class="desc-error pb-1">
-            Vuelve a intentarlo más tarde y, si el error persiste, no dudes en contactar con el <a class="enlace-error" href="mailto:soporte.youroom@gmail.com"><strong>equipo de soporte</strong></a>.
-            Muchas gracias, disculpa las molestias.
+            Vuelve a intentarlo más tarde y, si el error persiste, no dudes en contactar con el <a class="enlace-error" href="mailto:soporte.youroom@gmail.com"><strong>equipo de soporte</strong></a>. Muchas gracias, disculpa las molestias.
         </p>
         <a type="button" href="/timeline/" class="btn btn-primary boton boton-error"><i class="bi bi-house-fill mr-1"></i> Inicio</a>
     </div>

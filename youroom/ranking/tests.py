@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from publicacion.enum import Categorias
 from django.urls import reverse
+from tienda.models import Product
 
 class ValorarTestCase(APITestCase):
 
@@ -20,6 +21,7 @@ class ValorarTestCase(APITestCase):
         self.u.save()
         self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
         self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
+        self.suscripcion = Product.objects.get_or_create(name="suscripcion",price="399",numVidas=0)
 
     def tearDown(self):
         self.client = None

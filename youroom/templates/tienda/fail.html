@@ -1,0 +1,9 @@
+{% extends 'base/error.html' %}
+{% load l10n %}
+
+{% block titulo_pagina %}Error{% endblock %}
+{% block titulo %}Error{% endblock %}
+
+{% block error-pago %}
+    <p class="text-center"><strong>{{message}}</strong></p>
+{% endblock %}

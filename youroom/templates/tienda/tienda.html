@@ -36,7 +36,7 @@
                         {% if contador_vidas.estaActivo is True %}
                         <button id="btnP{{product.pk}}" class="btn btn-primary boton font-weight-bold" type="button"><i class="bi bi-stars icon-suscripcion"></i>Suscríbete por {{ product.get_display_price }} € al mes</button>
                         {% else %}
-                        <button id="cancelSusModal" class="btn btn-cancelar-publicacion" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i> Cancelar suscripción</button>
+                        <a id="cancelSusModal" class="btn btn-cancelar-publicacion" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i> Cancelar suscripción</a>
                         {% endif %}
                     </div>
                 </div>
