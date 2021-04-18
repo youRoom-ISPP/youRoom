@@ -6,13 +6,13 @@
                     <div class="col-12">
                         {% if cont.estaActivo is False %}
                         {% if cont.perfil.totalPuntos >= 50 %}
-                        <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Perderás el 10% de tus Roomies.</p>
+                        <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Perderás el 10% de tus estrellas.</p>
                         <div class="text-center">
                             <a class="btn btn-primary boton" href="{% url 'destacar_publicacion' p.id %}">Sí, quiero destacar la publicación</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">No quiero</button>
                         </div>
                         {% else %}
-                        <p class="text-center">No puedes destacar la publicación<br>Necesitas al menos 50 Roomies para destacar una publicación.</p>
+                        <p class="text-center">No puedes destacar la publicación<br>Necesitas al menos 50 estrellas para destacar una publicación.</p>
                         <div class="text-center">
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
                         </div>
