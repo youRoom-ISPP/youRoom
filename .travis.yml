@@ -2,18 +2,29 @@ dist: xenial
 
 services:
   - postgresql
+  - xvfb
 addons:
   postgresql: "9.4"
+  chrome: stable
 before_script:
   - psql -U postgres -c "create user youroom password 'youroom'"
   - psql -U postgres -c "create database test_youroom owner youroom"
   - psql -U postgres -c "ALTER USER youroom CREATEDB"
+  - "export DISPLAY=:99.0"
+  - sleep 3
 language: python
 python:
   - "3.8"
 install:
   - pip install -r requirements.txt
   - pip install codacy-coverage
+  - pip install selenium
+  - sudo apt-get install chromium-browser
+  - wget -N https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip 
+  - rm chromedriver_linux64.zip
+  - sudo mv -f chromedriver /usr/bin
+  - sudo chmod +x /usr/bin/chromedriver
 script:
   - cd youroom
   - coverage run --branch --source=. ./manage.py test --keepdb
