@@ -4,37 +4,30 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <!-- Modal para destacar publicación -->
                         {% if cont.estaActivo is False %}
-                        <!-- Si es premium -->
                         {% if cont.perfil.totalPuntos >= 50 %}
-                        <!-- Si tiene mas de 50 pts -->
                         <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Perderás el 10% de tus Roomies.</p>
                         <div class="text-center">
                             <a class="btn btn-primary boton" href="{% url 'destacar_publicacion' p.id %}">Sí, quiero destacar la publicación</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">No quiero</button>
                         </div>
                         {% else %}
-                        <!-- Si tiene menos de 50 pts -->
                         <p class="text-center">No puedes destacar la publicación<br>Necesitas al menos 50 Roomies para destacar una publicación.</p>
                         <div class="text-center">
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
                         </div>
                         {% endif %}
                         {% else %}
-                        <!-- Si no es premium -->
                         {% if vidasTotales >= 2 %}
-                        <!-- Tiene 2 vidas o mas -->
                         <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Gastarás 2 Keys priorizando las semanales.</p>
                         <div class="text-center">
                             <a class="btn btn-primary boton" href="{% url 'destacar_publicacion' p.id %}">Sí, quiero destacar la publicación</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">No quiero</button>
                         </div>
                         {% else %}
-                        <!-- Tiene menos de 2 vidas -->
                         <p class="text-center">No puedes destacar la publicación<br>Necesitas al menos 2 Keys para poder destacar la publicación.</p>
                         <div class="text-center">
-                            <a class="btn btn-primary boton" href="#">Quiero comprar Keys</a>
+                            <a class="btn btn-primary boton" href="{% url 'tienda' %}">Quiero comprar Keys</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
                         </div>
                         {% endif %}
