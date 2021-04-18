@@ -1,36 +1,27 @@
-function coincidePass() {
+function compruebaPass() {
     var pass = $("#password-reg").val();
     var confirmPass = $("#password-confirm-reg").val();
-    if (pass != confirmPass) {
-        $("#password-confirm-reg").css("background-color","#f8d7da");
-        $("#boton-registro").attr("disabled", true);
-    } else {
-        $("#password-confirm-reg").css("background-color","#78f8da");
-        if (pass.length > 7) {
-            $("#boton-registro").attr("disabled", false);
-        } else {
-            $("#boton-registro").attr("disabled", true);
-        }
-    }
-}
-
-function longPass() {
-    var pass = $("#password-reg").val();
-    var confirmPass = $("#password-confirm-reg").val();
-    if (pass.length < 8) {
-        $("#password-reg").css("background-color","#f8d7da");
-        $("#boton-registro").attr("disabled", true);
-    } else {
+    $("#boton-registro").attr("disabled", true);
+    if (pass.length > 7 && pass == confirmPass) {
         $("#password-reg").css("background-color","#78f8da");
-        if (pass == confirmPass) {
-            $("#boton-registro").attr("disabled", false);
+        $("#password-confirm-reg").css("background-color","#78f8da");
+        $("#boton-registro").attr("disabled", false);
+    } else {
+        if (pass.length > 7) {
+            $("#password-reg").css("background-color","#78f8da");
+            $("#password-confirm-reg").css("background-color","#f8d7da");
+        } else if (pass == confirmPass) {
+            $("#password-confirm-reg").css("background-color","#78f8da");
+            $("#password-reg").css("background-color","#f8d7da");
         } else {
+            $("#password-reg").css("background-color","#f8d7da");
             $("#password-confirm-reg").css("background-color","#f8d7da");
         }
+        $("#boton-registro").attr("disabled", true);
     }
 }
 
 $(document).ready(function(){
-    $("#password-confirm-reg").keyup(coincidePass);
-    $("#password-reg").keyup(longPass);
+    $("#password-confirm-reg").keyup(compruebaPass);
+    $("#password-reg").keyup(compruebaPass);
 });
