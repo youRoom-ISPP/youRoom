@@ -7,7 +7,7 @@
 {% block contenido %}
 <div class="row">
     <div class="col-12">
-        {% for usuario in usuarios %} 
+        {% for usuario in usuarios %}
         <div class="card rank-user mb-1 pl-3 pr-3">
             <div class="row pt-2 pb-2">
                 <div class="col-2 col-md-1"><span class="pos">{{forloop.counter}}</span></div>
@@ -20,9 +20,12 @@
                     {% elif forloop.counter == 3 %}
                     <i class="bi bi-trophy-fill tercero"></i>
                     {% endif %}
-                {{usuario.user.username}}</div>
+                    <a class="listado-usuarios" href="{% url 'usuario' username=usuario.user.username %}">{{usuario.user.username}}</a>
+                </div>
                 {% else %}
-                <div class="col-7 col-md-8">{{usuario.user.username}}</div>
+                <div class="col-7 col-md-8">
+                    <a class="listado-usuarios" href="{% url 'usuario' username=usuario.user.username %}">{{usuario.user.username}}</a>
+                </div>
                 {% endif %}
                 <div class="col-3 text-right valoracion">{{usuario.totalPuntos}}</div>
             </div>
