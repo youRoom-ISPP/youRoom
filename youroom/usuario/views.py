@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
-from .models import UsuarioPerfil, ContadorVida
+from .models import UsuarioPerfil, ContadorVida, Premium
 from publicacion.models import Publicacion
 from .forms import RegistroForm
 from django.urls import reverse_lazy
@@ -11,12 +11,14 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models.functions import Lower
 from usuario.serializers import UsuarioSerializer
+from datetime import datetime
 import json
 
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
-    redirect_authenticated_user=True
+    redirect_authenticated_user = True
+
 
 class RegistroView(FormView):
     form_class = RegistroForm
@@ -45,10 +47,29 @@ class RegistroView(FormView):
             else:
                 context = self.get_context_data(form=form)
                 return self.render_to_response(context)
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+          
+def restablecer_vidas():
+    fecha_hoy = datetime.today()
+    if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
+        for contador in ContadorVida.objects.all():
+            contador.numVidasSemanales = 3
+            contador.save()
             
+
+def cancelar_suscripcion():
+    fecha_hoy = datetime.today()
+    if fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
+        for premium in Premium.objects.filter(fechaCancelacion=fecha_hoy.date()):
+            perfil = premium.perfil
+            premium.delete()
+            contador_vidas = get_object_or_404(ContadorVida, perfil=perfil)
+            contador_vidas.estaActivo = True
+            contador_vidas.save()
+
 @method_decorator(login_required, name='dispatch')
 class UsuariosView(TemplateView):
     template_name = 'usuario/usuarios.html'

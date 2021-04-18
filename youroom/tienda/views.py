@@ -1,6 +1,6 @@
 import os
 import stripe
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from tienda.models import Product
@@ -16,8 +16,8 @@ from publicacion.models import Publicacion
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 @method_decorator(login_required, name='dispatch')
-class HomePageView(TemplateView):
-    template_name = 'tienda/home.html'
+class TiendaView(TemplateView):
+    template_name = 'tienda/tienda.html'
 
     def get_context_data(self, **kwargs):
         try:
@@ -25,11 +25,14 @@ class HomePageView(TemplateView):
             context = super().get_context_data(**kwargs)
             context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
             context['products'] = products
+            usuario = get_object_or_404(UsuarioPerfil, user = self.request.user)
+            contador_vidas = get_object_or_404(ContadorVida, perfil=usuario)
+            context['contador_vidas'] = contador_vidas
             return context
 
         except:
-            message = 'Ha ocurrido un error al cargar los productos'
-            return render(request, 'tienda/fail.html', {'message':message})
+            mensaje_error = 'Ha ocurrido un error al cargar los productos'
+            return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
     def charge(request, pk):
         if request.method == 'POST':
@@ -39,8 +42,8 @@ class HomePageView(TemplateView):
 
             # Si es una suscripción, y el usuario ya esta suscrito, rechazar suscripción
             if Premium.objects.filter(perfil=perfil).exists():
-                message='Ya tiene una suscripción activa en su perfil'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error = 'Ya tienes una suscripción activa en tu perfil'
+                return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             # realizar pago
             if product.numVidas == 0:
@@ -50,24 +53,23 @@ class HomePageView(TemplateView):
 
             # Comprobar los posibles errores a la hora de realizar el pago
             if estado == 'credit_card_error':
-                message='Ha habido un error con el pago de su tarjeta'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error = 'Ha habido un error con el pago de tu tarjeta'
+                return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'invalid_request_error':
-                message='Ha habido un error con la petición de pago'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error='Ha habido un error con la petición de pago'
+                return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'error_creating_customer':
-                message='Ha habido con sus datos en Stripe'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error='Ha habido un error con sus datos en Stripe'
+                return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
-                
             elif estado == 'error':
-                message='Ha habido un error desconocido'
-                return render(request, 'tienda/fail.html', {'message':message})
+                mensaje_error='Ha habido un error desconocido'
+                return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'success':
-                
+
                 # Añadir objeto vida si se ha hecho la compra correctamente
                 if product.numVidas != 0:
                     contador = ContadorVida.objects.get_or_create(perfil = perfil)[0]
@@ -81,16 +83,16 @@ class HomePageView(TemplateView):
                     cv.estaActivo = False
                     premium.save()
                     cv.save()
-            
+
                 return HttpResponseRedirect('/perfil/')
 
         return HttpResponseRedirect('/perfil/')
 
-    def cancel_suscription(request):
+    def cancelar_suscripcion(request):
         try:
-            perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
+            perfil = UsuarioPerfil.objects.get_or_create(user=request.user)[0]
             premium_query = Premium.objects.filter(perfil=perfil)
-            if premium_query.exists()  and premium_query[0].fechaCancelacion==None:
+            if premium_query.exists() and premium_query[0].fechaCancelacion==None:
                 premium = premium_query[0]
                 customer = stripe.Customer.retrieve(perfil.id_stripe)
                 suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
@@ -99,29 +101,29 @@ class HomePageView(TemplateView):
                 premium.save()
 
             return HttpResponseRedirect('/perfil/')
-        
-        except:
-            message = 'Ha ocurrido un error al cancelar su suscripción'
-            return render(request, 'tienda/fail.html', {'message':message})
 
-    def obtiene_fecha_cancelacion(request):
+        except:
+            mensaje_error = 'Ha ocurrido un error al cancelar su suscripción'
+            return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
+
+    def obtener_fecha_cancelacion(request):
         try:
-            perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
+            perfil = UsuarioPerfil.objects.get_or_create(user=request.user)[0]
             premium = Premium.objects.filter(perfil=perfil)
 
-            if premium.exists()  and premium[0].fechaCancelacion==None:
+            if premium.exists() and premium[0].fechaCancelacion==None:
                 customer = stripe.Customer.retrieve(perfil.id_stripe)
                 suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
                 fecha_cancelacion = date.fromtimestamp(suscripcion['current_period_end'])
                 return JsonResponse({'fechaCancelacion':fecha_cancelacion,'valid':True})
             else:
-                return JsonResponse({'fechaCancelacion':'','valid':True})
-        
-        except:
-            message = 'Ha ocurrido un error al comprobar tu suscripción'
-            return render(request, 'tienda/fail.html', {'message':message})
+                return JsonResponse({'fechaCancelacion':'','valid':False})
 
-        
+        except:
+            mensaje_error = 'Ha ocurrido un error al comprobar tu suscripción'
+            return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
+
+
 
 
 def pay(request, product):
@@ -132,15 +134,15 @@ def pay(request, product):
             description='Pago de ' + str(product.numVidas) + ' vidas',
             source=request.POST['stripeToken'],
         )
-        
+
         return 'success'
 
     except stripe.error.CardError as e:
         return 'credit_card_error'
-    
+
     except stripe.error.InvalidRequestError as e:
         return 'invalid_request_error'
-    
+
     except:
         return 'error'
 
@@ -170,7 +172,7 @@ def suscribirse(request, product, perfil):
                 },
         ],
         )
-        
+
         return 'success'
 
     except stripe.error.CardError as e:
