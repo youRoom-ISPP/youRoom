@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from publicacion.enum import Categorias
 from usuario.models import UsuarioPerfil, ContadorVida
+from tienda.models import Product
 
 # Create your tests here.
 
@@ -21,7 +22,9 @@ class TimelineViewTest(APITestCase):
         self.u.save()
         self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
         self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-    
+        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
+
+
     def tearDown(self):
         self.client = None
         if os.path.exists('./media/publicaciones/test.png') :
@@ -54,7 +57,7 @@ class TimelineViewTest(APITestCase):
         response = self.client.get('/timeline/Dormitorio')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='timeline/timeline.html')
-    
+
 
     def test_timeline_logged(self):
         # El usuario se loguea y accede a su perfil
@@ -210,5 +213,4 @@ def test_timeline_destacar_orden_logged(self):
     self.assertEqual(publicaciones[2], publicacion2)
 
 
-       
-    
+

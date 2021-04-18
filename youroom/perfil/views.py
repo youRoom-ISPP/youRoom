@@ -1,7 +1,9 @@
+import os
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from publicacion.models import Publicacion
 from usuario.models import UsuarioPerfil, ContadorVida
+from tienda.models import Product
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -15,6 +17,10 @@ class PerfilView(TemplateView):
             context = super().get_context_data(**kwargs)
             usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
             cont = ContadorVida.objects.get_or_create(perfil=usuario)[0]
+            product = Product.objects.get(id=1)
+            # Datos necesarios para la suscripcion
+            context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
+            context['product'] = product
             #Del contador obtienes el numVidasSemanales y el numVidasCompradas
             context['cont'] = cont
             publicaciones = Publicacion.objects.filter(usuario=usuario).order_by('-fecha_publicacion')

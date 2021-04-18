@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
+from tienda.models import Product
 
 # Create your tests here.
 
@@ -21,7 +22,8 @@ class PerfilViewTest(APITestCase):
         self.u.save()
         self.p = UsuarioPerfil.objects.get_or_create(user = self.u,totalPuntos=100)[0]
         self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-    
+        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
+
     def tearDown(self):
         self.client = None
         if os.path.exists('./media/publicaciones/test.png') :
@@ -67,14 +69,14 @@ class PerfilViewTest(APITestCase):
         csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
 
-        
+
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
             'descripcion' : "Prueba",
             'categoria' : Categorias.SALON,
             'usuario':  self.p,
             'format': 'multipart/form-data'},follow = True)
-            
+
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get("http://testserver{}".format(reverse("perfil")))

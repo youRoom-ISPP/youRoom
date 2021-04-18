@@ -1,6 +1,9 @@
-<h1>PAGO RECHAZADO!</h1>
-<h2>La tarjeta en el entorno sandbox debe ser una tarjeta de prueba</h2>
-<p>Para más información, ver la documentación: https://stripe.com/docs/testing#cards</p>
+{% extends 'base/error.html' %}
+{% load l10n %}
 
+{% block titulo_pagina %}Error{% endblock %}
+{% block titulo %}Error{% endblock %}
 
-<h4>Mensaje que se recibe de la vista: {{message}}</h4>
+{% block error-pago %}
+    <p class="text-center"><strong>{{message}}</strong></p>
+{% endblock %}

@@ -7,14 +7,29 @@
 {% block contenido %}
 <div class="row">
     <header class="col-12 detalles-usuario card">
-        <div>
-            <h5>{{user.user.username}}</h5>
+        <div class="row mb-2 align-items-center">
+            <div class="col-8"><h5>{{user.user.username}}</h5></div>
+            <div class="col-4 d-flex justify-content-end dropleft">
+                <button class="btn dropdown-toggle user-options" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bi bi-gear-fill"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    {% if cont.estaActivo is True %}
+                    <a class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-stars icon-suscripcion"></i>Suscríbete</a>
+                    {% else %}
+                    <a id="cancelSusModal" class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item btn-dropdown-user" href="{% url 'logout' %}"><i class="bi bi-power icon-suscripcion"></i>Cerrar sesión</a>
+                </div>
+            </div>
+            {% include 'perfil/modal_suscripcion.html' %}
         </div>
         <section class="row">
             <div class="col-12">
                 <p class="descripcion-usuario">{{user.descripcion}}</p>
             </div>
-            <div class="col-6 align-self-center">
+            <div class="col-12 align-self-center">
                 {% if cont.estaActivo is True %}
                 <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
                     data-content="Keys semanales">
@@ -33,9 +48,6 @@
                     data-content="Roomies">
                     <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
                 </span>
-            </div>
-            <div class="col-6 d-flex justify-content-end">
-                <a class="btn btn-primary btn-sm btn-cancelar-publicacion" href="{% url 'logout' %}">Cerrar sesión</a>
             </div>
         </section>
     </header>
@@ -75,7 +87,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% include 'perfil/destacado.html' %}
+                    {% include 'perfil/modal_destacado.html' %}
                     <div class="row px-1 pt-1">
                         <p>{{p.descripcion}}</p>
                     </div>
