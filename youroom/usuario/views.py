@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
@@ -6,9 +6,13 @@ from .models import UsuarioPerfil, ContadorVida
 from publicacion.models import Publicacion
 from .forms import RegistroForm
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models.functions import Lower
+from usuario.serializers import UsuarioSerializer
+import json
+
 
 class LoginView(auth_view):
     template_name = 'usuario/login.html'
@@ -53,7 +57,8 @@ class UsuariosView(TemplateView):
         try:
             context = super().get_context_data(**kwargs)
             lista_usuarios = UsuarioPerfil.objects.all().order_by(Lower('user__username'))
-            context['usuarios'] = lista_usuarios
+            serializer = UsuarioSerializer(lista_usuarios, many=True)
+            context['usuarios'] = json.dumps(serializer.data)
             return context
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
@@ -63,12 +68,23 @@ class UsuariosView(TemplateView):
 class UsuarioShowView(TemplateView):
     template_name = 'usuario/usuario.html'
 
+    def get(self, request, username):
+        try:
+            if not User.objects.filter(username = username).exists():
+                raise Exception("El usuario no existe")
+            if username == self.request.user.username:
+                return HttpResponseRedirect('/perfil/')
+            return super(UsuarioShowView, self).get(request, username)
+        except Exception as e:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(request, 'base/error.html', context)
+
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
             username = self.kwargs.get('username')
-            user = User.objects.get_or_create(username = username)[0]
-            perfil = UsuarioPerfil.objects.get_or_create(user = user)[0]
+            user = User.objects.get(username = username)
+            perfil = UsuarioPerfil.objects.get(user = user)
             publicaciones = Publicacion.objects.filter(usuario=perfil)
             context['publicaciones'] = publicaciones
             context['numPublicaciones'] = publicaciones.count()
