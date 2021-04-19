@@ -8,7 +8,7 @@
 <ul class="nav justify-content-around opciones-timeline-mobile mb-3 sticky-top">
     <div class="col-6 timeline-nav">
         <li class="nav-item">
-            <a class="nav-link text-white text-center" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill dest mr-2"></i>Destacados</a>
+            <a class="nav-link text-white text-center" href="{% url 'usuarios' %}"><i class="bi bi-search dest mr-2"></i>Buscar</a>
         </li>
     </div>
     <div class="col-6 timeline-nav">
@@ -32,7 +32,7 @@
         <div>
             <div class="card mb-3">
                 <div class="card-header bg-white">
-                    <strong class="timeline-user">{{p.0.usuario.user.username}}</strong>
+                    <a class="listado-usuarios" href="{% url 'usuario' username=p.0.usuario.user.username %}"><strong class="timeline-user">{{p.0.usuario.user.username}}</strong></a>
                 </div>
                 <div class="container-visor-timeline">
                     <img src="{{p.0.imagen.url}}" class="card-img-bottom">
@@ -69,7 +69,7 @@
                     {% else %}
                     <div class="row pt-2 bg-white">
                         <div class="col-6">
-                            <p class="puntos">{{p.0.totalValoraciones}} roomies</p>
+                            <p class="puntos">{{p.0.totalValoraciones}} ★</p>
                         </div>
                         <div class="col-6 d-flex justify-content-end">
                             <!-- Publicacion destacada -->
@@ -95,7 +95,7 @@
     <div class="row">
         <div class="col-12">
             <div class="row timeline-nav-pc">
-                <a class="text-white" href="{% url 'timeline' %}"><i class="bi bi-lightning-fill"></i><span class="ml-1 ml-lg-4">Destacados</span></a>
+                <a class="text-white" href="{% url 'usuarios' %}"><i class="bi bi-search"></i><span class="ml-1 ml-lg-4">Buscar</span></a>
             </div>
             <div class="row mt-1 timeline-nav-pc">
                 <div class="nav-item dropdown">

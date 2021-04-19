@@ -14,6 +14,12 @@ class LoginTestCase(APITestCase):
         self.u.isActive=True
         self.u.save()
 
+        self.u = User(username='prueba1')
+        self.u.set_password('usuario1234')
+        self.u.email = 'prueba1@gmail.com'
+        self.u.isActive=True
+        self.u.save()
+
     def tearDown(self):
         self.client = None
 
@@ -87,3 +93,23 @@ class LoginTestCase(APITestCase):
         response = self.client.post('/registro/', answers)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().username, 'usuario_ok')
+
+    def test_listar_usuarios(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        response = self.client.post('', answers)
+        response = self.client.get('/usuarios/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[-1],'usuario/usuarios.html')
+    
+    def test_mostrar_usuario(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        response = self.client.post('', answers)
+        response = self.client.get('/usuarios/prueba1')
+        self.assertEqual(response.status_code, 301)
+        self.assertTemplateUsed(template_name='usuario/usuario.html')
