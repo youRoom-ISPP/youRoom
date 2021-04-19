@@ -357,6 +357,7 @@ input[type="file"] {
 
 .descripcion-usuario {
     font-size: 0.9rem;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
 @media (max-width: 335px) {

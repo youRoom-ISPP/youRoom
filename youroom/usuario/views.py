@@ -13,6 +13,8 @@ from django.db.models.functions import Lower
 from usuario.serializers import UsuarioSerializer
 from datetime import datetime
 import json
+from ranking.forms import ValoracionForm
+from ranking.models import Valoracion
 
 
 class LoginView(auth_view):
@@ -51,14 +53,14 @@ class RegistroView(FormView):
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 
-          
+
 def restablecer_vidas():
     fecha_hoy = datetime.today()
     if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
         for contador in ContadorVida.objects.all():
             contador.numVidasSemanales = 3
             contador.save()
-            
+
 
 def cancelar_suscripcion():
     fecha_hoy = datetime.today()
@@ -107,7 +109,20 @@ class UsuarioShowView(TemplateView):
             user = User.objects.get(username = username)
             perfil = UsuarioPerfil.objects.get(user = user)
             publicaciones = Publicacion.objects.filter(usuario=perfil)
-            context['publicaciones'] = publicaciones
+            totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
+            finalVals=[]
+
+            for p in publicaciones:
+                valorada = False
+                for val in totalVals:
+                    if val.publicacion.id == p.id:
+                        finalVals.append(val.puntuacion)
+                        valorada = True
+                if not valorada:
+                    finalVals.append(0)
+
+            context['formulario_valoracion'] = ValoracionForm()
+            context['publicaciones'] = list(zip(publicaciones, finalVals))
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = perfil
             return context

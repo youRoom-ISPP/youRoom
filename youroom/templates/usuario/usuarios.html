@@ -1,7 +1,18 @@
-{% for usuario in usuarios %} 
-<div>
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block titulo_pagina %}Listado de usuarios{% endblock %}
+{% block titulo %}Listado de usuarios{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-sm-12">
+        <input type="text" id="buscador" class="form-control mb-2" placeholder="Buscar">
+    </div>
     <div>
-        <div>{{usuario.user.username}}</div>
+        <input type="hidden" id="usuarios" value="{{usuarios}}">
+    </div>
+    <div class="col-12" id="resultado">
     </div>
 </div>
-{% endfor %}
+{% endblock %}

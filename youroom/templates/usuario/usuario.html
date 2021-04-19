@@ -1,2 +1,77 @@
-<h5>{{user.user.username}}</h5>
-<p>{{user.descripcion}}</p>
+{% extends 'base/base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo_pagina %}Perfil de usuario{% endblock %}
+{% block titulo %}Perfil de usuario{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <header class="col-12 detalles-usuario card">
+        <div class="row mb-2 align-items-center">
+            <div class="col-8"><h5>{{user.user.username}}</h5>
+            </div>
+        </div>
+        <section class="row">
+            <div class="col-12">
+                <pre class="descripcion-usuario">{{user.descripcion}}</pre>
+            </div>
+            <div class="col-12 align-self-center">
+                <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
+                    data-placement="top" data-content="Publicaciones totales">
+                    <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
+                </span>
+                <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
+                    data-content="Roomies">
+                    <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
+                </span>
+            </div>
+        </section>
+    </header>
+</div>
+<div class="row">
+    <div class="col-12 pt-sm-3 timeline">
+        {% for p in publicaciones %}
+        <div>
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <strong class="timeline-user">{{p.0.usuario.user.username}}</strong>
+                </div>
+                <div class="container-visor-timeline">
+                    <img src="{{p.0.imagen.url}}" class="card-img-bottom">
+                    {% for e in p.0.etiqueta_set.all %}
+                    {% localize off %}
+                    <a target="_blank" href="{{e.enlace}}">
+                        <div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;">
+                        </div>
+                    </a>
+                    {% endlocalize %}
+                    {% endfor %}
+                </div>
+                <div class="card-body cuerpo-tarjeta">
+                    <div class="row pl-1 bg-white">
+                        <form id="v{{p.0.id}}">{% csrf_token %}
+                            <fieldset class="rating">
+                                <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="5" />
+                                <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
+                                <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="4" />
+                                <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
+                                <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="3" />
+                                <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
+                                <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="2" />
+                                <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
+                                <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="1" />
+                                <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="row px-1 pt-1">
+                        <p>{{p.0.descripcion}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
