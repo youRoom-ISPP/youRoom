@@ -36,17 +36,107 @@
                         {% endfor %}
                         </div>
                         {% endif %}
+                        <div class="form-group">
+                            <input type="checkbox" name="checkboxPoliticaDatos" id="checkboxPoliticaDatos" required><small> He leído y acepto la <a href="" data-toggle="modal" data-target="#staticBackdrop">Política de datos</a>.</small>
+                        </div>
                         <button id="boton-registro" class="btn btn-primary boton" type="submit">Registrarse</button>
                     </form>
                 </div>
                 <div class="text-center pt-2">
-                    <a id="a-login" class="enlace-registro" href="/">¿Ya eres estás registrado? Inicia sesión</a>
+                    <a id="a-login" class="enlace-registro" href="/">¿Ya estás registrado? Inicia sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Política de datos</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">En esta política se describe la información que tratamos a fin de proporcionar los servicios de youRoom.</p>
+                    <h3>I. ¿Qué información recopilamos?</h3>
+
+                    <p>Debemos tratar su información a fin de proporcionarle los Productos de youRoom. El tipo de información que recopilamos depende de la forma en la que usa nuestros Productos.</p>
+
+                    <h4>Cosas que usted y otras personas hacen y nos proporcion</h4>
+
+                    <p><strong>Credenciales de usuario y correo electrónico.</strong> Por cada cuenta de usuario que se registra en youRoom, almacenamos en nuestro sistema el nombre de usuario y su contraseña, credenciales de acceso para poder autenticarse en youRoom. La contraseña está almacenada de manera encriptada, aumentando así las garantías de privacidad y seguridad.</p>
+
+                    <p>Por otro lado, la dirección de correo electrónico se almacena como único medio de comunicación para contactar con los usuarios. Esta dirección no se revela en ningún caso, siendo totalmente privada y de uso interno para emitir comunicaciones importas por parte de youRoom.</p>
+
+                    <p><strong>Contenido que publica en youRoom.</strong> Recopilamos el contenido y los comentarios en las publicaciones. Esta información puede corresponder a las imágenes que publica, datos incluidos en el contenido que proporciona o relacionados con este, como la descripción de una publicación o los enlaces web que etiqueta en la imagen a publicar, así como las puntuaciones que otorga a publicaciones de otros usuarios.</p>
+
+                    <h3>II. ¿Para qué utilizamos esta información?</h3>
+
+                    <h4>Fomentar la seguridad, la integridad y la protección.</h4>
+
+                    <p>Utilizamos el nombre de usuario y la contraseña para poder autenticarle a la hora de acceder a youRoom. De esta forma garantizamos que la persona que accede a la aplicación es titular de la cuenta de usario, evitando así la publicación de contenido por parte de terceros o la compra de Productos no desados.</p>
+
+                    <h4>Comunicarnos con el usuario</h4>
+
+                    <p>Usamos la dirección de correo electrónico que proporcions para enviarle mensajes de marketing, darle a conocer nuestros Productos e informarle acerca de nuestras políticas y condiciones. También la utilizamos para responderle cuando se ponga en contacto con nosotros.</p>
+
+                    <p>Ante cualquier cambio en nuestras políticas y condiciones o ante cualquier brecha de seguridad detectada que pueda poner en peligro la integración de sus datos personales, será a través del correo electrónico como contactaremos con usted.</p>
+
+                    <h3>III. ¿Cómo puede ejercer sus derechos en virtud del RGPD?</h3>
+
+                    <p>De conformidad con el Reglamento General de Protección de Datos, tiene derecho a acceder a sus datos, rectificarlos, obtener su portabilidad y suprimirlos.</p>
+
+                    <p>Para ejercer cualquiera de estos derechos anteriormente enunciados, debe solicitarlo por correo electrónico a <a href="mailto:rgpd.youroom@gmail.com">rgpd.youroom@gmail.com</a>.</p>
+
+                    <h4>Desactivación y eliminación de cuentas</h4>
+
+                    <p>En cualquier momento puede solicitar la desactivación y eliminación de su cuenta de usuario. Para ello, debe solicitarlo por correo electrónico a <a href="mailto:rgpd.youroom@gmail.com">rgpd.youroom@gmail.com</a>. Debe indicar en el asunto del mensaje "Eliminar cuenta de usuario".</p>
+
+                    <p>Ninguna cuenta de usuario será eliminada si no se facilitan, en el mensaje de solicitud de baja, los siguientes datos:</p>
+
+                    <ul>
+                        <li>Correo electrónico de la cuenta de usuario.</li>
+                        <li>Nombre de la cuenta de usuario.</li>
+                    </ul>
+
+                    <h4>Acceso y portabilidad de los datos</h4>
+
+                    <p>En cualquier momento puede solicitar el acceso y/o portabilidad de los datos totales de su cuenta de usuario. Para ello, debe solicitarlo por correo electrónico a <a href="mailto:rgpd.youroom@gmail.com">rgpd.youroom@gmail.com</a>. Debe indicar en el asunto del mensaje "Acceso a datos personales".</p>
+
+                    <p>No se facilitarán los datos totales de ninguna cuenta de usuario si no se facilitan, en el mensaje de solicitud, los siguientes datos:</p>
+
+                    <ul>
+                        <li>Correo electrónico de la cuenta de usuario.</li>
+                        <li>Nombre de la cuenta de usuario.</li>
+                    </ul>
+
+                    <h3>IV. ¿Cómo le notificaremos los cambios que se produzcan en esta política?</h3>
+
+                    <p>Ante cualquier cambio en nuestras políticas y condiciones o ante cualquier brecha de seguridad detectada que pueda poner en peligro la integración de sus datos personales, será a través del correo electrónico como contactaremos con usted.</p>
+
+                    <p>Todas las notificaciones que se emitan de manera oficial por parte de youRoom serán remitidas por la cuenta de correo electrónico rgpd.youroom@gmail.com. Cualquier otra información en nombre de youRoom que no sea remitida por esta dirección deberá ser ignorada y tratada como fraudulenta.</p>
+
+                    <h3>V. Cómo remitir sus dudas a youRoom</h3>
+
+                    <p>Si tiene preguntas acerca de esta política, contacte con nosotros a través de los métodos que se indican a continuación.</p>
+
+                    <ul>
+                        <li><a href="mailto:rgpd.youroom@gmail.com">rgpd.youroom@gmail.com</a></li>
+                        <li><a href="mailto:soporte.youroom@gmail.com">soporte.youroom@gmail.com</a></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/registro.js' %}"></script>
 
 </body>
