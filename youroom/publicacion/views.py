@@ -1,7 +1,7 @@
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
-from .forms import PublicacionForm
-from .models import Publicacion, Etiqueta, Destacada
+from .forms import PublicacionForm, ComentarioForm
+from .models import Publicacion, Etiqueta, Destacada, Comentario
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -140,3 +140,19 @@ class DestacarPublicacionView(TemplateView):
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(request, 'base/error.html', context)
         
+@method_decorator(login_required, name='dispatch')
+class ComentarPublicacionView(FormView):
+    form_class = ComentarioForm
+    template_name = 'timeline/timeline.html'
+    success_url = reverse_lazy('timeline')
+
+    def form_valid(self, form):
+        try:
+            texto=form.cleaned_data['texto']
+            usuario=UsuarioPerfil.objects.get(user=self.request.user)
+            publicacion=Publicacion.objects.get(id=form.cleaned_data['publicacion_id'])
+            Comentario.objects.create(texto=texto, usuario=usuario, publicacion=publicacion)
+            return super().form_valid(form)
+        except Exception as e:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)

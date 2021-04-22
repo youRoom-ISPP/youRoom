@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from publicacion.models import Publicacion, Destacada
+from publicacion.models import Publicacion, Destacada, Comentario
+from publicacion.forms import ComentarioForm
 from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
 from usuario.models import UsuarioPerfil
@@ -33,7 +34,9 @@ class TimelineView(TemplateView):
     
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
             finalVals=[]
-            
+
+            comentarios = Comentario.objects.all().order_by('-fecha')
+            finalComents = []
             for p in publicaciones:
                 valorada = False
                 for val in totalVals:
@@ -42,10 +45,17 @@ class TimelineView(TemplateView):
                         valorada = True
                 if not valorada:
                     finalVals.append(0)
-    
+                aux = []
+                for comentario in comentarios:
+                    if comentario.publicacion.id == p.id:
+                        aux.append(comentario)
+                finalComents.append(aux)
+            
             context['formulario_valoracion'] = ValoracionForm()
-            context['publicaciones'] = list(zip(publicaciones, finalVals))
+            context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
             context['categorias'] = Categorias.choices()
+            context['formulario_comentario'] = ComentarioForm()
+            
             return context
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
