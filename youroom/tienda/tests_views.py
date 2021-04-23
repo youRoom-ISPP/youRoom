@@ -1,18 +1,11 @@
-import io, os
-from PIL import Image
-from django.core.management import call_command
-from rest_framework.test import  APIClient , APITestCase
-from django.contrib.auth.models import User
-from usuario.models import UsuarioPerfil, ContadorVida, Premium
-from tienda.models import Product
 from django.urls import reverse
-from tienda.tests import BaseTestCase
+from youroom.base_tests import BaseTestCase
+
 
 class TiendaViewTest(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-
 
     def tearDown(self):
         self.client = None

@@ -1,7 +1,6 @@
-from tienda.tests import BaseTestCase
 from django.contrib.auth.models import User
-from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
+from youroom.base_tests import BaseTestCase
+
 
 class LoginTestCase(BaseTestCase):
 
@@ -11,7 +10,7 @@ class LoginTestCase(BaseTestCase):
         self.u = User(username='prueba1')
         self.u.set_password('usuario1234')
         self.u.email = 'prueba1@gmail.com'
-        self.u.isActive=True
+        self.u.isActive = True
         self.u.save()
 
     def tearDown(self):
@@ -28,8 +27,8 @@ class LoginTestCase(BaseTestCase):
         }
         response = self.client.post('', answers)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/timeline/', status_code=302, 
-        target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(response, '/timeline/', status_code=302,
+                             target_status_code=200, fetch_redirect_response=True)
 
     def test_login_fail(self):
         answers = {
@@ -38,8 +37,8 @@ class LoginTestCase(BaseTestCase):
             }
         response = self.client.post('', answers)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name[-1],'usuario/login.html')
-    
+        self.assertEqual(response.template_name[-1], 'usuario/login.html')
+
     def test_registro_ok(self):
         answers = {
                 'username': 'usuario_ok',
@@ -63,7 +62,7 @@ class LoginTestCase(BaseTestCase):
         response = self.client.post('/registro/', answers)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().username, 'usuario_ok')
-    
+
     def test_registro_fail_username(self):
         answers = {
                 'username': 'prueba',
@@ -75,7 +74,7 @@ class LoginTestCase(BaseTestCase):
         response = self.client.post('/registro/', answers)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.last().email, 'test@test.com')
-    
+
     def test_registro_fail_email(self):
         answers = {
                 'username': 'usuario_ok',
@@ -96,8 +95,8 @@ class LoginTestCase(BaseTestCase):
         response = self.client.post('', answers)
         response = self.client.get('/usuarios/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name[-1],'usuario/usuarios.html')
-    
+        self.assertEqual(response.template_name[-1], 'usuario/usuarios.html')
+
     def test_mostrar_usuario(self):
         answers = {
             'username': 'prueba',

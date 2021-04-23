@@ -1,16 +1,10 @@
-import io, os
+import io
+import os
 from PIL import Image
-from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
-from usuario.models import UsuarioPerfil
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
-from tienda.models import Product
-from tienda.tests import BaseTestCase
+from youroom.base_tests import BaseTestCase
 
-# Create your tests here.
 
 class PerfilViewTest(BaseTestCase):
 
@@ -19,7 +13,7 @@ class PerfilViewTest(BaseTestCase):
 
     def tearDown(self):
         self.client = None
-        if os.path.exists('./media/publicaciones/test.png') :
+        if os.path.exists('./media/publicaciones/test.png'):
             os.remove('./media/publicaciones/test.png')
 
     def generate_photo_file(self):
@@ -30,14 +24,10 @@ class PerfilViewTest(BaseTestCase):
         file.seek(0)
         return file
 
-
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='usuario/login.html')
-
-
-
 
     def test_perfil_logged(self):
 
@@ -56,19 +46,16 @@ class PerfilViewTest(BaseTestCase):
         self.assertEqual(len(publicaciones), 0)
 
         # El usuario realiza publicación, y al acceder a su perfil obtiene la publicación
-        formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
         self.assertEqual(response.status_code, 200)
 
-        csrftoken = formulario.cookies['csrftoken']
         imagen = self.generate_photo_file()
-
 
         response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
             'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
+            'descripcion': "Prueba",
+            'categoria': Categorias.SALON,
             'usuario':  self.p,
-            'format': 'multipart/form-data'},follow = True)
+            'format': 'multipart/form-data'}, follow=True)
 
         self.assertEqual(response.status_code, 200)
 
@@ -82,7 +69,3 @@ class PerfilViewTest(BaseTestCase):
         self.assertEqual(perfil.user, self.u)
         self.assertEqual(len(publicaciones), 1)
         self.assertEqual(publicaciones[0].usuario, perfil)
-
-
-
-
