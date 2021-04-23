@@ -1,6 +1,4 @@
-import io
 import os
-from PIL import Image
 from django.urls import reverse
 from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
@@ -25,14 +23,6 @@ class PublicacionViewTest(BaseTestCase):
         self.client = None
         if os.path.exists('./static/media/publicaciones/test.png'):
             os.remove('./static/media/publicaciones/test.png')
-
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
 
     def test_publicacion_view_not_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("publicacion")))
@@ -59,13 +49,7 @@ class PublicacionViewTest(BaseTestCase):
             'password': 'usuario1234'
         }
         self.client.post('', answers)
-        imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.SALON)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
@@ -73,7 +57,7 @@ class PublicacionViewTest(BaseTestCase):
         self.assertEqual(cont.numVidasSemanales, 2)
 
         objeto_guardado = Publicacion.objects.last()
-        self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + imagen.name)
+        self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + self.imagen.name)
         self.assertEqual(objeto_guardado.categoria, 'Categorias.SALON')
         self.assertEqual(objeto_guardado.descripcion, "Prueba")
         self.assertEqual(objeto_guardado.usuario, self.p)
@@ -92,13 +76,7 @@ class PublicacionViewTest(BaseTestCase):
 
         # Contamos la cantidad de publicaciones destacadas que tenemos inicialmente
         cantidad_destacados_inicial = Destacada.objects.all().count()
-        imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
@@ -123,7 +101,7 @@ class PublicacionViewTest(BaseTestCase):
 
     def test_destacar_otro_usuario_logged(self):
         # Creamos nuevo usuario
-        User.objects.get_or_create(username='prueba2', password='prueba2')[0]
+        User.objects.create(username='prueba2', password='prueba2')
 
         cantidad_destacados_inicial = Destacada.objects.all().count()
         answers = {
@@ -132,14 +110,8 @@ class PublicacionViewTest(BaseTestCase):
         }
         self.client.post('', answers)
 
-        imagen = self.generate_photo_file()
-
         # Usuario 1 realiza una publicación
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
@@ -163,14 +135,8 @@ class PublicacionViewTest(BaseTestCase):
         # Contamos la cantidad de publicaciones destacadas que tenemos inicialmente
         cantidad_destacados_inicial = Destacada.objects.all().count()
 
-        imagen = self.generate_photo_file()
-        Premium.objects.get_or_create(perfil=self.p2)[0]
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'usuario':  self.p2,
-            'format': 'multipart/form-data'}, follow=True)
+        Premium.objects.create(perfil=self.p2)
+        response = super().publicar(self.p2, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 

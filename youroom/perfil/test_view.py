@@ -1,6 +1,4 @@
-import io
 import os
-from PIL import Image
 from django.urls import reverse
 from publicacion.enum import Categorias
 from youroom.base_tests import BaseTestCase
@@ -15,14 +13,6 @@ class PerfilViewTest(BaseTestCase):
         self.client = None
         if os.path.exists('./media/publicaciones/test.png'):
             os.remove('./media/publicaciones/test.png')
-
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
@@ -48,14 +38,7 @@ class PerfilViewTest(BaseTestCase):
         # El usuario realiza publicación, y al acceder a su perfil obtiene la publicación
         self.assertEqual(response.status_code, 200)
 
-        imagen = self.generate_photo_file()
-
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.SALON)
 
         self.assertEqual(response.status_code, 200)
 

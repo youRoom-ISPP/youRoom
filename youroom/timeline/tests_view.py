@@ -1,10 +1,8 @@
-import io
 import os
-from PIL import Image
 from django.urls import reverse
 from publicacion.enum import Categorias
 from publicacion.models import Publicacion
-from usuario.models import UsuarioPerfil, Premium
+from usuario.models import Premium
 from youroom.base_tests import BaseTestCase
 
 
@@ -15,16 +13,8 @@ class TimelineViewTest(BaseTestCase):
 
     def tearDown(self):
         self.client = None
-        if os.path.exists('./media/publicaciones/test.png') :
+        if os.path.exists('./media/publicaciones/test.png'):
             os.remove('./media/publicaciones/test.png')
-
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
 
     def test_timeline_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("timeline")))
@@ -69,14 +59,7 @@ class TimelineViewTest(BaseTestCase):
         # El usuario realiza una publicación de la categoría Dormitorio
         self.assertEqual(response.status_code, 200)
 
-        imagen = self.generate_photo_file()
-        perfil, create = UsuarioPerfil.objects.get_or_create(user=self.u)
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria':  Categorias.DORMITORIO,
-            'usuario':  perfil,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.DORMITORIO)
         self.assertEqual(response.status_code, 200)
 
         # El usuario entra a la Timeline y encuentra una publicación
@@ -101,12 +84,7 @@ class TimelineViewTest(BaseTestCase):
         self.client.login(username='prueba', password='usuario1234')
 
         Premium.objects.create(perfil=self.p)
-        imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria':  Categorias.DORMITORIO,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.DORMITORIO)
         self.assertEqual(response.status_code, 200)
 
         # El usuario entra a la Timeline y la primera imagen que ve es su publicación
@@ -117,12 +95,7 @@ class TimelineViewTest(BaseTestCase):
         self.assertEqual(publicaciones[0][0], publicacion1)
 
         # El usuario realiza una segunda publicación y le sale la primera en la timeline
-        imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria':  Categorias.ENTRADITA,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.ENTRADITA)
         self.assertEqual(response.status_code, 200)
 
         publicacion2 = Publicacion.objects.last()
