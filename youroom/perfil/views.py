@@ -30,11 +30,6 @@ class PerfilView(TemplateView):
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = usuario
             context['vidasTotales'] = cont.numVidasCompradas + cont.numVidasSemanales
-            # formulario_editar_perfil = PerfilForm()
-            # formulario_editar_perfil['descripcion'] = usuario.descripcion
-            # formulario_editar_perfil['password1'] = usuario.user.password
-            # formulario_editar_perfil['password2'] = usuario.user.password
-            context['formulario_perfil'] =  PerfilForm()
             return context
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
@@ -47,16 +42,62 @@ class EditarPerfilView(FormView):
     template_name = 'perfil/editar_perfil.html'
     success_url = reverse_lazy('perfil')
 
-    def form_valid(self, form):
-        try:
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+        formulario_editar_perfil =  PerfilForm(initial={ 
+            "descripcion": usuario.descripcion})
+        context['formulario_perfil'] =  formulario_editar_perfil
+        return render(self.request, 'perfil/editar_perfil.html', context)
+
+    def form_valid(self,form):
+        #try:
             usuario_perfil = UsuarioPerfil.objects.get_or_create(user=self.request.user)[0]
-            usuario_perfil.descripcion = form.cleaned_data.get['descripcion']
-            usuario_perfil.user.password = form.cleaned_data.get['contrasena']
-            usuario=usuario_perfil.imagen = form.cleaned_data.get['imagen']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            if password1 =='' and password2 =='':
+                usuario_perfil.descripcion = form.cleaned_data['descripcion']
+                usuario=usuario_perfil.imagen = form.cleaned_data['imagen']
+                return super().form_valid(form)
+            elif password1 != '' and password2 != '' and password1==password2:
+                usuario_perfil.descripcion = form.cleaned_data['descripcion']
+                usuario=usuario_perfil.imagen = form.cleaned_data['imagen']
+                usuario_perfil.user.password = password1
+                return super().form_valid(form)
+            elif password1 != '' and password2 != '' and password1!=password2:
+                context = {'error_message': 'Las contraseñas deben coincidir'}
+                return render(self.request, 'base/error.html', context)
+            else:
+                context = {'error_message': 'Ha ocurrido un error inesperado'}
+                return render(self.request, 'base/error.html', context)
+        #except Exception as e:
+            # context = {'error_message': 'Ha ocurrido un error inesperado'}
+            # return render(self.request, 'base/error.html', context)
+
+
+-------------
+
+class EditarPerfilView(FormView):
+    form_class = PerfilForm
+    template_name = 'perfil/editar_perfil.html'
+    success_url = reverse_lazy('perfil')
+
+    def form_valid(self,form, **kwargs):
+        try:
+            descripcion = form.cleaned_data['descripcion']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            imagen = form.cleaned_data['imagen']
+            usuario = getUser()
+            usuario.descripcion = descripcion
+            if password1 != '' and password2 != '' and password1==password2:
+                usuario.user.password = password1
             return super().form_valid(form)
-        except Exception as e:
+
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 
-
-
+    def getUser(self, request):
+        usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+        return usuario  

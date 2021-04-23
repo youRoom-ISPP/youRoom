@@ -1,4 +1,5 @@
-<form>
+<form action="{% url 'guardar_perfil' %}" method="POST" id="form-perfil" enctype="multipart/form-data">
     {% csrf_token %}
     {{ formulario_perfil}}
+    <button></button>
 </form>
