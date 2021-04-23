@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo_pagina %}Política de datos{% endblock %}
+{% block titulo %}Política de datos{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-12">
+        <h2>Política de datos</h2>
+        {% include 'rgpd/rgpd.html' %}
+    </div>
+</div>
+{% endblock %}
