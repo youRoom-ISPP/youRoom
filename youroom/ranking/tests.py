@@ -1,4 +1,4 @@
-from django.test import TestCase
+from tienda.tests import BaseTestCase
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida
 from ranking.models import Valoracion
@@ -10,19 +10,10 @@ from publicacion.enum import Categorias
 from django.urls import reverse
 from tienda.models import Product
 
-class ValorarTestCase(APITestCase):
+class ValorarTestCase(BaseTestCase):
 
     def setUp(self):
-        self.client = APIClient()
-        self.u = User(username='prueba')
-        self.u.set_password('usuario1234')
-        self.u.email = 'prueba@gmail.com'
-        self.u.isActive=True
-        self.u.save()
-        self.p = UsuarioPerfil.objects.get_or_create(user = self.u)[0]
-        self.c = ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
-
+        super().setUp()
 
     def tearDown(self):
         self.client = None

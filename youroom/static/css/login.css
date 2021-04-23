@@ -1,73 +1,73 @@
 .container-login {
-    height: 100vh;
-    margin-top: -3rem;
-    display: flex;
-    justify-content: center;
+  height: 100vh;
+  margin-top: -3rem;
+  display: flex;
+  justify-content: center;
 }
 
 .reg-form,
 .login-form {
-    border-color: #0DDFAD;
-    background-color: white;
-    border-radius: 10px;
-    border-width: 2px;
-    border-style: solid;
-    text-align: center;
-    padding: 2.5rem;
-    max-width: 400px;
-    margin: auto;
+  border-color: #0ddfad;
+  background-color: white;
+  border-radius: 10px;
+  border-width: 2px;
+  border-style: solid;
+  text-align: center;
+  padding: 2.5rem;
+  max-width: 400px;
+  margin: auto;
 }
 
 .reg-form {
-    padding: 2rem;
-    margin-top: 2rem;
+  padding: 2rem;
+  margin-top: 2rem;
 }
 
 .logo-login {
-    width: 275px;
-    margin-bottom: 3rem;
+  width: 275px;
+  margin-bottom: 3rem;
 }
 
 .form-control {
-    background-color: #F6F6F3;
-    border: 1px solid #D4D0C4;
-    border-radius: 15px;
+  background-color: #f6f6f3;
+  border: 1px solid #d4d0c4;
+  border-radius: 15px;
 }
 
 .alerta {
-    font-size: small;
-    border-radius: 15px;
+  font-size: small;
+  border-radius: 15px;
 }
 
 .anula-margin-bottom {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .enlace-registro {
-    text-align: center;
-    font-size: small;
-    color: #086952;
-    transition-duration: 0.8s;
-    cursor: pointer;
+  text-align: center;
+  font-size: small;
+  color: #086952;
+  transition-duration: 0.8s;
+  cursor: pointer;
 }
 
 .enlace-registro:hover {
-    color: #0ddfad;
-    transition-duration: 0.8s;
-    text-decoration: none;
-    cursor: pointer;
+  color: #0ddfad;
+  transition-duration: 0.8s;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .tit-registro {
-    color: #099A78;
+  color: #099a78;
 }
 
 .boton:disabled {
-    background-color: #96fde5;
-    border: 2px solid #21b895;
-    color: #156956;
+  background-color: #96fde5;
+  border: 2px solid #21b895;
+  color: #156956;
 }
 
 #descripcion-reg {
-    resize: none;
+  resize: none;
 }

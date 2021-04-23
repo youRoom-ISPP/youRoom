@@ -1,18 +1,12 @@
-from django.test import TestCase
+from tienda.tests import BaseTestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-
-class LoginTestCase(APITestCase):
+class LoginTestCase(BaseTestCase):
 
     def setUp(self):
-        self.client = APIClient()
-        self.u = User(username='prueba')
-        self.u.set_password('usuario1234')
-        self.u.email = 'prueba@gmail.com'
-        self.u.isActive=True
-        self.u.save()
+        super().setUp()
 
         self.u = User(username='prueba1')
         self.u.set_password('usuario1234')

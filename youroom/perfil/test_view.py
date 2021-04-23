@@ -8,21 +8,14 @@ from django.contrib.auth import authenticate
 from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
 from tienda.models import Product
+from tienda.tests import BaseTestCase
 
 # Create your tests here.
 
-class PerfilViewTest(APITestCase):
+class PerfilViewTest(BaseTestCase):
 
     def setUp(self):
-        self.client = APIClient()
-        self.u = User(username='prueba')
-        self.u.set_password('prueba')
-        self.u.email = 'prueba@gmail.com'
-        self.u.isActive=True
-        self.u.save()
-        self.p = UsuarioPerfil.objects.get_or_create(user = self.u,totalPuntos=100)[0]
-        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
+        super().setUp()
 
     def tearDown(self):
         self.client = None
@@ -49,7 +42,7 @@ class PerfilViewTest(APITestCase):
     def test_perfil_logged(self):
 
         # El usuario se loguea y accede a su perfil
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
 
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 200)
