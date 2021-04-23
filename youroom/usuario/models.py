@@ -10,7 +10,7 @@ class UsuarioPerfil(models.Model):
     descripcion = models.TextField(max_length=500, blank=True)
     totalPuntos = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])
     id_stripe = models.CharField(max_length = 50, blank=True, default='')
-    #imagen = models.ImageField(upload_to='perfiles/')
+    foto_perfil = models.ImageField(upload_to='perfil/', default = '')
 
 
 class ContadorVida(models.Model):

@@ -1,3 +1,6 @@
+{%if imagen != ''%}
+<img src={{imagen.url}}/>
+{%endif%}
 <form action="{% url 'guardar_perfil' %}" method="POST" id="form-perfil" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p}}
