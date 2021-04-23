@@ -10,6 +10,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate,login
 
 @method_decorator(login_required, name='dispatch')
 class PerfilView(TemplateView):
@@ -36,46 +38,6 @@ class PerfilView(TemplateView):
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 
-
-# @method_decorator(login_required, name='dispatch')
-# class EditarPerfilView(FormView):
-#     form_class = PerfilForm
-#     template_name = 'perfil/editar_perfil.html'
-#     success_url = reverse_lazy('perfil')
-
-#     def get(self, request, *args, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
-#         formulario_editar_perfil =  PerfilForm(initial={ 
-#             "descripcion": usuario.descripcion})
-#         context['formulario_perfil'] =  formulario_editar_perfil
-#         return render(self.request, 'perfil/editar_perfil.html', context)
-
-#     def form_valid(self,form):
-#         #try:
-#             usuario_perfil = UsuarioPerfil.objects.get_or_create(user=self.request.user)[0]
-#             password1 = form.cleaned_data['password1']
-#             password2 = form.cleaned_data['password2']
-#             if password1 =='' and password2 =='':
-#                 usuario_perfil.descripcion = form.cleaned_data['descripcion']
-#                 usuario=usuario_perfil.imagen = form.cleaned_data['imagen']
-#                 return super().form_valid(form)
-#             elif password1 != '' and password2 != '' and password1==password2:
-#                 usuario_perfil.descripcion = form.cleaned_data['descripcion']
-#                 usuario=usuario_perfil.imagen = form.cleaned_data['imagen']
-#                 usuario_perfil.user.password = password1
-#                 return super().form_valid(form)
-#             elif password1 != '' and password2 != '' and password1!=password2:
-#                 context = {'error_message': 'Las contraseñas deben coincidir'}
-#                 return render(self.request, 'base/error.html', context)
-#             else:
-#                 context = {'error_message': 'Ha ocurrido un error inesperado'}
-#                 return render(self.request, 'base/error.html', context)
-#         #except Exception as e:
-#             # context = {'error_message': 'Ha ocurrido un error inesperado'}
-#             # return render(self.request, 'base/error.html', context)
-
-
 @method_decorator(login_required, name='dispatch')
 class EditarPerfilView(FormView):
     template_name = 'perfil/editar_perfil.html'
@@ -92,10 +54,32 @@ class EditarPerfilView(FormView):
         return render(self.request, 'perfil/editar_perfil.html', context)
 
     def post(self, request, *args, **kwargs):
-        print('hola')
-        form = PerfilForm(data=request.POST)
-        print(form['descripcion'])
+        usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+        username = usuario.user.username
+        form = PerfilForm(request.POST)
         if form.is_valid():
-            print('hola')
+            password1=form.cleaned_data['password1']
+            password2=form.cleaned_data['password2']
+            usuario.descripcion = form.cleaned_data['descripcion']
+            if password1 != '' and password2 != '' and password1==password2:
+                usuario.user.set_password(password1)
+                usuario.user.save()
+                user = authenticate(username=username, password=password1)
+                login(request,user)
+            elif password1 != '' or password2 != '' or password1!=password2:
+                return super().form_invalid(form)
+            usuario.save()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return super().form_valid(form)
+
+
+    def form_invalid(self, form, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        context = {'error_message': 'Ha ocurrido un error inesperado'}
+        return render(self.request, 'perfil/editar_perfil.html', context)
+
+            
 
 
