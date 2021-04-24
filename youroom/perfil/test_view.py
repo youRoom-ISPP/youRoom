@@ -1,26 +1,19 @@
+import io, os
+from PIL import Image
+from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
+from usuario.models import UsuarioPerfil
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
+from tienda.models import Product
 from youroom.base_tests import BaseTestCase
 
 
 class PerfilViewTest(BaseTestCase):
 
     def setUp(self):
-        self.client = APIClient()
-        self.u = User(username='prueba')
-        self.u.set_password('prueba')
-        self.u.email = 'prueba@gmail.com'
-        self.u.isActive=True
-        self.u.save()
-        self.p = UsuarioPerfil.objects.get_or_create(
-            user = self.u,
-            totalPuntos=100,
-            descripcion ='descripcion prueba')[0]
-        self.c= ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
-        self.suscripcion = Product.objects.get_or_create(
-            id=1,
-            price="399",
-            numVidas=0)[0]
         super().setUp()
 
     def tearDown(self):
@@ -73,7 +66,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_description_solo(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         nueva_descripcion = 'Esta es una nueva descripcion'
         password = self.u.password
@@ -103,7 +96,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_password_solo(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         password = self.u.password
         descripcion_inicial = perfil.descripcion
@@ -132,7 +125,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_imagen_solo(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         descripcion = perfil.descripcion
         password = self.u.password
@@ -162,7 +155,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_todo(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         descripcion = perfil.descripcion
         password = self.u.password
@@ -194,7 +187,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_password_diferentes(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         pass_inicial = perfil.user.password
         nueva_pass_1 = 'nueva_pas_1'
@@ -219,7 +212,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_password1_falta(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         pass_inicial = perfil.user.password
         nueva_pass_2 = 'nueva_pas_2'
@@ -242,7 +235,7 @@ class PerfilViewTest(BaseTestCase):
     def test_editar_perfil_password2_falta(self):
         
         # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         pass_inicial = perfil.user.password
         nueva_pass_1 = 'nueva_pas_1'
