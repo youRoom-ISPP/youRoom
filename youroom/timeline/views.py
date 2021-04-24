@@ -33,7 +33,7 @@ class TimelineView(TemplateView):
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
             finalVals=[]
 
-            comentarios = Comentario.objects.all().order_by('-fecha')
+            comentarios = Comentario.objects.all()
             finalComents = []
             for p in publicaciones:
                 valorada = False

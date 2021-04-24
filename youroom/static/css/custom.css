@@ -2,6 +2,7 @@
 @import "rating.css";
 @import "error.css";
 @import "login.css";
+@import "usuarios.css";
 
 body {
   background-color: #fafafa;
@@ -331,6 +332,31 @@ input[type="file"] {
 
 .timeline-user {
   color: #099a78;
+}
+
+.comentar {
+  border: 0px solid transparent;
+  border-bottom: 1px solid #e5e3dc;
+  width: 100%;
+  height: 100%;
+}
+
+.comentar:focus-visible {
+  outline: none;
+}
+
+.boton-comentar {
+  background-color: transparent;
+  border: 0px solid transparent;
+  color: #099a78;
+}
+
+.boton-comentar:hover,
+.boton-comentar:active,
+.boton-comentar:focus {
+  background-color: transparent;
+  border: 0px solid transparent;
+  color: #0ddfad;
 }
 
 .header-pc a {

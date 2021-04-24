@@ -160,8 +160,6 @@ class ComentarPublicacionView(FormView):
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
-    def get_success_url(self):
-         return reverse_lazy('mostrar_publicacion', kwargs={'publicacion_id': self.pk})
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionMostrarView(TemplateView):
@@ -172,10 +170,9 @@ class PublicacionMostrarView(TemplateView):
             if Publicacion.objects.filter(id=publicacion_id).exists():
                 context = super().get_context_data(**kwargs)
                 publicacion = Publicacion.objects.get(id=publicacion_id)
-                comentarios = Comentario.objects.filter(publicacion=publicacion).order_by('-fecha')
+                comentarios = Comentario.objects.filter(publicacion=publicacion)
                 context['comentarios'] = comentarios
                 context['publicacion'] = publicacion
-                context['formulario_comentario'] = ComentarioForm()
                 return context
             else:
                 raise Exception("La publicacion no existe")

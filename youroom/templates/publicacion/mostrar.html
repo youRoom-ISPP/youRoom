@@ -1,10 +1,10 @@
 {% extends 'base/base.html' %}
 {% load l10n %}
 
-{% block titulo_pagina %}Timeline{% endblock %}
-{% block titulo %}Timeline{% endblock %}
+{% block titulo_pagina %}Mostrar publicación{% endblock %}
+{% block titulo %}Mostrar publicación{% endblock %}
 
-{% block mobile-sticky-menu %}
+{% block contenido %}
 <div>
     <div class="card mb-3">
         <div class="card-header bg-white">
@@ -58,20 +58,19 @@
                 <p>{{publicacion.descripcion}}</p>
             </div>
             {% endif %}
-            <form method="POST" action="{% url 'comentar_publicacion' %}">{% csrf_token %}
-                {{formulario_comentario.texto}}
-                <input type="hidden" name="publicacion_id" value="{{publicacion.id}}"/>
-                <input type="submit"/>
+            <div class="row px-1">
+                {% for c in comentarios %}
+                <p class="col-12 comentario mb-0 pl-0"><a class="listado-usuarios" href="{% url 'usuario' username=c.usuario.user.username %}"><strong class="timeline-user">{{c.usuario.user.username}}</strong></a> {{c.texto}}</p>
+                {% endfor %}
+            </div>
+            <form id="formCom{{publicacion.id}}" class="row pt-2">{% csrf_token %}
+                <div class="col-10 px-1">
+                    <input class="comentar" name="texto" type="text" placeholder="Introduce tu comentario">
+                </div>
+                <div class="col-2 text-center">
+                    <button id="comentarP{{publicacion.id}}" class="boton-comentar"><i class="bi bi-chat-fill"></i></button>
+                </div>
             </form>
-            <ul>
-            {% for c in comentarios %}
-                <li>
-                    <strong>{{c.usuario.user.username}}</strong>-{{c.fecha}}
-                    {{c.texto}}
-                </li>
-            {% endfor %}
-            </ul>
-            {{comentarios.count}}
         </div>
     </div>
 </div>

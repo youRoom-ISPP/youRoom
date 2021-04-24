@@ -68,6 +68,26 @@
                     <div class="row px-1 pt-1">
                         <p>{{p.0.descripcion}}</p>
                     </div>
+                    {% if p.0.comentario_set.all|length > 2 %}
+                    <div class="row px-1">
+                        <a class="listado-usuarios" href="{% url 'mostrar_publicacion' publicacion_id=p.0.id %}"><small>Ver los {{p.0.comentario_set.all|length}} comentarios</small></a>
+                    </div>
+                    {% endif %}
+                    {% if p.2|length > 0 %}
+                    <div class="row px-1">
+                        {% for c in p.2 %}
+                        <p class="col-12 comentario mb-0 pl-0"><a class="listado-usuarios" href="{% url 'usuario' username=c.usuario.user.username %}"><strong class="timeline-user">{{c.usuario.user.username}}</strong></a> {{c.texto}}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <form id="formCom{{p.0.id}}" class="row pt-2">{% csrf_token %}
+                        <div class="col-10 px-1">
+                            <input class="comentar" name="texto" required type="text" placeholder="Introduce tu comentario">
+                        </div>
+                        <div class="col-2 text-center">
+                            <button id="comentarP{{p.0.id}}" class="boton-comentar"><i class="bi bi-chat-fill"></i></button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

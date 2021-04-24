@@ -49,3 +49,6 @@ class Comentario(models.Model):
     usuario = models.ForeignKey(UsuarioPerfil, on_delete=models.CASCADE)
     publicacion = models.ForeignKey(Publicacion, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha']
