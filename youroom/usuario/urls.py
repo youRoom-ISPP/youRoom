@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LoginView, RegistroView, UsuariosView, UsuarioShowView
+from .views import LoginView, RegistroView, UsuariosView, UsuarioShowView, PoliticaDatosView
 from django.contrib.auth.views import logout_then_login
 from timeline import urls as timeline_urls
 from django.urls import include
@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', logout_then_login, name='logout'),
     path('registro/', RegistroView.as_view(), name='registro'),
     path('usuarios/', UsuariosView.as_view(), name='usuarios'),
-    path('usuarios/<username>/', UsuarioShowView.as_view(), name='usuario')
+    path('usuarios/<username>/', UsuarioShowView.as_view(), name='usuario'),
+    path('politica-datos/', PoliticaDatosView.as_view(), name='politica-datos'),
 ]

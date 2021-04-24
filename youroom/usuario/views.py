@@ -129,3 +129,6 @@ class UsuarioShowView(TemplateView):
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+class PoliticaDatosView(TemplateView):
+    template_name = 'rgpd/datos.html'
