@@ -187,7 +187,7 @@ class PublicacionViewTest(BaseTestCase):
             'publicacion_id': publicacion.id
         }
         response = self.client.post('/publicacion/comentar/', answers)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='publicacion/mostrar.html')
         self.assertEqual(Comentario.objects.all().count(), 1)
         c = Comentario.objects.last()
