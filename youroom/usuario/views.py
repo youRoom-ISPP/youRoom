@@ -3,7 +3,8 @@ from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida, Premium
-from publicacion.models import Publicacion
+from publicacion.models import Publicacion, Comentario
+from publicacion.forms import ComentarioForm
 from .forms import RegistroForm
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -112,6 +113,8 @@ class UsuarioShowView(TemplateView):
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
             finalVals=[]
 
+            comentarios = Comentario.objects.all().order_by('-fecha')
+            finalComents = []
             for p in publicaciones:
                 valorada = False
                 for val in totalVals:
@@ -120,11 +123,17 @@ class UsuarioShowView(TemplateView):
                         valorada = True
                 if not valorada:
                     finalVals.append(0)
-
+                aux = []
+                for comentario in comentarios:
+                    if comentario.publicacion.id == p.id:
+                        aux.append(comentario)
+                aux = aux[:2]
+                finalComents.append(aux)
             context['formulario_valoracion'] = ValoracionForm()
-            context['publicaciones'] = list(zip(publicaciones, finalVals))
+            context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = perfil
+            context['formulario_comentario'] = ComentarioForm()
             return context
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}

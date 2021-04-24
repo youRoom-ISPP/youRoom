@@ -9,8 +9,6 @@ from publicacion.enum import Categorias
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timezone
-import json
-from publicacion.serializer import ComentarioSerializer
 
 
 @method_decorator(login_required, name='dispatch')
@@ -51,11 +49,9 @@ class TimelineView(TemplateView):
                 for comentario in comentarios:
                     if comentario.publicacion.id == p.id:
                         aux.append(comentario)
-                aux = aux[:5]
+                aux = aux[:2]
                 finalComents.append(aux)
             
-            serializer = ComentarioSerializer(comentarios, many=True)
-            context['comentarios'] = json.dumps(serializer.data)
             context['formulario_valoracion'] = ValoracionForm()
             context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
             context['categorias'] = Categorias.choices()
