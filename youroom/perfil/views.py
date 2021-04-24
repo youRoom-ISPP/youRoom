@@ -19,6 +19,7 @@ load_dotenv()
 BUCKET_NAME = os.environ.get("S3_BUCKET")
 s3 = boto3.client('s3')
 
+
 @method_decorator(login_required, name='dispatch')
 class PerfilView(TemplateView):
     template_name = 'perfil/perfil.html'
@@ -26,7 +27,7 @@ class PerfilView(TemplateView):
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
-            usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+            usuario, create = UsuarioPerfil.objects.get_or_create(user=self.request.user)
             cont = ContadorVida.objects.get_or_create(perfil=usuario)[0]
             product = Product.objects.get(id=1)
             # Datos necesarios para la suscripcion
@@ -40,7 +41,7 @@ class PerfilView(TemplateView):
             context['user'] = usuario
             context['vidasTotales'] = cont.numVidasCompradas + cont.numVidasSemanales
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 

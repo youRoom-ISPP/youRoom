@@ -22,7 +22,7 @@ function procesarEtiquetas(listaEtiquetas){
     let etiquetasStr = "";
     for(i = 0; i < listaEtiquetas.length; i++){
         let etiqueta = listaEtiquetas[i];
-        etiquetasStr += etiqueta.enlace + "," + etiqueta.coordX + "," + etiqueta.coordY + "|"
+        etiquetasStr += etiqueta.enlace + "," + etiqueta.coordX + "," + etiqueta.coordY + "|";
     }
     return etiquetasStr.substring(0, etiquetasStr.length - 1);
 }
@@ -40,12 +40,12 @@ function readURL(input) {
     let validador = true;
     if (input.files && input.files[0]) {
         const tipo = input.files[0].type;
-        if (tipo == "image/jpg" || tipo == "image/jpeg" || tipo == "image/png") {
+        if (tipo === "image/jpg" || tipo === "image/jpeg" || tipo === "image/png") {
             let reader = new FileReader();
             reader.onload = function (e) {
-                $('#visor-imagen').attr('src', e.target.result);
-                $('#visor-imagen').show();
-            }
+                $("#visor-imagen").attr("src", e.target.result);
+                $("#visor-imagen").show();
+            };
             reader.readAsDataURL(input.files[0]);
             validador = true;
         } else {
@@ -79,17 +79,17 @@ function crearEtiqueta(coords) {
     const x = coords[0] * 100;
     const y = coords[1] * 100;
     const etiquetaID = "#etiqueta" + contadorEtiqueta;
-    $("#container-visor").append('<div class="etiqueta" id="etiqueta'
-        + contadorEtiqueta + '"><div>');
-    $(etiquetaID).css("left", x + '%');
-    $(etiquetaID).css("top", y + '%');
+    $("#container-visor").append("<div class=\"etiqueta\" id=\"etiqueta"
+        + contadorEtiqueta + "\"><div>");
+    $(etiquetaID).css("left", x + "%");
+    $(etiquetaID).css("top", y + "%");
     $("#url-etiqueta").removeClass("d-none");
     contadorEtiqueta++;
     return new Etiqueta(etiquetaID, null, x, y);
 }
 
 function capturaPulsacion (event) {
-    if (usuarioFree && maximoEtiquetas == contadorEtiqueta) {
+    if (usuarioFree && maximoEtiquetas === contadorEtiqueta) {
         $("#visor-imagen").attr("data-target", "#modalEtiquetas");
         $("#visor-imagen").attr("data-toggle", "modal");
     } else {
@@ -100,7 +100,7 @@ function capturaPulsacion (event) {
             offsetTop: $("#visor-imagen").offset().top
         };
         $("#instrucciones-subir-foto").hide();
-        $('#visor-imagen').off()
+        $("#visor-imagen").off();
         const coords = getCoords(event, visor);
         etiqueta = crearEtiqueta(coords);
     }
@@ -109,7 +109,7 @@ function capturaPulsacion (event) {
 $("#error-url-enlace").hide();
 $("#error-tipo-archivo").hide();
 $("#metadata-publicacion").hide();
-$('#visor-imagen').toggle();
+$("#visor-imagen").toggle();
 $("#imagen").change(function (){
     $(".etiqueta").remove();
     $("#enlace-etiqueta").val("");
@@ -133,7 +133,7 @@ $("#imagen").change(function (){
     }
 });
 
-$('#visor-imagen').on('click', capturaPulsacion);
+$("#visor-imagen").on("click", capturaPulsacion);
 
 $("#btn-borrar-enlace").click(function () {
     if ($("#error-url-enlace").is(":visible")) {
@@ -146,7 +146,7 @@ $("#btn-borrar-enlace").click(function () {
     contadorEtiqueta--;
     $("#url-etiqueta").addClass("d-none");
     $("#instrucciones-subir-foto").show();
-    return $('#visor-imagen').on('click', capturaPulsacion);
+    return $("#visor-imagen").on("click", capturaPulsacion);
 });
 
 $("#btn-guardar-enlace").click(function () {
@@ -158,7 +158,7 @@ $("#btn-guardar-enlace").click(function () {
         $("#url-etiqueta").addClass("d-none");
         $("#instrucciones-subir-foto").show();
         listaEtiquetas.push(etiqueta);
-        return $('#visor-imagen').on('click', capturaPulsacion);
+        return $("#visor-imagen").on("click", capturaPulsacion);
     } else {
         $("#error-url-enlace").show();
     }
@@ -185,7 +185,7 @@ $(document).ready(function(){
 });
 
 $("#btnConfirmarPub").click(function () {
-    $("#btnConfirmarPub").html("<span id=\"spinnerBtn\"></span> Publicando...")
+    $("#btnConfirmarPub").html("<span id=\"spinnerBtn\"></span> Publicando...");
     $("#spinnerBtn").addClass("spinner-border");
     $("#spinnerBtn").addClass("spinner-border-sm");
     $("#spinnerBtn").attr("role", "status");

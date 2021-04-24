@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% load l10n %}
+
+{% block titulo_pagina %}Timeline{% endblock %}
+{% block titulo %}Timeline{% endblock %}
+
+{% block mobile-sticky-menu %}
+<div>
+    <div class="card mb-3">
+        <div class="card-header bg-white">
+            <a class="listado-usuarios" href="{% url 'usuario' username=publicacion.usuario.user.username %}"><strong class="timeline-user">{{publicacion.usuario.user.username}}</strong></a>
+        </div>
+        <div class="container-visor-timeline">
+            <img src="{{publicacion.imagen.url}}" class="card-img-bottom">
+            {% for e in publicacion.etiqueta_set.all %}
+            {% localize off %}
+            <a target="_blank" href="{{e.enlace}}">
+                <div id="{{e.nombre}}" class="etiqueta" style="left: {{e.coord_x}}%; top: {{e.coord_y}}%;">
+                </div>
+            </a>
+            {% endlocalize %}
+            {% endfor %}
+        </div>
+        <div class="card-body cuerpo-tarjeta">
+            {% if publicacion.usuario.user.username != user.username %}
+            <div class="row pl-1 bg-white">
+                <form id="v{{publicacion.id}}">{% csrf_token %}
+                    <fieldset class="rating">
+                        <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="5" />
+                        <label class="full" for="star5P{{publicacion.id}}" title="5 estrellas"></label>
+                        <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="4" />
+                        <label class="full" for="star4P{{publicacion.id}}" title="4 estrellas"></label>
+                        <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="3" />
+                        <label class="full" for="star3P{{publicacion.id}}" title="3 estrellas"></label>
+                        <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="2" />
+                        <label class="full" for="star2P{{publicacion.id}}" title="2 estrellas"></label>
+                        <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="1" />
+                        <label class="full" for="star1P{{publicacion.id}}" title="1 estrella"></label>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="row px-1">
+                <p>{{publicacion.descripcion}}</p>
+            </div>
+            {% else %}
+            <div class="row pt-2 bg-white">
+                <div class="col-6">
+                    <p class="puntos">{{publicacion.totalValoraciones}} ★</p>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <!-- Publicacion destacada -->
+                    {% if publicacion.destacada.es_destacada %}
+                    <p class="destacada">Destacada</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row px-1 pt-1">
+                <p>{{publicacion.descripcion}}</p>
+            </div>
+            {% endif %}
+            <form method="POST" action="{% url 'comentar_publicacion' %}">{% csrf_token %}
+                {{formulario_comentario.texto}}
+                <input type="hidden" name="publicacion_id" value="{{publicacion.id}}"/>
+                <input type="submit"/>
+            </form>
+            <ul>
+            {% for c in comentarios %}
+                <li>
+                    <strong>{{c.usuario.user.username}}</strong>-{{c.fecha}}
+                    {{c.texto}}
+                </li>
+            {% endfor %}
+            </ul>
+            {{comentarios.count}}
+        </div>
+    </div>
+</div>
+{% endblock %}

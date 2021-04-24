@@ -8,7 +8,6 @@ from ranking.models import Valoracion
 from publicacion.models import Publicacion
 from usuario.models import UsuarioPerfil
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 
 
@@ -17,11 +16,12 @@ class ValorarPublicacionView(FormView):
     form_class = ValoracionForm
     template_name = 'timeline/timeline.html'
     success_url = reverse_lazy('timeline')
+
     def form_valid(self, form):
         try:
-            usuario_perfil , create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
-            publicacion_a_valorar , create = Publicacion.objects.get_or_create(id = form.cleaned_data['publicacion_id'])
-            valoracion , create = Valoracion.objects.get_or_create(
+            usuario_perfil, create = UsuarioPerfil.objects.get_or_create(user=self.request.user)
+            publicacion_a_valorar, create = Publicacion.objects.get_or_create(id=form.cleaned_data['publicacion_id'])
+            valoracion, create = Valoracion.objects.get_or_create(
                 usuario=usuario_perfil,
                 publicacion=publicacion_a_valorar
             )
@@ -36,8 +36,8 @@ class ValorarPublicacionView(FormView):
             publicacion_a_valorar.usuario.save()
             publicacion_a_valorar.totalValoraciones += puntos
             publicacion_a_valorar.save()
-            return JsonResponse({'message':'Valoración guardada correctamente','valid':True})
-        except Exception as e:
+            return JsonResponse({'message': 'Valoración guardada correctamente', 'valid': True})
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 
@@ -54,7 +54,6 @@ class RankingView(TemplateView):
             else:
                 context['usuarios'] = lista_usuarios
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
-

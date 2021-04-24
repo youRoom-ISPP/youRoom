@@ -1,17 +1,9 @@
-import io, os
-from PIL import Image
-from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
-from usuario.models import UsuarioPerfil
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
-from tienda.models import Product
+from youroom.base_tests import BaseTestCase
 
-# Create your tests here.
 
-class PerfilViewTest(APITestCase):
+class PerfilViewTest(BaseTestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -29,33 +21,20 @@ class PerfilViewTest(APITestCase):
             id=1,
             price="399",
             numVidas=0)[0]
+        super().setUp()
 
     def tearDown(self):
-        self.client = None
-        if os.path.exists('./media/publicaciones/test.png') :
-            os.remove('./media/publicaciones/test.png')
-
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
-
+        super().tearDown()
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='usuario/login.html')
 
-
-
-
     def test_perfil_logged(self):
 
         # El usuario se loguea y accede a su perfil
-        self.client.login(username='prueba', password='prueba')
+        self.client.login(username='prueba', password='usuario1234')
 
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
         self.assertEqual(response.status_code, 200)
@@ -69,19 +48,9 @@ class PerfilViewTest(APITestCase):
         self.assertEqual(len(publicaciones), 0)
 
         # El usuario realiza publicación, y al acceder a su perfil obtiene la publicación
-        formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
         self.assertEqual(response.status_code, 200)
 
-        csrftoken = formulario.cookies['csrftoken']
-        imagen = self.generate_photo_file()
-
-
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'},follow = True)
+        response = super().publicar(self.p, Categorias.SALON)
 
         self.assertEqual(response.status_code, 200)
 
@@ -293,7 +262,3 @@ class PerfilViewTest(APITestCase):
         perfil = UsuarioPerfil.objects.get(user=self.u)
         self.assertEqual(pass_inicial, perfil.user.password)
         
-
-
-
-
