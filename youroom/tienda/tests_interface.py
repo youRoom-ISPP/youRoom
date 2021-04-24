@@ -1,16 +1,11 @@
-from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-
 from tienda.tests_views import TiendaViewTest
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida, Premium
 import time
+
 
 class TiendaInterfaceTest(StaticLiveServerTestCase):
 
@@ -25,14 +20,14 @@ class TiendaInterfaceTest(StaticLiveServerTestCase):
         self.base.u2 = User(username='prueba2')
         self.base.u2.set_password('usuario1234')
         self.base.u2.email = 'prueba2@gmail.com'
-        self.base.u2.isActive=True
+        self.base.u2.isActive = True
         self.base.u2.save()
-        self.base.p2 = UsuarioPerfil.objects.get_or_create(user = self.base.u2,totalPuntos=100)[0]
-        self.base.c2= ContadorVida.objects.get_or_create(perfil=self.base.p2,estaActivo=True)[0]
+        self.base.p2 = UsuarioPerfil.objects.get_or_create(user=self.base.u2, totalPuntos=100)[0]
+        self.base.c2 = ContadorVida.objects.get_or_create(perfil=self.base.p2, estaActivo=True)[0]
 
-        super().setUp()            
-            
-    def tearDown(self):           
+        super().setUp()
+
+    def tearDown(self):
         super().tearDown()
         self.driver.quit()
         self.base.tearDown()
@@ -87,7 +82,3 @@ class TiendaInterfaceTest(StaticLiveServerTestCase):
         self.driver.find_element(By.ID, "btnCancelarSus").click()
         time.sleep(3)
         self.assertIsNotNone(Premium.objects.get(perfil=self.base.p2).fechaCancelacion)
-
-
-
-

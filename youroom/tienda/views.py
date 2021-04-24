@@ -2,18 +2,15 @@ import os
 import stripe
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView
-from django.conf import settings
 from tienda.models import Product
 from django.http import HttpResponseRedirect, JsonResponse
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from datetime import datetime, timedelta, date
-from dateutil import relativedelta
-from publicacion.models import Publicacion
+from datetime import date
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+
 
 @method_decorator(login_required, name='dispatch')
 class TiendaView(TemplateView):
@@ -25,19 +22,18 @@ class TiendaView(TemplateView):
             context = super().get_context_data(**kwargs)
             context['key'] = os.getenv('STRIPE_PUBLISHABLE_KEY')
             context['products'] = products
-            usuario = get_object_or_404(UsuarioPerfil, user = self.request.user)
+            usuario = get_object_or_404(UsuarioPerfil, user=self.request.user)
             contador_vidas = get_object_or_404(ContadorVida, perfil=usuario)
             context['contador_vidas'] = contador_vidas
             return context
-
-        except:
+        except Exception:
             mensaje_error = 'Ha ocurrido un error al cargar los productos'
-            return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
+            return render(self.request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
     def charge(request, pk):
         if request.method == 'POST':
 
-            perfil = UsuarioPerfil.objects.get_or_create(user = request.user)[0]
+            perfil = UsuarioPerfil.objects.get_or_create(user=request.user)[0]
             product = Product.objects.get(id=pk)
 
             # Si es una suscripción, y el usuario ya esta suscrito, rechazar suscripción
@@ -57,15 +53,15 @@ class TiendaView(TemplateView):
                 return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'invalid_request_error':
-                mensaje_error='Ha habido un error con la petición de pago'
+                mensaje_error = 'Ha habido un error con la petición de pago'
                 return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'error_creating_customer':
-                mensaje_error='Ha habido un error con sus datos en Stripe'
+                mensaje_error = 'Ha habido un error con sus datos en Stripe'
                 return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'error':
-                mensaje_error='Ha habido un error desconocido'
+                mensaje_error = 'Ha habido un error desconocido'
                 return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
             elif estado == 'success':
@@ -92,7 +88,7 @@ class TiendaView(TemplateView):
         try:
             perfil = UsuarioPerfil.objects.get_or_create(user=request.user)[0]
             premium_query = Premium.objects.filter(perfil=perfil)
-            if premium_query.exists() and premium_query[0].fechaCancelacion==None:
+            if premium_query.exists() and premium_query[0].fechaCancelacion is None:
                 premium = premium_query[0]
                 customer = stripe.Customer.retrieve(perfil.id_stripe)
                 suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
@@ -102,7 +98,7 @@ class TiendaView(TemplateView):
 
             return HttpResponseRedirect('/perfil/')
 
-        except:
+        except Exception:
             mensaje_error = 'Ha ocurrido un error al cancelar su suscripción'
             return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
@@ -111,24 +107,22 @@ class TiendaView(TemplateView):
             perfil = UsuarioPerfil.objects.get_or_create(user=request.user)[0]
             premium = Premium.objects.filter(perfil=perfil)
 
-            if premium.exists() and premium[0].fechaCancelacion==None:
+            if premium.exists() and premium[0].fechaCancelacion is None:
                 customer = stripe.Customer.retrieve(perfil.id_stripe)
                 suscripcion = stripe.Subscription.list(customer=customer.id)['data'][0]
                 fecha_cancelacion = date.fromtimestamp(suscripcion['current_period_end'])
-                return JsonResponse({'fechaCancelacion':fecha_cancelacion,'valid':True})
+                return JsonResponse({'fechaCancelacion': fecha_cancelacion, 'valid': True})
             else:
-                return JsonResponse({'fechaCancelacion':'','valid':False})
+                return JsonResponse({'fechaCancelacion': '', 'valid': False})
 
-        except:
+        except Exception:
             mensaje_error = 'Ha ocurrido un error al comprobar tu suscripción'
             return render(request, 'tienda/fail.html', {'mensaje_error':mensaje_error})
 
 
-
-
 def pay(request, product):
     try:
-        charge = stripe.Charge.create(
+        stripe.Charge.create(
             amount=product.price,
             currency='EUR',
             description='Pago de ' + str(product.numVidas) + ' vidas',
@@ -137,14 +131,15 @@ def pay(request, product):
 
         return 'success'
 
-    except stripe.error.CardError as e:
+    except stripe.error.CardError:
         return 'credit_card_error'
 
-    except stripe.error.InvalidRequestError as e:
+    except stripe.error.InvalidRequestError:
         return 'invalid_request_error'
 
-    except:
+    except Exception:
         return 'error'
+
 
 def suscribirse(request, product, perfil):
     try:
@@ -153,33 +148,31 @@ def suscribirse(request, product, perfil):
         if perfil.id_stripe == '':
             try:
                 customer = stripe.Customer.create(
-                    email = perfil.user.email,
-                    name = perfil.user.username,
-                    source = request.POST['stripeToken']
+                    email=perfil.user.email,
+                    name=perfil.user.username,
+                    source=request.POST['stripeToken']
                 )
                 perfil.id_stripe = customer.id
                 perfil.save()
-            except stripe.error.StripeError as e:
+            except stripe.error.StripeError:
                 return 'error_creating_customer'
 
-
         stripe.Subscription.create(
-        customer=perfil.id_stripe,
-        items=[
+            customer=perfil.id_stripe,
+            items=[
                 {
-                "price": os.getenv('SUSCRIPTION_PRICE_KEY'),
-                "quantity": 1,
+                    "price": os.getenv('SUSCRIPTION_PRICE_KEY'),
+                    "quantity": 1,
                 },
-        ],
+            ],
         )
-
         return 'success'
 
-    except stripe.error.CardError as e:
+    except stripe.error.CardError:
         return 'credit_card_error'
 
-    except stripe.error.InvalidRequestError as e:
+    except stripe.error.InvalidRequestError:
         return 'invalid_request_error'
 
-    except:
+    except Exception:
         return 'error'
