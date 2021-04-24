@@ -1,48 +1,25 @@
-import io, os
-from PIL import Image
-from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
-from publicacion.models import Publicacion, Destacada
+from publicacion.models import Publicacion, Destacada, Comentario
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida, Premium
-from tienda.models import Product
+from youroom.base_tests import BaseTestCase
 
-class PublicacionViewTest(APITestCase):
+
+class PublicacionViewTest(BaseTestCase):
 
     def setUp(self):
-        self.client = APIClient()
-        self.u = User(username='prueba')
-        self.u.set_password('usuario1234')
-        self.u.email = 'prueba@gmail.com'
-        self.u.isActive=True
-        self.u.save()
-        self.p = UsuarioPerfil.objects.get_or_create(user = self.u,totalPuntos=100)[0]
-        self.c = ContadorVida.objects.get_or_create(perfil=self.p,estaActivo=True)[0]
+        super().setUp()
         self.u2 = User(username='prueba3')
         self.u2.set_password('usuario1234')
         self.u2.email = 'prueba3@gmail.com'
-        self.u2.isActive=True
+        self.u2.isActive = True
         self.u2.save()
-        self.p2 = UsuarioPerfil.objects.get_or_create(user = self.u2,totalPuntos=100)[0]
-        self.c2 = ContadorVida.objects.get_or_create(perfil=self.p2,estaActivo=True)[0]
-        self.suscripcion = Product.objects.get_or_create(id=1,price="399",numVidas=0)[0]
-
-
+        self.p2 = UsuarioPerfil.objects.get_or_create(user=self.u2, totalPuntos=100)[0]
+        self.c2 = ContadorVida.objects.get_or_create(perfil=self.p2, estaActivo=True)[0]
 
     def tearDown(self):
-        self.client = None
-        if os.path.exists('./static/media/publicaciones/test.png'):
-            os.remove('./static/media/publicaciones/test.png')
-
-    def generate_photo_file(self):
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
-        return file
-
+        super().tearDown()
 
     def test_publicacion_view_not_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("publicacion")))
@@ -53,45 +30,33 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='usuario/login.html')
 
-
-
     def test_publicacion_view(self):
         answers = {
             'username': 'prueba',
             'password': 'usuario1234'
         }
-        login = self.client.post('', answers)
+        self.client.post('', answers)
         response = self.client.get("http://testserver{}".format(reverse("publicacion")))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='publicacion/subir_imagen.html')
-
 
     def test_subir_publicacion_view(self):
         answers = {
             'username': 'prueba',
             'password': 'usuario1234'
         }
-        login = self.client.post('', answers)
-        formulario = self.client.get("http://testserver{}".format(reverse("publicacion")))
-        csrftoken = formulario.cookies['csrftoken']
-        imagen = self.generate_photo_file()
+        self.client.post('', answers)
+        response = super().publicar(self.p, Categorias.SALON)
 
-
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'},follow = True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         cont = ContadorVida.objects.get(perfil=self.p)
-        self.assertEqual(cont.numVidasSemanales,2)
+        self.assertEqual(cont.numVidasSemanales, 2)
 
         objeto_guardado = Publicacion.objects.last()
-        self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + imagen.name)
-        self.assertEqual(objeto_guardado.categoria,'Categorias.SALON')
-        self.assertEqual(objeto_guardado.descripcion,"Prueba")
+        self.assertEqual(objeto_guardado.imagen.name, "publicaciones/" + self.imagen.name)
+        self.assertEqual(objeto_guardado.categoria, 'Categorias.SALON')
+        self.assertEqual(objeto_guardado.descripcion, "Prueba")
         self.assertEqual(objeto_guardado.usuario, self.p)
 
     def test_destacar_not_logged(self):
@@ -100,23 +65,15 @@ class PublicacionViewTest(APITestCase):
         self.assertTemplateUsed(template_name='usuario/login.html')
 
     def test_destacar_logged(self):
-
         answers = {
             'username': 'prueba',
             'password': 'usuario1234'
         }
-        login = self.client.post('', answers)
+        self.client.post('', answers)
 
         # Contamos la cantidad de publicaciones destacadas que tenemos inicialmente
         cantidad_destacados_inicial = Destacada.objects.all().count()
-
-        imagen = self.generate_photo_file()
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
-            'usuario':  self.p,
-            'format': 'multipart/form-data'},follow = True)
+        response = super().publicar(self.p, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
@@ -128,41 +85,30 @@ class PublicacionViewTest(APITestCase):
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
         cont = ContadorVida.objects.get(perfil=self.p)
-        self.assertEqual(cont.numVidasSemanales,0)
-
+        self.assertEqual(cont.numVidasSemanales, 0)
 
         ultima_destacada = Destacada.objects.last()
         self.assertEqual(ultima_destacada.publicacion, publicacion)
 
         # Intentamos volver a destacar una publicación destacada y no se crea otra vez
-
         response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
 
-
     def test_destacar_otro_usuario_logged(self):
-
         # Creamos nuevo usuario
-        usuario2 = User.objects.get_or_create(username='prueba2', password='prueba2')[0]
+        User.objects.create(username='prueba2', password='prueba2')
 
         cantidad_destacados_inicial = Destacada.objects.all().count()
         answers = {
             'username': 'prueba',
             'password': 'usuario1234'
         }
-        login = self.client.post('', answers)
-
-
-        imagen = self.generate_photo_file()
+        self.client.post('', answers)
 
         # Usuario 1 realiza una publicación
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
-            'format': 'multipart/form-data'},follow = True)
+        response = super().publicar(self.p, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
@@ -177,24 +123,17 @@ class PublicacionViewTest(APITestCase):
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial)
 
     def test_destacar_premium_logged(self):
-
         answers = {
             'username': 'prueba3',
             'password': 'usuario1234'
         }
-        login = self.client.post('', answers)
+        self.client.post('', answers)
 
         # Contamos la cantidad de publicaciones destacadas que tenemos inicialmente
         cantidad_destacados_inicial = Destacada.objects.all().count()
 
-        imagen = self.generate_photo_file()
-        prem = Premium.objects.get_or_create(perfil=self.p2)[0]
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion' : "Prueba",
-            'categoria' : Categorias.SALON,
-            'usuario':  self.p2,
-            'format': 'multipart/form-data'},follow = True)
+        Premium.objects.create(perfil=self.p2)
+        response = super().publicar(self.p2, Categorias.SALON)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
@@ -205,15 +144,51 @@ class PublicacionViewTest(APITestCase):
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
 
-
         ultima_destacada = Destacada.objects.last()
         self.assertEqual(ultima_destacada.publicacion, publicacion)
 
         # Intentamos volver a destacar una publicación destacada y no se crea otra vez
-
         response = self.client.get("/publicacion/destacar/" + str(publicacion.id))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
         up = UsuarioPerfil.objects.get(user=self.u2)
-        self.assertEqual(up.totalPuntos,90)
+        self.assertEqual(up.totalPuntos, 90)
+    
+    def test_mostrar_publicacion(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        self.client.post('', answers)
+        response = super().publicar(self.p, Categorias.SALON)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        publicacion = Publicacion.objects.last()
+        response = self.client.get('/publicacion/' + str(publicacion.id) + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+
+    def test_comentar_publicacion(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        self.client.post('', answers)
+        response = super().publicar(self.p, Categorias.SALON)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        publicacion = Publicacion.objects.last()
+        response = self.client.get('/publicacion/' + str(publicacion.id) + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+        answers = {
+            'texto': 'Comentario de prueba',
+            'publicacion_id': publicacion.id
+        }
+        response = self.client.post('/publicacion/comentar/', answers)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+        self.assertEqual(Comentario.objects.all().count(), 1)
+        c = Comentario.objects.last()
+        self.assertEqual(c.texto, 'Comentario de prueba')

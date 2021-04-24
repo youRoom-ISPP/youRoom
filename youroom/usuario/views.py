@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
 from django.contrib.auth.models import User
 from .models import UsuarioPerfil, ContadorVida, Premium
 from publicacion.models import Publicacion, Comentario
-from publicacion.forms import ComentarioForm
 from .forms import RegistroForm
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -28,7 +27,7 @@ class RegistroView(FormView):
     template_name = 'usuario/registro.html'
     success_url = reverse_lazy('login')
 
-    def form_valid(self, form, **kwargs):
+    def form_valid(self, form):
         try:
             username = form.cleaned_data['username']
             password1 = form.cleaned_data['password1']
@@ -84,7 +83,7 @@ class UsuariosView(TemplateView):
             serializer = UsuarioSerializer(lista_usuarios, many=True)
             context['usuarios'] = json.dumps(serializer.data)
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 
@@ -92,14 +91,14 @@ class UsuariosView(TemplateView):
 class UsuarioShowView(TemplateView):
     template_name = 'usuario/usuario.html'
 
-    def get(self, request, username):
+    def get(self, request, *args, **kwargs):
         try:
-            if not User.objects.filter(username = username).exists():
+            if not User.objects.filter(username=kwargs['username']).exists():
                 raise Exception("El usuario no existe")
-            if username == self.request.user.username:
+            if kwargs['username'] == self.request.user.username:
                 return HttpResponseRedirect('/perfil/')
-            return super(UsuarioShowView, self).get(request, username)
-        except Exception as e:
+            return super(UsuarioShowView, self).get(request, kwargs['username'])
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(request, 'base/error.html', context)
 
@@ -107,11 +106,11 @@ class UsuarioShowView(TemplateView):
         try:
             context = super().get_context_data(**kwargs)
             username = self.kwargs.get('username')
-            user = User.objects.get(username = username)
-            perfil = UsuarioPerfil.objects.get(user = user)
+            user = User.objects.get(username=username)
+            perfil = UsuarioPerfil.objects.get(user=user)
             publicaciones = Publicacion.objects.filter(usuario=perfil)
-            totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
-            finalVals=[]
+            totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user=self.request.user)[0])
+            finalVals = []
 
             comentarios = Comentario.objects.all().order_by('-fecha')
             finalComents = []
@@ -133,9 +132,8 @@ class UsuarioShowView(TemplateView):
             context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = perfil
-            context['formulario_comentario'] = ComentarioForm()
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
 

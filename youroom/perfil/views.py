@@ -6,7 +6,7 @@ from usuario.models import UsuarioPerfil, ContadorVida
 from tienda.models import Product
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+
 
 @method_decorator(login_required, name='dispatch')
 class PerfilView(TemplateView):
@@ -15,7 +15,7 @@ class PerfilView(TemplateView):
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
-            usuario, create = UsuarioPerfil.objects.get_or_create(user = self.request.user)
+            usuario, create = UsuarioPerfil.objects.get_or_create(user=self.request.user)
             cont = ContadorVida.objects.get_or_create(perfil=usuario)[0]
             product = Product.objects.get(id=1)
             # Datos necesarios para la suscripcion
@@ -29,6 +29,6 @@ class PerfilView(TemplateView):
             context['user'] = usuario
             context['vidasTotales'] = cont.numVidasCompradas + cont.numVidasSemanales
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
