@@ -1,4 +1,3 @@
-import os
 from django.urls import reverse
 from publicacion.enum import Categorias
 from youroom.base_tests import BaseTestCase
@@ -10,9 +9,7 @@ class PerfilViewTest(BaseTestCase):
         super().setUp()
 
     def tearDown(self):
-        self.client = None
-        if os.path.exists('./media/publicaciones/test.png'):
-            os.remove('./media/publicaciones/test.png')
+        super().tearDown()
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))

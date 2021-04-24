@@ -1,4 +1,5 @@
 import io
+import os
 from PIL import Image
 from django.urls import reverse
 from django.core.management import call_command
@@ -19,6 +20,12 @@ class BaseTestCase(APITestCase):
         self.p = UsuarioPerfil.objects.get_or_create(user=self.u, totalPuntos=100)[0]
         self.c = ContadorVida.objects.get_or_create(perfil=self.p, estaActivo=True)[0]
         call_command('loaddata', 'products.json', verbosity=0)
+
+    def tearDown(self):
+        self.client = None
+        filelist = [f for f in os.listdir('./static/media/publicaciones/') if f.endswith(".png")]
+        for f in filelist:
+            os.remove(os.path.join('./static/media/publicaciones/', f))
 
     def generate_photo_file(self):
         file = io.BytesIO()

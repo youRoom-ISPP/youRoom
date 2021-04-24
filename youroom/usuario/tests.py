@@ -14,7 +14,7 @@ class LoginTestCase(BaseTestCase):
         self.u.save()
 
     def tearDown(self):
-        self.client = None
+        super().tearDown()
 
     def test_login(self):
         response = self.client.get('')

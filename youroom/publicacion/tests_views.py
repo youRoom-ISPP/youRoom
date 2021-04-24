@@ -1,4 +1,3 @@
-import os
 from django.urls import reverse
 from publicacion.models import Publicacion, Destacada
 from publicacion.enum import Categorias
@@ -20,9 +19,7 @@ class PublicacionViewTest(BaseTestCase):
         self.c2 = ContadorVida.objects.get_or_create(perfil=self.p2, estaActivo=True)[0]
 
     def tearDown(self):
-        self.client = None
-        if os.path.exists('./static/media/publicaciones/test.png'):
-            os.remove('./static/media/publicaciones/test.png')
+        super().tearDown()
 
     def test_publicacion_view_not_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("publicacion")))

@@ -8,7 +8,7 @@ class TiendaViewTest(BaseTestCase):
         super().setUp()
 
     def tearDown(self):
-        self.client = None
+        super().tearDown()
 
     def test_tienda_view_not_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("tienda")))

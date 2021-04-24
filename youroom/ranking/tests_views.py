@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida
 from ranking.models import Valoracion
 from publicacion.models import Publicacion
-from django.core.files.uploadedfile import SimpleUploadedFile
 from publicacion.enum import Categorias
 from django.urls import reverse
 from youroom.base_tests import BaseTestCase
@@ -14,7 +13,7 @@ class ValorarTestCase(BaseTestCase):
         super().setUp()
 
     def tearDown(self):
-        self.client = None
+        super().tearDown()
 
     def test_valorar(self):
         answers = {
@@ -24,13 +23,7 @@ class ValorarTestCase(BaseTestCase):
         self.client.post('', answers)
         self.assertTemplateUsed(template_name='timeline/timeline.html')
 
-        imagen = SimpleUploadedFile(name='test_image.png', content=open('static/images/logo-xl.png', 'rb').read())
-        response = self.client.post("http://testserver{}".format(reverse("publicacion_guardar")), {
-            'imagen': imagen,
-            'descripcion': "Prueba",
-            'categoria': Categorias.SALON,
-            'usuario':  self.u,
-            'format': 'multipart/form-data'}, follow=True)
+        response = super().publicar(self.p, Categorias.SALON)
 
         answers = {
             'puntuacion': 4,
@@ -68,7 +61,7 @@ class RankingTestCase(BaseTestCase):
         self.c2 = ContadorVida.objects.get_or_create(perfil=self.p2, estaActivo=True)[0]
 
     def tearDown(self):
-        self.client = None
+        super().tearDown()
 
     def test_ranking(self):
         answers = {
