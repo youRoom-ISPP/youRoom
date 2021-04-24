@@ -1,9 +1,10 @@
 import os
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 from publicacion.models import Publicacion
 from usuario.models import UsuarioPerfil, ContadorVida
 from tienda.models import Product
+from .forms import FotoPerfilForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -32,3 +33,7 @@ class PerfilView(TemplateView):
         except Exception as e:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+class EditarPerfilView(FormView):
+    template_name = 'perfil/editar_perfil.html'
+    form_class = FotoPerfilForm
