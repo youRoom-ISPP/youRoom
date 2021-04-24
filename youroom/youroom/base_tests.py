@@ -23,9 +23,10 @@ class BaseTestCase(APITestCase):
 
     def tearDown(self):
         self.client = None
-        filelist = [f for f in os.listdir('./static/media/publicaciones/') if f.endswith(".png")]
-        for f in filelist:
-            os.remove(os.path.join('./static/media/publicaciones/', f))
+        if os.path.exists('./static/media/publicaciones/'):
+            filelist = [f for f in os.listdir('./static/media/publicaciones/') if f.endswith(".png")]
+            for f in filelist:
+                os.remove(os.path.join('./static/media/publicaciones/', f))
 
     def generate_photo_file(self):
         file = io.BytesIO()
