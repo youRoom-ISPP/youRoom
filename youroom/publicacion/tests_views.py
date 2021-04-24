@@ -1,5 +1,5 @@
 from django.urls import reverse
-from publicacion.models import Publicacion, Destacada
+from publicacion.models import Publicacion, Destacada, Comentario
 from publicacion.enum import Categorias
 from django.contrib.auth.models import User
 from usuario.models import UsuarioPerfil, ContadorVida, Premium
@@ -154,3 +154,41 @@ class PublicacionViewTest(BaseTestCase):
         self.assertEqual(Destacada.objects.all().count(), cantidad_destacados_inicial + 1)
         up = UsuarioPerfil.objects.get(user=self.u2)
         self.assertEqual(up.totalPuntos, 90)
+    
+    def test_mostrar_publicacion(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        self.client.post('', answers)
+        response = super().publicar(self.p, Categorias.SALON)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        publicacion = Publicacion.objects.last()
+        response = self.client.get('/publicacion/' + str(publicacion.id) + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+
+    def test_comentar_publicacion(self):
+        answers = {
+            'username': 'prueba',
+            'password': 'usuario1234'
+        }
+        self.client.post('', answers)
+        response = super().publicar(self.p, Categorias.SALON)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+        publicacion = Publicacion.objects.last()
+        response = self.client.get('/publicacion/' + str(publicacion.id) + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+        answers = {
+            'texto': 'Comentario de prueba',
+            'publicacion_id': publicacion.id
+        }
+        response = self.client.post('/publicacion/comentar/', answers)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='publicacion/mostrar.html')
+        self.assertEqual(Comentario.objects.all().count(), 1)
+        c = Comentario.objects.last()
+        self.assertEqual(c.texto, 'Comentario de prueba')

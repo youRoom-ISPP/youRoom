@@ -1,7 +1,7 @@
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
-from .forms import PublicacionForm
-from .models import Publicacion, Etiqueta, Destacada
+from .forms import PublicacionForm, ComentarioForm
+from .models import Publicacion, Etiqueta, Destacada, Comentario
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -140,3 +140,45 @@ class DestacarPublicacionView(TemplateView):
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(request, 'base/error.html', context)
+        
+@method_decorator(login_required, name='dispatch')
+class ComentarPublicacionView(FormView):
+    form_class = ComentarioForm
+    template_name = 'publicacion/mostrar.html'
+    success_url = reverse_lazy('mostrar_publicacion')
+    pk = None
+
+    def form_valid(self, form):
+        try:
+            texto=form.cleaned_data['texto']
+            usuario=UsuarioPerfil.objects.get(user=self.request.user)
+            pub_id = form.cleaned_data['publicacion_id']
+            publicacion=Publicacion.objects.get(id=pub_id)
+            self.pk = pub_id
+            Comentario.objects.create(texto=texto, usuario=usuario, publicacion=publicacion)
+            return super().form_valid(form)
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+    def get_success_url(self):
+         return reverse_lazy('mostrar_publicacion', kwargs={'publicacion_id': self.pk})
+
+@method_decorator(login_required, name='dispatch')
+class PublicacionMostrarView(TemplateView):
+    template_name = 'publicacion/mostrar.html'
+    def get_context_data(self, **kwargs):
+        try:
+            publicacion_id = kwargs['publicacion_id']
+            if Publicacion.objects.filter(id=publicacion_id).exists():
+                context = super().get_context_data(**kwargs)
+                publicacion = Publicacion.objects.get(id=publicacion_id)
+                comentarios = Comentario.objects.filter(publicacion=publicacion).order_by('-fecha')
+                context['comentarios'] = comentarios
+                context['publicacion'] = publicacion
+                context['formulario_comentario'] = ComentarioForm()
+                return context
+            else:
+                raise Exception("La publicacion no existe")
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
