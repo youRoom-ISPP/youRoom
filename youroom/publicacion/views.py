@@ -23,9 +23,10 @@ class PublicacionView(TemplateView):
             data = serializers.serialize('json', info_usuario)
             context['info_usuario'] = data
             return context
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
 
 @method_decorator(login_required, name='dispatch')
 class SubirPublicacionView(FormView):
@@ -43,13 +44,13 @@ class SubirPublicacionView(FormView):
             #Si el usuario es premium, puede publicar
             if not cont.estaActivo:
                 puede = True
-    
+
             #Tiene 1 vidas semanales disponibles
             elif cont.numVidasSemanales >=1:
                 cont.numVidasSemanales-=1
                 cont.save()
                 puede = True
-    
+
             #No tiene vidas semanales pero si compradas
             elif cont.numVidasCompradas >=1:
                 cont.numVidasCompradas-=1
@@ -57,7 +58,7 @@ class SubirPublicacionView(FormView):
                 puede = True
             else:
                 messages.info(self.request,'Necesitas 1 vida mínimo para poder publicar. Puedes comprarla en la tienda!')
-    
+
             if puede:
                 publicacion = Publicacion.objects.create(
                     usuario=usuario_perfil,
@@ -79,64 +80,63 @@ class SubirPublicacionView(FormView):
                             publicacion=publicacion
                         )
             return super().form_valid(form)
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
 
 @method_decorator(login_required, name='dispatch')
 class DestacarPublicacionView(TemplateView):
     template_name = 'perfil/perfil.html'
 
-
-    def get(self, request, publicacion_id):
+    def get(self, request, *args, **kwargs):
         try:
-            publicacion_id = publicacion_id
+            publicacion_id = kwargs['publicacion_id']
             publicacion = Publicacion.objects.get(id=publicacion_id)
-            perfil = UsuarioPerfil.objects.get_or_create(user = self.request.user)[0]
+            perfil = UsuarioPerfil.objects.get_or_create(user=self.request.user)[0]
             destacada_contador = Destacada.objects.filter(publicacion=publicacion).count()
-    
+
             #Comprobaciones de perfil de usuario
             if (publicacion.usuario == perfil) and (destacada_contador == 0):
-    
+
                 #Si es premium, comprobamos que tenga 50 puntos y le restamos el 10% de sus puntos
                 if Premium.objects.filter(perfil=perfil).exists():
-                    if perfil.totalPuntos>=50:
+                    if perfil.totalPuntos >= 50:
                         perfil.totalPuntos = int(perfil.totalPuntos*0.9)
                         perfil.save()
-                        messages.info(request,'Has perdido el 10% de tus puntos. Tranquilo, los recuperarás!')
+                        messages.info(request, 'Has perdido el 10% de tus puntos. Tranquilo, los recuperarás!')
                         destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
                     else:
-                        messages.info(request,'Necesitas 50 puntos mínimo para poder destacar la publicación. ¡Sigue publicando :D!')
+                        messages.info(request, 'Necesitas 50 puntos mínimo para poder destacar la publicación. ¡Sigue publicando :D!')
                 else:
                     #Si es gratuito, comprobamos que tenga suficientes vidas, restando primero siempre las semanales gratuitas
                     cont = ContadorVida.objects.get(perfil=perfil)
-    
+
                     #Caso 1: tiene 2 vidas semanales disponibles
-                    if cont.numVidasSemanales >=2:
-                        cont.numVidasSemanales-=2
+                    if cont.numVidasSemanales >= 2:
+                        cont.numVidasSemanales -= 2
                         cont.save()
-                        messages.info(request,'Has destacado usando 2 vidas semanales. Tú sí que sabes!')
-                        destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
-    
+                        messages.info(request, 'Has destacado usando 2 vidas semanales. Tú sí que sabes!')
+                        Destacada.objects.create(es_destacada=True, publicacion=publicacion)
+
                     #Caso 2: tiene 1 vida semanal y mínimo una vida comprada
-                    elif cont.numVidasSemanales==1 and cont.numVidasCompradas >=1:
-                        cont.numVidasSemanales-=1
-                        cont.numVidasCompradas-=1
+                    elif cont.numVidasSemanales == 1 and cont.numVidasCompradas >= 1:
+                        cont.numVidasSemanales -= 1
+                        cont.numVidasCompradas -= 1
                         cont.save()
-                        messages.info(request,'Has hecho uso de una vida gratuita y otra comprada. Aprovechando los recursos!')
-                        destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
-    
+                        messages.info(request, 'Has hecho uso de una vida gratuita y otra comprada. Aprovechando los recursos!')
+                        Destacada.objects.create(es_destacada=True, publicacion=publicacion)
+
                     #No tiene vidas semanales pero si compradas
-                    elif cont.numVidasCompradas >=2:
-                        cont.numVidasCompradas-=2
+                    elif cont.numVidasCompradas >= 2:
+                        cont.numVidasCompradas -= 2
                         cont.save()
-                        destacada = Destacada.objects.create(es_destacada=True,publicacion=publicacion)
-                        messages.info(request,'Has destadado la publicación con 2 vidas compradas. Enhorabuena!')
+                        Destacada.objects.create(es_destacada=True, publicacion=publicacion)
+                        messages.info(request, 'Has destadado la publicación con 2 vidas compradas. Enhorabuena!')
                     else:
-                        messages.info(request,'Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!')
-    
+                        messages.info(request, 'Necesitas 2 vidas mínimo para poder destacar la publicación. Puedes comprarlas en la tienda!')
+
             return HttpResponseRedirect('/perfil/')
-        except Exception as e:
+        except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(request, 'base/error.html', context)
-        

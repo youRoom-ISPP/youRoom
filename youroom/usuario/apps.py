@@ -9,4 +9,3 @@ class UsuarioConfig(AppConfig):
         from usuario.scheduler import scheduler
         scheduler.restablecer()
         scheduler.cancelar()
-        

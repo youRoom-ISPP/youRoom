@@ -9,4 +9,3 @@ urlpatterns = [
     path('', include(ranking_urls)),
     path('<categoria>', login_required(TimelineViewCategorias.as_view()), name='timeline_categoria')
 ]
- 
