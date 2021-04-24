@@ -89,7 +89,7 @@ class EditarPerfilView(FormView):
     def form_invalid(self, form, **kwargs):
         context = self.get_context_data(**kwargs)
         context['form'] = form
-        context = {'error_message': 'Ha ocurrido un error inesperado'}
+        context['error_message'] = 'Ha ocurrido un error inesperado'
         return render(self.request, 'perfil/editar_perfil.html', context)
 
             
