@@ -9,7 +9,8 @@ class UsuarioPerfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, )
     descripcion = models.TextField(max_length=500, blank=True)
     totalPuntos = models.BigIntegerField(default=0, validators=[MinValueValidator(0)])
-    id_stripe = models.CharField(max_length = 50, blank=True, default='')
+    id_stripe = models.CharField(max_length=50, blank=True, default='')
+    foto_perfil = models.ImageField(upload_to='perfil/', default='')
 
 class ContadorVida(models.Model):
     perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE,)

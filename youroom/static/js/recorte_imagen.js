@@ -20,12 +20,23 @@ $(document).ready(function(){
         reader.readAsDataURL(this.files[0]);
         $('#uploadimageModal').modal('show');
     });
-    $('.crop_image').click(function(event){
-        var formData = new FormData();
-        image_crop.croppie('result', {type: 'blob', format: 'png'}).then(function(blob) {
-            formData.append('cropped_image', blob);
-            ajaxFormPost(formData, '/upload-image/');
-        });
-        $('#uploadimageModal').modal('hide');
-    });
+
+    $('.crop_image').on('click mousedown touchstart', function(event){
+        image_crop.croppie('result', {
+            size: 'viewport',
+            format: 'png',
+            type: 'blob'
+        }).then(function (blob){
+            var fd = new FormData(document.getElementById('foto-perfil'));
+            fd.append('imagen_recortada', blob);
+            $.ajax({
+            url: "",
+            type: "POST",
+            data: fd,
+            processData: false,
+            contentType: false,
+            });
+            $('#uploadImageModal').modal('hide');
+        })
+     });
 });
