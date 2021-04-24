@@ -164,18 +164,26 @@ class ComentarPublicacionView(FormView):
 @method_decorator(login_required, name='dispatch')
 class PublicacionMostrarView(TemplateView):
     template_name = 'publicacion/mostrar.html'
-    def get_context_data(self, **kwargs):
+
+    def get(self, request,*args,**kwargs):
         try:
             publicacion_id = kwargs['publicacion_id']
-            if Publicacion.objects.filter(id=publicacion_id).exists():
-                context = super().get_context_data(**kwargs)
-                publicacion = Publicacion.objects.get(id=publicacion_id)
-                comentarios = Comentario.objects.filter(publicacion=publicacion)
-                context['comentarios'] = comentarios
-                context['publicacion'] = publicacion
-                return context
-            else:
+            if not Publicacion.objects.filter(id=publicacion_id).exists():
                 raise Exception("La publicacion no existe")
+            return super(PublicacionMostrarView, self).get(request, kwargs['publicacion_id'])
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(request, 'base/error.html', context)
+
+    def get_context_data(self, **kwargs):
+        try:
+            publicacion_id = self.kwargs['publicacion_id']
+            context = super().get_context_data(**kwargs)
+            publicacion = Publicacion.objects.get(id=publicacion_id)
+            comentarios = Comentario.objects.filter(publicacion=publicacion)
+            context['comentarios'] = comentarios
+            context['publicacion'] = publicacion
+            return context
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
