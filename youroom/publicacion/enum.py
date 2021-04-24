@@ -1,6 +1,7 @@
 from enum import Enum
 from django.utils.translation import ugettext_lazy as _
 
+
 class Categorias(Enum):
     DORMITORIO = 'DORMITORIO'
     SALON = 'SALON'

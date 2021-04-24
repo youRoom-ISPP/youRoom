@@ -1,17 +1,17 @@
-@import 'custom.css';
+@import "custom.css";
 
 .listado-usuarios {
-    color: #099a78;
+  color: #099a78;
 }
 
 .listado-usuarios:hover,
 .listado-usuarios:active,
 .listado-usuarios:focus {
-    color: #0ddfad;
-    text-decoration: none;
+  color: #0ddfad;
+  text-decoration: none;
 }
 
 .tarjeta-listado {
-    color:#099a78;
-    border: 1px solid #0ddfad;
+  color: #099a78;
+  border: 1px solid #0ddfad;
 }
