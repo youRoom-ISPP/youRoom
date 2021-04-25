@@ -19,7 +19,7 @@ class PerfilViewTest(BaseTestCase):
 
     def tearDown(self):
         super().tearDown()
-        filelist = [f for f in os.listdir('./static/media/perfil/') if f[0:6]=='prueba']
+        filelist = [f for f in os.listdir('./static/media/perfil/') if f.startswith('prueba')]
         for f in filelist:
             os.remove(os.path.join('./static/media/perfil/', f))
         
