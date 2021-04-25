@@ -2,6 +2,7 @@ from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
 from .forms import PublicacionForm, ComentarioForm
 from .models import Publicacion, Etiqueta, Destacada, Comentario
+from ranking.models import Valoracion
 from usuario.models import UsuarioPerfil, Premium, ContadorVida
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -146,7 +147,6 @@ class ComentarPublicacionView(FormView):
     form_class = ComentarioForm
     template_name = 'publicacion/mostrar.html'
     success_url = reverse_lazy('mostrar_publicacion')
-    pk = None
 
     def form_valid(self, form):
         try:
@@ -183,6 +183,12 @@ class PublicacionMostrarView(TemplateView):
             comentarios = Comentario.objects.filter(publicacion=publicacion)
             context['comentarios'] = comentarios
             context['publicacion'] = publicacion
+            usuario=UsuarioPerfil.objects.get(user=self.request.user)
+            v, creado = Valoracion.objects.get_or_create(usuario=usuario, publicacion=publicacion)
+            if creado:
+                context['valoracion'] = 0
+            else:
+                context['valoracion'] = v.puntuacion
             return context
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}

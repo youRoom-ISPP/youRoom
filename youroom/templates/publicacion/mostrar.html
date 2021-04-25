@@ -26,15 +26,15 @@
             <div class="row pl-1 bg-white">
                 <form id="v{{publicacion.id}}">{% csrf_token %}
                     <fieldset class="rating">
-                        <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="5" />
+                        <input {% if valoracion is 5 %} checked {% endif %} type="radio" id="star5P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="5" />
                         <label class="full" for="star5P{{publicacion.id}}" title="5 estrellas"></label>
-                        <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="4" />
+                        <input {% if valoracion is 4 %} checked {% endif %} type="radio" id="star4P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="4" />
                         <label class="full" for="star4P{{publicacion.id}}" title="4 estrellas"></label>
-                        <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="3" />
+                        <input {% if valoracion is 3 %} checked {% endif %} type="radio" id="star3P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="3" />
                         <label class="full" for="star3P{{publicacion.id}}" title="3 estrellas"></label>
-                        <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="2" />
+                        <input {% if valoracion is 2 %} checked {% endif %} type="radio" id="star2P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="2" />
                         <label class="full" for="star2P{{publicacion.id}}" title="2 estrellas"></label>
-                        <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="1" />
+                        <input {% if valoracion is 1 %} checked {% endif %} type="radio" id="star1P{{publicacion.id}}" name="valoracionP{{publicacion.id}}" value="1" />
                         <label class="full" for="star1P{{publicacion.id}}" title="1 estrella"></label>
                     </fieldset>
                 </form>
