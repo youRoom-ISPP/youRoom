@@ -37,7 +37,7 @@
                         {%if p.0.usuario.foto_perfil %}
                         <img class="img-fluid pb-1 mr-1" src={{p.0.usuario.foto_perfil.url}} width="30"/>
                         {% else %}
-                        <img class="img-fluid pb-1 mr-2" src="{% static 'images/default_profile.png' %}" width="30">
+                        <img class="img-fluid pb-1 mr-1" src="{% static 'images/default_profile.png' %}" width="30">
                         {%endif%}
                         <strong class="timeline-user">{{p.0.usuario.user.username}}</strong></a>
                 </div>

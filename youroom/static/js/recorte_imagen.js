@@ -1,16 +1,16 @@
 $(document).ready(function(){
-    var image_crop = $('#image_demo').croppie({
+    var image_crop = $('#formato-imagen').croppie({
         viewport: {
-            width: 400,
-            height: 400,
+            width: 300,
+            height: 300,
             type:'circle' //square
         },
         boundary:{
-            width: 600,
-            height: 400
+            width: 300,
+            height: 300
         }
     });
-    $('#cover_image').on('change', function(){
+    $('#foto-sin-recortar').on('change', function(){
         var reader = new FileReader();
         reader.onload = function (event) {
             image_crop.croppie('bind', {
@@ -18,16 +18,16 @@ $(document).ready(function(){
             });
         }
         reader.readAsDataURL(this.files[0]);
-        $('#uploadimageModal').modal('show');
+        $('#modalRecorteFotoPerfil').modal('show');
     });
 
-    $('#crop_image').on('click', function(){
+    $('#recortar-foto').on('click', function(){
         image_crop.croppie('result', {
             size: 'viewport',
             format: 'png',
             type: 'blob'
         }).then(function (blob){
-            var fd = new FormData(document.getElementById('foto-perfil'));
+            var fd = new FormData(document.getElementById('form-foto-perfil'));
             fd.append('imagen_recortada', blob);
             $.ajax({
                 url: "",
@@ -35,8 +35,13 @@ $(document).ready(function(){
                 data: fd,
                 processData: false,
                 contentType: false,
+            }).then((response) => {
+                if (response["valid"]) {
+                    var fotoUrl = URL.createObjectURL(blob);
+                    document.getElementById('foto-perfil').src = fotoUrl;
+                    $('#modalRecorteFotoPerfil').modal('hide');
+                }
             });
-            $('#uploadImageModal').modal('hide');
         })
      });
 });

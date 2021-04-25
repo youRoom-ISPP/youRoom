@@ -120,7 +120,7 @@ $("#imagen").change(function (){
         $("#visor-imagen").removeAttr("data-target");
         $("#visor-imagen").removeAttr("data-toggle");
         $("#error-tipo-archivo").hide();
-        $("#icono-subir-foto").removeClass("bi-plus-square");
+        $("#icono-subir-foto").removeClass("bi-upload");
         $("#icono-subir-foto").addClass("bi-arrow-clockwise");
         $("#metadata-publicacion").show();
         $("#instrucciones-subir-foto").text("Etiqueta los productos y elige una categoría para tu publicación");

@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import PerfilView, EditarPerfilView
+from .views import PerfilView
 
 urlpatterns = [
-    path('', PerfilView.as_view(), name='perfil'),
-    path('editar/', EditarPerfilView.as_view(), name='editar_perfil')
+    path('', PerfilView.as_view(), name='perfil')
 ]

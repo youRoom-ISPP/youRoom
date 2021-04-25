@@ -1,17 +1,16 @@
-<div class="modal" tabindex="-1" role="dialog" id="uploadimageModal">
-    <div class="modal-dialog" role="document" style="min-width: 700px">
+<div class="modal" tabindex="-1" role="dialog" id="modalRecorteFotoPerfil">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-body px-0">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <div id="image_demo"></div>
+                        <div id="formato-imagen"></div>
                     </div>
                 </div>
-                <button id="crop_image" type="button" class="btn btn-primary">Crop and Save</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="text-center">
+                    <button id="recortar-foto" class="btn btn-primary boton">Guardar</button>
+                    <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
         </div>
     </div>
