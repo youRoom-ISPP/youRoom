@@ -1,5 +1,6 @@
 import io, os
 from PIL import Image
+from django.utils.six import BytesIO
 from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
 from usuario.models import UsuarioPerfil
@@ -18,6 +19,10 @@ class PerfilViewTest(BaseTestCase):
 
     def tearDown(self):
         super().tearDown()
+        filelist = [f for f in os.listdir('./static/media/perfil/') if f[0:6]=='prueba']
+        for f in filelist:
+            os.remove(os.path.join('./static/media/perfil/', f))
+        
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
@@ -70,7 +75,7 @@ class PerfilViewTest(BaseTestCase):
         perfil = UsuarioPerfil.objects.get(user=self.u)
         nueva_descripcion = 'Esta es una nueva descripcion'
         password = self.u.password
-        imagen = perfil.foto_perfil
+        
 
         self.assertNotEqual(perfil.descripcion, nueva_descripcion)
 
@@ -84,13 +89,12 @@ class PerfilViewTest(BaseTestCase):
             'password2':password      
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
         perfil = UsuarioPerfil.objects.get(user=self.u)
         self.assertEqual(perfil.descripcion, nueva_descripcion)
-        self.assertEqual(perfil.foto_perfil, imagen)
         self.assertTrue(perfil.user.check_password(password))
 
     def test_editar_perfil_password_solo(self):
@@ -100,7 +104,6 @@ class PerfilViewTest(BaseTestCase):
         perfil = UsuarioPerfil.objects.get(user=self.u)
         password = self.u.password
         descripcion_inicial = perfil.descripcion
-        imagen = perfil.foto_perfil
         nueva_password = 'prueba-nueva-pass-2021'
 
         response = self.client.get("http://testserver{}".format(reverse("editar_perfil")))
@@ -113,44 +116,15 @@ class PerfilViewTest(BaseTestCase):
             'password2':nueva_password
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
         perfil = UsuarioPerfil.objects.get(user=self.u)
         self.assertEqual(perfil.descripcion, descripcion_inicial)
-        self.assertEqual(perfil.foto_perfil, imagen)
         self.assertTrue(perfil.user.check_password(nueva_password))
 
-    def test_editar_perfil_imagen_solo(self):
-        
-        # Comprobamos cual es la descripción inicial del usuario
-        self.client.login(username='prueba', password='usuario1234')
-        perfil = UsuarioPerfil.objects.get(user=self.u)
-        descripcion = perfil.descripcion
-        password = self.u.password
-        imagen_inicial = perfil.foto_perfil
-        imagen_nueva = self.generate_photo_file()
 
-        response = self.client.get("http://testserver{}".format(reverse("editar_perfil")))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
-
-        formulario = {
-            'imagen':imagen_nueva,
-            'descripcion':descripcion,
-            'password1':password,
-            'password2':password      
-        }
-
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
-        self.assertEqual(response2.status_code, 302)
-        self.assertTemplateUsed(template_name='perfil/perfil.html')
-
-        perfil = UsuarioPerfil.objects.get(user=self.u)
-        self.assertEqual(perfil.descripcion, descripcion)
-        self.assertNotEqual(perfil.foto_perfil, imagen_inicial)
-        self.assertTrue(perfil.user.check_password(password))
 
     def test_editar_perfil_todo(self):
         
@@ -159,8 +133,6 @@ class PerfilViewTest(BaseTestCase):
         perfil = UsuarioPerfil.objects.get(user=self.u)
         descripcion = perfil.descripcion
         password = self.u.password
-        imagen_inicial = perfil.foto_perfil
-        imagen_nueva = self.generate_photo_file()
         nueva_descripcion = 'Esta es una nueva descripcion'
         nueva_password = 'nueva_password_prueba'
 
@@ -169,19 +141,17 @@ class PerfilViewTest(BaseTestCase):
         self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
 
         formulario = {
-            'imagen':imagen_nueva,
             'descripcion':nueva_descripcion,
             'password1':nueva_password,
             'password2':nueva_password      
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 302)
         self.assertTemplateUsed(template_name='perfil/perfil.html')
 
         perfil = UsuarioPerfil.objects.get(user=self.u)
         self.assertEqual(perfil.descripcion, nueva_descripcion)
-        self.assertNotEqual(perfil.foto_perfil, imagen_inicial)
         self.assertTrue(perfil.user.check_password(nueva_password))
 
     def test_editar_perfil_password_diferentes(self):
@@ -202,7 +172,7 @@ class PerfilViewTest(BaseTestCase):
             'password2':nueva_pass_2      
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
 
@@ -225,7 +195,7 @@ class PerfilViewTest(BaseTestCase):
             'password2':nueva_pass_2,
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
 
@@ -248,10 +218,29 @@ class PerfilViewTest(BaseTestCase):
             'password1':nueva_pass_1,
         }
 
-        response2 = self.client.post("http://testserver{}".format(reverse("guardar_perfil")), formulario)
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
         self.assertEqual(response2.status_code, 200)
         self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
 
         perfil = UsuarioPerfil.objects.get(user=self.u)
         self.assertEqual(pass_inicial, perfil.user.password)
+
+    def test_editar_perfil_imagen_solo(self):
+        self.client.login(username='prueba', password='usuario1234')
+        perfil = UsuarioPerfil.objects.get(user=self.u)
+        perfil.foto_perfil.save(perfil.user.username, BytesIO())
+
+        response = self.client.get("http://testserver{}".format(reverse("editar_perfil")))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/editar_perfil.html')
+        nueva_imagen= BytesIO()
+        formulario = {
+            'imagen_recortada':nueva_imagen,
+        }
+        
+        response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
+        self.assertEqual(response2.status_code, 200)
+
+
+        
         
