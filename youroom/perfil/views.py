@@ -1,5 +1,9 @@
 import os
 import boto3
+import io
+import uuid
+import base64
+from django.core.files.base import File
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView
@@ -10,6 +14,7 @@ from usuario.models import UsuarioPerfil, ContadorVida
 from tienda.models import Product
 from .forms import FotoPerfilForm
 from dotenv import load_dotenv
+
 
 load_dotenv()
 BUCKET_NAME = os.environ.get("S3_BUCKET")
@@ -62,13 +67,14 @@ class EditarPerfilView(FormView):
             storage.delete(path)
 
     def form_valid(self, form):
-        print(self.request.FILES['imagen_recortada'].read())
+        blob_file = self.request.FILES['imagen_recortada']
+        print(blob_file.content_type)
         usuario = get_object_or_404(UsuarioPerfil, user=self.request.user)
         foto_perfil = form.cleaned_data['foto_perfil']
         if foto_perfil != '':
             if usuario.foto_perfil != '':
                 self.borrar_foto_perfil_anterior(usuario.foto_perfil)
-            usuario.foto_perfil = foto_perfil
+            usuario.foto_perfil.save(usuario.user.username+str(uuid.uuid4()), blob_file)
         usuario.save()
         return super().form_valid(form)
 

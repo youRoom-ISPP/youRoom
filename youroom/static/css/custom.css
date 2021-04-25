@@ -233,9 +233,6 @@ input[type="file"] {
     display: none;
   }
 
-  .detalles-usuario {
-    margin: 1rem 0;
-  }
 }
 
 @media (min-width: 768px) {
@@ -348,6 +345,7 @@ input[type="file"] {
 }
 
 .descripcion-usuario {
+  white-space:pre-wrap;
   font-size: 0.9rem;
   font-family:
     -apple-system,
@@ -370,6 +368,15 @@ input[type="file"] {
   .categs {
     display: none;
   }
+}
+
+/* PERFIL */
+.p-reducido-1 {
+  padding: 1% !important;
+}
+
+.p-reducido-2 {
+  padding: 2% !important;
 }
 
 /* TIENDA */

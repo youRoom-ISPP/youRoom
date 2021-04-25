@@ -1,58 +1,87 @@
 {% extends 'base/base.html' %}
 {% load l10n %}
+{% load static %}
 
 {% block titulo_pagina %}Perfil de usuario{% endblock %}
 {% block titulo %}Perfil de usuario{% endblock %}
 
 {% block contenido %}
 <div class="row">
-    <header class="col-12 detalles-usuario card">
-        <div class="row mb-2 align-items-center">
-            <div class="col-8"><h5>{{user.user.username}}</h5></div>
-            <div class="col-4 d-flex justify-content-end dropleft">
-                <button class="btn dropdown-toggle user-options" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="bi bi-gear-fill"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    {% if cont.estaActivo is True %}
-                    <a class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-stars icon-suscripcion"></i>Suscríbete</a>
-                    {% else %}
-                    <a id="cancelSusModal" class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal" data-target="#modalSuscripcion"><i class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
-                    {% endif %}
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item btn-dropdown-user" href="/politica-datos/"><i class="bi bi-file-earmark-text"></i> Política de datos</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item btn-dropdown-user" href="{% url 'logout' %}"><i class="bi bi-power icon-suscripcion"></i>Cerrar sesión</a>
+    <div class="col-12 mb-3 card p-reducido-1">
+        <div class="row no-gutters mb-2 align-items-center">
+            <div class="col-3 col-sm-2 col-md-3">
+                {%if user.foto_perfil %}
+                <img class="img-fluid pb-2" src={{user.foto_perfil.url}} />
+                {% else %}
+                <img class="img-fluid pb-2" src="{% static 'images/default_profile.png' %}">
+                {%endif%}
+            </div>
+            <div class="col-9 col-sm-10 col-md-9 p-reducido-2">
+                <div class="row">
+                    <div class="col-10">
+                        <h4 class="pb-2">{{user.user.username}}</h4>
+                    </div>
+                    <div class="col-2">
+                        <div class="d-flex justify-content-end ">
+                            <button class="btn dropdown-toggle user-options" type="button" id="dropdownMenu2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-gear-fill"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                                <a class="dropdown-item btn-dropdown-user" type="button" href="editar/"><i
+                                        class="bi bi-pencil-square"></i> Editar perfil</a>
+                                <div class="dropdown-divider"></div>
+                                {% if cont.estaActivo is True %}
+                                <a class="dropdown-item btn-dropdown-user" type="button" data-toggle="modal"
+                                    data-target="#modalSuscripcion"><i
+                                        class="bi bi-stars icon-suscripcion"></i>Suscríbete</a>
+                                {% else %}
+                                <a id="cancelSusModal" class="dropdown-item btn-dropdown-user" type="button"
+                                    data-toggle="modal" data-target="#modalSuscripcion"><i
+                                        class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
+                                {% endif %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-dropdown-user" href="/politica-datos/"><i
+                                        class="bi bi-file-earmark-text"></i> Política de datos</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-dropdown-user" href="{% url 'logout' %}"><i
+                                        class="bi bi-power icon-suscripcion"></i>Cerrar sesión</a>
+                            </div>
+                        </div>
+                        {% include 'perfil/modal_suscripcion.html' %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {% if cont.estaActivo is True %}
+                        <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
+                            data-content="Keys semanales">
+                            <i class="bi bi-key-fill vida-semanal" alt> {{cont.numVidasSemanales}} </i>
+                        </span>
+                        <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click" data-placement="top"
+                            data-content="Keys compradas">
+                            <i class="bi bi-key-fill ml-2 vida-comprada"> {{cont.numVidasCompradas}} </i>
+                        </span>
+                        {% endif %}
+                        <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
+                            data-placement="top" data-content="Publicaciones totales">
+                            <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
+                        </span>
+                        <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
+                            data-content="Roomies">
+                            <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
+                        </span>
+                        <p class="descripcion-usuario d-none d-sm-block">{{user.descripcion}}</p>
+                    </div>
                 </div>
             </div>
-            {% include 'perfil/modal_suscripcion.html' %}
         </div>
-        <section class="row">
+        <div class="row d-block d-sm-none">
             <div class="col-12">
-                <pre class="descripcion-usuario">{{user.descripcion}}</pre>
+                <p class="descripcion-usuario">{{user.descripcion}}</p>
             </div>
-            <div class="col-12 align-self-center">
-                {% if cont.estaActivo is True %}
-                <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
-                    data-content="Keys semanales">
-                    <i class="bi bi-key-fill vida-semanal" alt> {{cont.numVidasSemanales}} </i>
-                </span>
-                <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click" data-placement="top"
-                    data-content="Keys compradas">
-                    <i class="bi bi-key-fill ml-2 vida-comprada"> {{cont.numVidasCompradas}} </i>
-                </span>
-                {% endif %}
-                <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
-                    data-placement="top" data-content="Publicaciones totales">
-                    <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
-                </span>
-                <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
-                    data-content="Roomies">
-                    <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
-                </span>
-            </div>
-        </section>
-    </header>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-12 pt-sm-3 timeline">
@@ -84,8 +113,8 @@
                             <p class="destacada">Destacada</p>
                             {% else %}
                             <!-- Publicación no destacada -->
-                            <button class="btn btn-primary btn-sm boton-destacar"
-                                type="button" data-toggle="modal" data-target="#modalDestacarP{{p.id}}">   Destacar</button>
+                            <button class="btn btn-primary btn-sm boton-destacar" type="button" data-toggle="modal"
+                                data-target="#modalDestacarP{{p.id}}"> Destacar</button>
                             {% endif %}
                         </div>
                     </div>

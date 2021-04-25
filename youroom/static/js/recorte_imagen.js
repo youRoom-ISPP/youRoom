@@ -21,7 +21,7 @@ $(document).ready(function(){
         $('#uploadimageModal').modal('show');
     });
 
-    $('.crop_image').on('click mousedown touchstart', function(event){
+    $('#crop_image').on('click', function(){
         image_crop.croppie('result', {
             size: 'viewport',
             format: 'png',
@@ -30,11 +30,11 @@ $(document).ready(function(){
             var fd = new FormData(document.getElementById('foto-perfil'));
             fd.append('imagen_recortada', blob);
             $.ajax({
-            url: "",
-            type: "POST",
-            data: fd,
-            processData: false,
-            contentType: false,
+                url: "",
+                type: "POST",
+                data: fd,
+                processData: false,
+                contentType: false,
             });
             $('#uploadImageModal').modal('hide');
         })
