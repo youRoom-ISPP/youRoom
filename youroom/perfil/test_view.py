@@ -18,11 +18,11 @@ class PerfilViewTest(BaseTestCase):
         super().setUp()
 
     def tearDown(self):
-        super().tearDown()
-        filelist = [f for f in os.listdir('./static/media/perfil/') if f.startswith('prueba')]
-        for f in filelist:
-            os.remove(os.path.join('./static/media/perfil/', f))
-        
+        self.client = None
+        if os.path.exists('./static/media/perfil/'):
+            filelist = [f for f in os.listdir('./static/media/perfil/') if f.startswith('prueba')]
+            for f in filelist:
+                os.remove(os.path.join('./static/media/perfil/', f))        
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
