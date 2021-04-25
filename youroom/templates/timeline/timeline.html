@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load l10n %}
+{% load static %}
 
 {% block titulo_pagina %}Timeline{% endblock %}
 {% block titulo %}Timeline{% endblock %}
@@ -31,8 +32,14 @@
         {% for p in publicaciones %}
         <div>
             <div class="card mb-3">
-                <div class="card-header bg-white">
-                    <a class="listado-usuarios" href="{% url 'usuario' username=p.0.usuario.user.username %}"><strong class="timeline-user">{{p.0.usuario.user.username}}</strong></a>
+                <div class="card-header bg-white px-minimo">
+                    <a class="listado-usuarios" href="{% url 'usuario' username=p.0.usuario.user.username %}">
+                        {%if p.0.usuario.foto_perfil %}
+                        <img class="img-fluid pb-1 mr-1" src={{p.0.usuario.foto_perfil.url}} width="30"/>
+                        {% else %}
+                        <img class="img-fluid pb-1 mr-2" src="{% static 'images/default_profile.png' %}" width="30">
+                        {%endif%}
+                        <strong class="timeline-user">{{p.0.usuario.user.username}}</strong></a>
                 </div>
                 <div class="container-visor-timeline">
                     <img src="{{p.0.imagen.url}}" class="card-img-bottom">

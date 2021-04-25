@@ -8,10 +8,10 @@
 {% block contenido %}
 <div class="row">
     <div class="col-12 mb-3 card p-reducido-1">
-        <div class="row no-gutters mb-2 align-items-center">
+        <div class="row no-gutters align-items-center">
             <div class="col-3 col-sm-2 col-md-3">
                 {%if user.foto_perfil %}
-                <img class="img-fluid pb-2" src={{user.foto_perfil.url}} />
+                <img class="img-fluid pb-2" src={{user.foto_perfil.url}}>
                 {% else %}
                 <img class="img-fluid pb-2" src="{% static 'images/default_profile.png' %}">
                 {%endif%}
@@ -19,7 +19,7 @@
             <div class="col-9 col-sm-10 col-md-9 p-reducido-2">
                 <div class="row">
                     <div class="col-10">
-                        <h4 class="pb-2">{{user.user.username}}</h4>
+                        <h4 class="pb-2 ml-2">{{user.user.username}}</h4>
                     </div>
                     <div class="col-2">
                         <div class="d-flex justify-content-end ">
@@ -53,42 +53,60 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        {% if cont.estaActivo is True %}
-                        <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click" data-placement="top"
-                            data-content="Keys semanales">
-                            <i class="bi bi-key-fill vida-semanal" alt> {{cont.numVidasSemanales}} </i>
-                        </span>
-                        <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click" data-placement="top"
-                            data-content="Keys compradas">
-                            <i class="bi bi-key-fill ml-2 vida-comprada"> {{cont.numVidasCompradas}} </i>
-                        </span>
-                        {% endif %}
-                        <span id="publicaciones-totales" data-toggle="publicaciones-totales" data-trigger="click"
-                            data-placement="top" data-content="Publicaciones totales">
-                            <i class="bi bi-camera-fill ml-2"> {{numPublicaciones}} </i>
-                        </span>
-                        <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click" data-placement="top"
-                            data-content="Roomies">
-                            <i class="bi bi-trophy-fill primero ml-2"> {{user.totalPuntos}} </i>
-                        </span>
-                        <p class="descripcion-usuario d-none d-sm-block">{{user.descripcion}}</p>
+                        <ul class="list-inline ml-2">
+                            <li class="list-inline-item">
+                                <span id="publicaciones-totales" data-toggle="publicaciones-totales"
+                                    data-trigger="click" data-placement="top" data-content="Publicaciones totales">
+                                    <strong class="h5">{{numPublicaciones}} </strong><i
+                                        class="fas fa-camera h5"></i>
+                                </span>
+                                <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click"
+                                    data-placement="top" data-content="Roomies">
+                                    <strong class="estrellas h5 ml-2">{{user.totalPuntos}} </strong><i
+                                        class="fas fa-star estrellas h5"></i>
+                                </span>
+                            </li>
+                            {% if cont.estaActivo is True %}
+                            <li class="list-inline-item">
+                                <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click"
+                                    data-placement="top" data-content="Keys semanales">
+                                    <strong class="vida-semanal h5">{{cont.numVidasSemanales}} </strong><i
+                                        class="fas fa-key vida-semanal h5"></i>
+                                </span>
+                                <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click"
+                                    data-placement="top" data-content="Keys compradas">
+                                    <strong class="vida-comprada h5 ml-2">{{cont.numVidasCompradas}} </strong><i
+                                        class="fas fa-key vida-comprada h5"></i>
+                                </span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-12">
+                        <p class="descripcion-usuario d-none d-sm-block pt-2 ml-2">{{user.descripcion}}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row d-block d-sm-none">
             <div class="col-12">
-                <p class="descripcion-usuario">{{user.descripcion}}</p>
+                <p class="descripcion-usuario ml-1">{{user.descripcion}}</p>
             </div>
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12 pt-sm-3 timeline">
         {% for p in publicaciones %}
         <div>
             <div class="card mb-3">
                 <div class="card-header bg-white">
+                    {%if p.usuario.foto_perfil %}
+                    <img class="img-fluid pb-1 mr-1" src={{p.usuario.foto_perfil.url}} width="30"/>
+                    {% else %}
+                    <img class="img-fluid pb-1 mr-2" src="{% static 'images/default_profile.png' %}" width="30">
+                    {%endif%}
                     <strong class="timeline-user">{{p.usuario.user.username}}</strong>
                 </div>
                 <div class="container-visor-timeline">
@@ -105,7 +123,7 @@
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pt-2 bg-white">
                         <div class="col-6">
-                            <p class="puntos">{{p.totalValoraciones}} ★</p>
+                            <p class="puntos align-self-center">{{p.totalValoraciones}} <i class="fas fa-star estrellas "></i></p>
                         </div>
                         <div class="col-6 align-self-center text-right">
                             <!-- Publicacion destacada -->
@@ -119,7 +137,7 @@
                         </div>
                     </div>
                     {% include 'perfil/modal_destacado.html' %}
-                    <div class="row px-1 pt-1">
+                    <div class="row px-1 pt-3">
                         <p>{{p.descripcion}}</p>
                     </div>
                 </div>

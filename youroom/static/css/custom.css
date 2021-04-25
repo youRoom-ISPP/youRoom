@@ -72,33 +72,6 @@ input[type="file"] {
   margin-top: 16px;
 }
 
-.boton-destacar {
-  background-color: #77fdde !important;
-  border: 2px solid #099a78 !important;
-  border-radius: 30px;
-  color: #086952;
-  padding: 0 0.8rem;
-  height: 80%;
-}
-
-.boton-destacar:hover,
-.boton-destacar:active {
-  background-color: #099a78 !important;
-  border-color: #77fdde !important;
-  color: #77fdde !important;
-}
-
-.destacada {
-  color: #099a78;
-  font-size: 1em;
-}
-
-.puntos {
-  color: #099a78;
-  font-size: 1em;
-  margin-left: -0.65rem;
-}
-
 .boton {
   background-color: #77fdde;
   border: 2px solid #099a78;
@@ -149,14 +122,6 @@ input[type="file"] {
   width: 1.5rem;
   height: 1.5rem;
   transition-duration: 0.4s;
-}
-
-.vida-semanal {
-  color: #099a78 !important;
-}
-
-.vida-comprada {
-  color: #de3f72 !important;
 }
 
 .b-publicar {
@@ -340,13 +305,40 @@ input[type="file"] {
   transition-duration: 0.8s;
 }
 
-.detalles-usuario {
-  padding: 1.2rem 1.5rem;
+
+
+@media (max-width: 335px) {
+  .dest,
+  .categs {
+    display: none;
+  }
+}
+
+/* PERFIL */
+
+.vida-semanal {
+  color: #efb810 !important;
+}
+
+.vida-comprada {
+  color: #de3f72 !important;
+}
+
+.estrellas {
+  color: #0ddfad !important;
+}
+
+.p-reducido-1 {
+  padding: 1% !important;
+}
+
+.p-reducido-2 {
+  padding: 2% !important;
 }
 
 .descripcion-usuario {
   white-space:pre-wrap;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -363,20 +355,32 @@ input[type="file"] {
     "Noto Color Emoji";
 }
 
-@media (max-width: 335px) {
-  .dest,
-  .categs {
-    display: none;
-  }
+.puntos {
+  color: #099a78;
+  font-size: 1em;
+  margin-bottom: 0 !important;
+  margin-left: -0.65rem;
 }
 
-/* PERFIL */
-.p-reducido-1 {
-  padding: 1% !important;
+.boton-destacar {
+  background-color: #77fdde !important;
+  border: 2px solid #099a78 !important;
+  border-radius: 30px;
+  color: #086952;
+  padding: 0 0.8rem;
+  height: 80%;
 }
 
-.p-reducido-2 {
-  padding: 2% !important;
+.boton-destacar:hover,
+.boton-destacar:active {
+  background-color: #099a78 !important;
+  border-color: #77fdde !important;
+  color: #77fdde !important;
+}
+
+.destacada {
+  color: #099a78;
+  font-size: 1em;
 }
 
 /* TIENDA */
