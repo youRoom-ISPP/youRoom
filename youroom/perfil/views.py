@@ -96,4 +96,3 @@ class EditarPerfilView(FormView):
         context['form'] = form
         context = {'error_message': 'Ha ocurrido un error inesperado'}
         return render(self.request, 'perfil/editar_perfil.html', context)
-

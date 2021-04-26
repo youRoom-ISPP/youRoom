@@ -12,6 +12,7 @@ class UsuarioPerfil(models.Model):
     id_stripe = models.CharField(max_length=50, blank=True, default='')
     foto_perfil = models.ImageField(upload_to='perfil/', default='')
 
+
 class ContadorVida(models.Model):
     perfil = models.OneToOneField(UsuarioPerfil, on_delete=models.CASCADE,)
     numVidasSemanales = models.IntegerField(default=3,validators=[MinValueValidator(0), MaxValueValidator(3)])

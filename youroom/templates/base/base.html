@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/rating.css' %}">
     <link rel="stylesheet" href="{% static 'css/usuarios.css' %}">
+    <link rel="stylesheet" href="{% static 'css/croppie.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <title>{% block titulo_pagina %} {% endblock %}</title>
 </head>
@@ -56,7 +58,7 @@
 
     <div class="container-md align-items-center">
         <div class="row">
-            <div class="col-md-7 mt-3 offset-md-1">
+            <div class="col-md-7 mt-md-3 offset-md-1">
             {% block contenido %}
             {% endblock %}
             </div>
@@ -121,6 +123,10 @@
     <script src="{% static 'js/perfil.js' %}"></script>
     <script src="{% static 'js/tienda.js' %}"></script>
     <script src="{% static 'js/usuarios.js' %}"></script>
+    <script src="{% static 'js/registro.js' %}"></script>
+    <script src="{% static 'js/croppie.min.js' %}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{% static 'js/recorte_imagen.js' %}"></script>
     <script src="{% static 'js/comentar.js' %}"></script>
 </body>
 </html>
