@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class RegistroForm(forms.Form):
     username = forms.CharField(label='',widget=forms.TextInput(attrs={'id': 'username-reg', 'class': 'form-control','placeholder': 'Nombre'}),max_length=30)
     email = forms.EmailField(label='',max_length=254, widget=forms.TextInput(attrs={'id': 'email-reg', 'class': 'form-control', 'placeholder': 'Correo electrónico'}))
-    password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-reg', 'class': 'form-control', 'placeholder': 'Contraseña'}))
-    password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-confirm-reg', 'class': 'form-control', 'placeholder': 'Repite la contraseña'}))
+    password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-reg', 'class': 'form-control', 'placeholder': 'Contraseña'}), min_length=8)
+    password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-confirm-reg', 'class': 'form-control', 'placeholder': 'Repite la contraseña'}), min_length=8)
     descripcion = forms.CharField(label='',widget=forms.Textarea(attrs={'id': 'descripcion-reg', 'class': 'form-control', 'placeholder': 'Descríbete en pocas palabras', 'rows': '3'}),max_length=280,required=False)
 
     def clean(self):
