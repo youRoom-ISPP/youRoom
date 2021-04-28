@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class RegistroForm(forms.Form):
-    username = forms.CharField(label='',widget=forms.TextInput(attrs={'id': 'username-reg', 'class': 'form-control','placeholder': 'Nombre'}),max_length=30)
+    username = forms.CharField(label='',widget=forms.TextInput(attrs={'id': 'username-reg', 'class': 'form-control','placeholder': 'Nombre de usuario'}),max_length=30)
     email = forms.EmailField(label='',max_length=254, widget=forms.TextInput(attrs={'id': 'email-reg', 'class': 'form-control', 'placeholder': 'Correo electrónico'}))
     password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-reg', 'class': 'form-control', 'placeholder': 'Contraseña'}), min_length=8)
     password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'id': 'password-confirm-reg', 'class': 'form-control', 'placeholder': 'Repite la contraseña'}), min_length=8)

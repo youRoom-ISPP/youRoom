@@ -7,21 +7,21 @@
 
 {% block contenido %}
 <div class="row">
-    <div class="col-12 mb-3 card p-reducido-1">
+    <div class="col-12 mb-1 card p-reducido-1">
         <div class="row no-gutters align-items-center">
             <div class="col-3 col-sm-2 col-md-3">
                 {%if user.foto_perfil %}
-                <img class="img-fluid pb-2" src={{user.foto_perfil.url}}>
+                <img class="img-fluid ml-md-1 pt-2 pb-2" src={{user.foto_perfil.url}}>
                 {% else %}
-                <img class="img-fluid pb-2" src="{% static 'images/default_profile.png' %}">
+                <img class="img-fluid ml-md-1 pt-2 pb-2" src="{% static 'images/default_profile.png' %}">
                 {%endif%}
             </div>
             <div class="col-9 col-sm-10 col-md-9 p-reducido-2">
                 <div class="row">
-                    <div class="col-10">
-                        <h4 class="pb-2 ml-2">{{user.user.username}}</h4>
+                    <div class="col-8">
+                        <h4 class="pb-2">{{user.user.username}}</h4>
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                         <div class="d-flex justify-content-end ">
                             <button class="btn dropdown-toggle user-options" type="button" id="dropdownMenu2"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -123,7 +123,7 @@
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pt-2 bg-white">
                         <div class="col-6">
-                            <p class="puntos align-self-center">{{p.totalValoraciones}} <i class="fas fa-star estrellas "></i></p>
+                            <p class="puntos align-self-center">{{p.totalValoraciones}} <i class="fas fa-star estrellas"></i></p>
                         </div>
                         <div class="col-6 align-self-center text-right">
                             <!-- Publicacion destacada -->

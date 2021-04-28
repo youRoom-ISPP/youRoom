@@ -6,7 +6,7 @@
 
 body {
   background-color: #fafafa;
-  padding-bottom: 100px;
+  padding-bottom: 44.8px;
 }
 
 footer {
@@ -164,7 +164,7 @@ input[type="file"] {
   .header-mobile {
     background-color: #fff;
     border-top: 1px solid #dbdbdb;
-    padding: 1rem 0;
+    padding: 0.1rem 0;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -181,13 +181,26 @@ input[type="file"] {
   .item-menu {
     color: #099a78;
     font-size: 1.2rem;
-    padding: 1rem;
   }
 
   .item-menu:hover,
   .item-menu:active,
   .item-menu:focus {
     color: #0ddfad;
+  }
+
+  .item-menu-left {
+    padding-right: 0.4rem;
+    text-align: right; 
+  }
+
+  .item-menu-right {
+    padding-left: 0.4rem;
+    text-align: left; 
+  }
+
+  .margen-movil {
+    margin-top: 0.5rem;
   }
 
   .leyenda-icono,
@@ -354,9 +367,11 @@ input[type="file"] {
   color: #0ddfad !important;
 }
 
-.p-reducido-1 {
-  padding: 1% !important;
-}
+@media (min-width: 768px) {
+  .p-reducido-1 {
+    padding: 1% !important;
+  }
+}  
 
 .p-reducido-2 {
   padding: 2% !important;
