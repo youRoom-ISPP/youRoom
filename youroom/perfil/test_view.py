@@ -1,14 +1,9 @@
-import io, os
-from PIL import Image
+import os
 from django.utils.six import BytesIO
-from rest_framework.test import  APIClient , APITestCase
+from rest_framework.test import  APITestCase
 from django.urls import reverse
 from usuario.models import UsuarioPerfil
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
-from tienda.models import Product
 from youroom.base_tests import BaseTestCase
 
 
@@ -86,7 +81,7 @@ class PerfilViewTest(BaseTestCase):
         formulario = {
             'descripcion':nueva_descripcion,
             'password1':password,
-            'password2':password      
+            'password2':password
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
@@ -102,7 +97,6 @@ class PerfilViewTest(BaseTestCase):
         # Comprobamos cual es la descripción inicial del usuario
         self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
-        password = self.u.password
         descripcion_inicial = perfil.descripcion
         nueva_password = 'prueba-nueva-pass-2021'
 
@@ -131,7 +125,6 @@ class PerfilViewTest(BaseTestCase):
         # Comprobamos cual es la descripción inicial del usuario
         self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
-        descripcion = perfil.descripcion
         password = self.u.password
         nueva_descripcion = 'Esta es una nueva descripcion'
         nueva_password = 'nueva_password_prueba'
@@ -143,7 +136,7 @@ class PerfilViewTest(BaseTestCase):
         formulario = {
             'descripcion':nueva_descripcion,
             'password1':nueva_password,
-            'password2':nueva_password      
+            'password2':nueva_password
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
@@ -169,7 +162,7 @@ class PerfilViewTest(BaseTestCase):
 
         formulario = {
             'password1':nueva_pass_1,
-            'password2':nueva_pass_2      
+            'password2':nueva_pass_2
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)

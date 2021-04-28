@@ -7,13 +7,13 @@
 
 {% block contenido %}
 <div class="row">
-    <div class="col-12 mb-3 card p-reducido-1">
+    <div class="col-12 mb-1 card p-reducido-1">
         <div class="row no-gutters align-items-center">
             <div class="col-3 col-sm-2 col-md-3">
                 {%if user.foto_perfil %}
-                <img class="img-fluid pb-2" src={{user.foto_perfil.url}} />
+                <img class="img-fluid pt-2 pb-2" src={{user.foto_perfil.url}} />
                 {% else %}
-                <img class="img-fluid pb-2" src="{% static 'images/default_profile.png' %}">
+                <img class="img-fluid pt-2 pb-2" src="{% static 'images/default_profile.png' %}">
                 {%endif%}
             </div>
             <div class="col-9 col-sm-10 col-md-9 p-reducido-2">
@@ -56,7 +56,7 @@
         {% for p in publicaciones %}
         <div>
             <div class="card mb-3">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white px-minimo">
                     {%if p.0.usuario.foto_perfil %}
                     <img class="img-fluid pb-1 mr-1" src={{p.0.usuario.foto_perfil.url}} width="30"/>
                     {% else %}
