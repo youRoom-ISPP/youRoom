@@ -92,7 +92,7 @@ class TimelineViewTest(BaseTestCase):
         self.assertEqual(publicaciones[0][0], publicacion1)
 
         # El usuario realiza una segunda publicación y le sale la primera en la timeline
-        response = super().publicar(self.p, Categorias.ENTRADITA)
+        response = super().publicar(self.p, Categorias.COBERTIZO)
         self.assertEqual(response.status_code, 200)
 
         publicacion2 = Publicacion.objects.last()

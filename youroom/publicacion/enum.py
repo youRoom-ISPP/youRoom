@@ -3,23 +3,52 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Categorias(Enum):
-    DORMITORIO = 'DORMITORIO'
-    SALON = 'SALON'
-    ENTRADITA = 'ENTRADITA'
-    ESCRITORIO = 'ESCRITORIO'
+    ATICO = 'ATICO'
+    BALCON = 'BALCON'
+    BANYO = 'BAÑO'
+    COBERTIZO = 'COBERTIZO'
     COCINA = 'COCINA'
-    ASEO = 'ASEO'
-    EXTERIOR = "EXTERIOR"
+    COMEDOR = 'COMEDOR'
+    CUARTO = 'CUARTO'
+    DORMITORIO = 'DORMITORIO'
+    ENTRADA = 'ENTRADA'
+    ESCALERA = 'ESCALERA'
+    GARAJE = 'GARAJE'
+    JARDIN = 'JARDIN'
+    LAVANDERIA = 'LAVANDERIA'
+    PARED = 'PARED'
+    PASILLO = 'PASILLO'
+    PATIO = 'PATIO'
+    PORCHE = 'PORCHE'
+    SALON = 'SALON'
+    SOTANO = 'SOTANO'
+    VESTIBULO = 'VESTIBULO'
+    GIMNASIO = 'GIMNASIO'
 
 
     @classmethod
     def choices(cls):
         return (
+            (str(cls.ATICO), _('Ático')),
+            (str(cls.BALCON), _('Balcón')),
+            (str(cls.BANYO), _('Baño')),
+            (str(cls.SOTANO), _('Sótano')),
+            (str(cls.COBERTIZO), _('Cobertizo')),
+            (str(cls.COCINA), _('Cocina')),
+            (str(cls.COMEDOR), _('Comedor')),
+            (str(cls.CUARTO), _('Cuarto')),
             (str(cls.DORMITORIO), _('Dormitorio')),
+            (str(cls.ENTRADA), _('Entrada')),
+            (str(cls.ESCALERA), _('Escalera')),
+            (str(cls.GARAJE), _('Garaje')),
+            (str(cls.JARDIN), _('Jardín')),
+            (str(cls.LAVANDERIA), _('Lavandería')),
+            (str(cls.PARED), _('Pared')),
+            (str(cls.PASILLO), _('Pasillo')),
+            (str(cls.PATIO), _('Patio')),
+            (str(cls.PORCHE), _('Porche')),
             (str(cls.SALON), _('Salón')),
-            (str(cls.ENTRADITA), _('Entradita')),
-            (str(cls.ESCRITORIO), _('Escritorio')),
-            (str(cls.COCINA), _('Cocinita')),
-            (str(cls.ASEO), _('Aseo')),
-            (str(cls.EXTERIOR), _('Exterior')),
+            (str(cls.VESTIBULO), _('Vestíbulo')),
+            (str(cls.GIMNASIO), _('Gimnasio')),
+
         )

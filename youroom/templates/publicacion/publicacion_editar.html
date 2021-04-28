@@ -1,0 +1,10 @@
+<img src="{{imagen.url}}" class="card-img-bottom">
+<form method="post">{% csrf_token %}
+    {{ form.descripcion }}
+    <select name="categoria">
+        {% for categoria in categorias %}
+            <option value="{{ categoria.0 }}">{{categoria.1}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Update">
+</form>
