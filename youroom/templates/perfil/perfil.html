@@ -101,7 +101,7 @@
         {% for p in publicaciones %}
         <div>
             <div class="card mb-3">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white px-minimo">
                     {%if p.usuario.foto_perfil %}
                     <img class="img-fluid pb-1 mr-1" src={{p.usuario.foto_perfil.url}} width="30"/>
                     {% else %}
