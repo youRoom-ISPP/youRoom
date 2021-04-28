@@ -206,27 +206,30 @@ class PublicacionUpdateView(UpdateView):
     success_url = reverse_lazy('perfil')
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        publicacion_id = self.kwargs.get('pk')
-        query = Publicacion.objects.filter(id=publicacion_id)
-        if query.exists():
-            publicacion = query[0]
-            context['imagen'] = publicacion.imagen
-            context['categorias'] = Categorias.choices()
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            publicacion_id = self.kwargs.get('pk')
+            query = Publicacion.objects.filter(id=publicacion_id)
+            if query.exists():
+                publicacion = query[0]
+                context['imagen'] = publicacion.imagen
+                context['categorias'] = Categorias.choices()
+            return context
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
 
 
     def get(self, *args, **kwargs):
-        publicacion_id = kwargs['pk']
-        usuario = UsuarioPerfil.objects.get(user=self.request.user)
-        query = Publicacion.objects.filter(id=publicacion_id)
-        if (not query.exists()) or (query[0].usuario != usuario):
-            return HttpResponseRedirect('/perfil/')
-        else:
-            publicacion = query[0]
-            return super(PublicacionUpdateView, self).get(self.request)
-        
-
-
-
-        
+        try:
+            publicacion_id = kwargs['pk']
+            usuario = UsuarioPerfil.objects.get(user=self.request.user)
+            query = Publicacion.objects.filter(id=publicacion_id)
+            if (not query.exists()) or (query[0].usuario != usuario):
+                return HttpResponseRedirect('/perfil/')
+            else:
+                publicacion = query[0]
+                return super(PublicacionUpdateView, self).get(self.request)
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
