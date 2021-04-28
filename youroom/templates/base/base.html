@@ -20,25 +20,25 @@
 <body>
     <div class="container-fluid">
         <div class="row logo-mobile">
-            <div class="col-4 col-md-1 mx-auto">
-                <img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="Logotipo de youRoom">
+            <div class="col-3 col-sm-2 mx-auto">
+                <a href="/timeline/"><img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="Logotipo de youRoom"></a>
             </div>
         </div>
     </div>
     {% block mobile-sticky-menu %} {% endblock %}
     <header class="header-mobile">
-        <nav class="navbar" style="padding-left: 0;">
+        <nav class="navbar">
             <div class="container text-center">
                 <div class="col-2">
                     <a class="item-menu" href="/timeline/"><i class="bi bi-house"></i></a>
                 </div>
-                <div class="col-2">
+                <div class="col-2 item-menu-left">
                     <a class="item-menu" href="/ranking/"><i class="bi bi-trophy"></i></a>
                 </div>
-                <div class="col-2">
+                <div class="col-4">
                     <a class="item-menu" href="/publicacion/"><i class="bi bi-plus-square"></i></a>
                 </div>
-                <div class="col-2">
+                <div class="col-2 item-menu-right">
                     <a class="item-menu" href="/tienda/"><i class="bi bi-credit-card"></i></a>
                 </div>
                 <div class="col-2">
@@ -50,8 +50,8 @@
 
     <div class="container-fluid sticky-top">
         <div class="row logo-pc">
-            <div class="col-4 col-md-1 mx-auto">
-                <img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="Logotipo de youRoom">
+            <div class="col-4 col-md-2 col-lg-1 mx-auto">
+                <a href="/timeline/"><img class="img-fluid" src="{% static 'images/logo-xl.png' %}" alt="Logotipo de youRoom"></a>
             </div>
         </div>
     </div>

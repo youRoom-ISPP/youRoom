@@ -182,7 +182,7 @@ class PublicacionMostrarView(TemplateView):
             publicacion_id = self.kwargs['publicacion_id']
             context = super().get_context_data(**kwargs)
             publicacion = Publicacion.objects.get(id=publicacion_id)
-            comentarios = Comentario.objects.filter(publicacion=publicacion)
+            comentarios = Comentario.objects.filter(publicacion=publicacion).order_by('fecha')
             context['comentarios'] = comentarios
             context['publicacion'] = publicacion
             usuario=UsuarioPerfil.objects.get(user=self.request.user)
