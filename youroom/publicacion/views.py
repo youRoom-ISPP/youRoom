@@ -212,7 +212,7 @@ class PublicacionUpdateView(UpdateView):
             query = Publicacion.objects.filter(id=publicacion_id)
             if query.exists():
                 publicacion = query[0]
-                context['imagen'] = publicacion.imagen
+                context['publicacion'] = publicacion
                 context['categorias'] = Categorias.choices()
             return context
         except Exception:

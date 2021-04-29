@@ -13,6 +13,7 @@ class Categorias(Enum):
     DORMITORIO = 'DORMITORIO'
     ENTRADA = 'ENTRADA'
     ESCALERA = 'ESCALERA'
+    ESCRITORIO = 'ESCRITORIO'
     GARAJE = 'GARAJE'
     JARDIN = 'JARDIN'
     LAVANDERIA = 'LAVANDERIA'
@@ -40,6 +41,7 @@ class Categorias(Enum):
             (str(cls.DORMITORIO), _('Dormitorio')),
             (str(cls.ENTRADA), _('Entrada')),
             (str(cls.ESCALERA), _('Escalera')),
+            (str(cls.ESCRITORIO), _('Escritorio')),
             (str(cls.GARAJE), _('Garaje')),
             (str(cls.JARDIN), _('Jardín')),
             (str(cls.LAVANDERIA), _('Lavandería')),

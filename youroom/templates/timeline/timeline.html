@@ -16,7 +16,7 @@
         <li class="nav-item dropdown ">
             <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                 aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list categs mr-2"></i>Categorías</a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu categoria">
                 {% for categoria in categorias %}
                 <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1 }}</a>
                 {% endfor %}
@@ -128,7 +128,7 @@
                 <div class="nav-item dropdown">
                     <a class="dropdown-toggle text-white text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                         aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list"></i><span class="ml-1 ml-lg-4">Categorías</span></a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu categoria">
                         {% for categoria in categorias %}
                         <a class="dropdown-item text-center" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
                         {% endfor %}

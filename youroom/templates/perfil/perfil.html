@@ -19,7 +19,7 @@
             <div class="col-9 col-sm-10 col-md-9 p-reducido-2">
                 <div class="row">
                     <div class="col-8">
-                        <h4 class="pb-2">{{user.user.username}}</h4>
+                        <h4 class="pl-2 pb-2">{{user.user.username}}</h4>
                     </div>
                     <div class="col-4">
                         <div class="d-flex justify-content-end ">
@@ -122,10 +122,10 @@
                 </div>
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pt-2 bg-white">
-                        <div class="col-6">
+                        <div class="col-5">
                             <p class="puntos align-self-center">{{p.totalValoraciones}} <i class="fas fa-star estrellas"></i></p>
                         </div>
-                        <div class="col-6 align-self-center text-right">
+                        <div class="col-7 align-self-center align-items-center text-right">
                             <!-- Publicacion destacada -->
                             {% if p.destacada.es_destacada %}
                             <p class="destacada">Destacada</p>
@@ -134,6 +134,7 @@
                             <button class="btn btn-primary btn-sm boton-destacar" type="button" data-toggle="modal"
                                 data-target="#modalDestacarP{{p.id}}"> Destacar</button>
                             {% endif %}
+                            <a class="item-menu pl-3 editar-pub" href="{% url 'editar_publicacion' pk=p.id %}"><i class="bi bi-pencil-square"></i></a>
                         </div>
                     </div>
                     {% include 'perfil/modal_destacado.html' %}
