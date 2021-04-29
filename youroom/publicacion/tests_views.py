@@ -192,3 +192,40 @@ class PublicacionViewTest(BaseTestCase):
         self.assertEqual(Comentario.objects.all().count(), 1)
         c = Comentario.objects.last()
         self.assertEqual(c.texto, 'Comentario de prueba')
+
+    def test_update_publicacion_no_logueado(self):
+        response = self.client.get("/publicacion/editar/1")
+        self.assertEqual(response.status_code, 301)
+        self.assertTemplateUsed(template_name='usuario/login.html')
+
+    def test_update_publicacion(self):
+        self.client.login(username='prueba', password='usuario1234')
+
+        response = super().publicar(self.p, Categorias.SALON)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+
+        publicacion = Publicacion.objects.last()
+        response = self.client.get(reverse('editar_publicacion', kwargs={'pk':publicacion.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(template_name='publicacion/publicacion_editar.html')
+
+        formulario = {
+            'descripcion':'cambiada',
+            'categoria': Categorias.COBERTIZO
+        }
+        
+        response = self.client.post(reverse('editar_publicacion', kwargs={'pk':publicacion.id}), formulario)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+
+        publicacion = Publicacion.objects.last()
+        self.assertEqual(publicacion.descripcion, 'cambiada')
+        self.assertEqual(publicacion.categoria, str(Categorias.COBERTIZO))
+
+        self.client.logout()
+        self.client.login(username='prueba3', password='usuario1234')
+        response = self.client.get(reverse('editar_publicacion', kwargs={'pk':publicacion.id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(template_name='perfil/perfil.html')
+
