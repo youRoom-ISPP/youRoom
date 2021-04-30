@@ -160,6 +160,11 @@ input[type="file"] {
   background-color: white;
 }
 
+.dropdown-menu.categoria {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
 @media (max-width: 767px) {
   .header-mobile {
     background-color: #fff;
@@ -331,6 +336,7 @@ input[type="file"] {
   background-color: transparent;
   border: 0 solid transparent;
   color: #0ddfad;
+  transition-duration: 0.8s;
 }
 
 .header-pc a {
@@ -368,6 +374,18 @@ input[type="file"] {
   .p-reducido-1 {
     padding: 1% !important;
   }
+}
+
+.editar-pub {
+  vertical-align: middle;
+  height: 100%;
+}
+
+.editar-pub:hover,
+.editar-pub:active,
+.editar-pub:focus {
+  color: #0ddfad;
+  transition-duration: 0.8s;
 }
 
 .p-reducido-2 {
