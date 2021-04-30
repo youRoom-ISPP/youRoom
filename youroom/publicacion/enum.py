@@ -33,7 +33,6 @@ class Categorias(Enum):
             (str(cls.ATICO), _('Ático')),
             (str(cls.BALCON), _('Balcón')),
             (str(cls.BANYO), _('Baño')),
-            (str(cls.SOTANO), _('Sótano')),
             (str(cls.COBERTIZO), _('Cobertizo')),
             (str(cls.COCINA), _('Cocina')),
             (str(cls.COMEDOR), _('Comedor')),
@@ -43,6 +42,7 @@ class Categorias(Enum):
             (str(cls.ESCALERA), _('Escalera')),
             (str(cls.ESCRITORIO), _('Escritorio')),
             (str(cls.GARAJE), _('Garaje')),
+            (str(cls.GIMNASIO), _('Gimnasio')),
             (str(cls.JARDIN), _('Jardín')),
             (str(cls.LAVANDERIA), _('Lavandería')),
             (str(cls.PARED), _('Pared')),
@@ -50,7 +50,7 @@ class Categorias(Enum):
             (str(cls.PATIO), _('Patio')),
             (str(cls.PORCHE), _('Porche')),
             (str(cls.SALON), _('Salón')),
+            (str(cls.SOTANO), _('Sótano')),
             (str(cls.VESTIBULO), _('Vestíbulo')),
-            (str(cls.GIMNASIO), _('Gimnasio')),
 
         )
