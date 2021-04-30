@@ -1,14 +1,8 @@
-import io, os
-from PIL import Image
+import os
 from django.utils.six import BytesIO
-from rest_framework.test import  APIClient , APITestCase
 from django.urls import reverse
 from usuario.models import UsuarioPerfil
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from usuario.models import UsuarioPerfil, ContadorVida
 from publicacion.enum import Categorias
-from tienda.models import Product
 from youroom.base_tests import BaseTestCase
 
 
@@ -22,7 +16,7 @@ class PerfilViewTest(BaseTestCase):
         if os.path.exists('./static/media/perfil/'):
             filelist = [f for f in os.listdir('./static/media/perfil/') if f.startswith('prueba')]
             for f in filelist:
-                os.remove(os.path.join('./static/media/perfil/', f))        
+                os.remove(os.path.join('./static/media/perfil/', f))
 
     def test_perfil_no_logged(self):
         response = self.client.get("http://testserver{}".format(reverse("perfil")))
@@ -69,14 +63,12 @@ class PerfilViewTest(BaseTestCase):
         self.assertTemplateUsed(template_name='usuario/login.html')
 
     def test_editar_perfil_description_solo(self):
-        
         # Comprobamos cual es la descripción inicial del usuario
         self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
         nueva_descripcion = 'Esta es una nueva descripcion'
         password = self.u.password
         
-
         self.assertNotEqual(perfil.descripcion, nueva_descripcion)
 
         response = self.client.get("http://testserver{}".format(reverse("editar_perfil")))
@@ -86,7 +78,7 @@ class PerfilViewTest(BaseTestCase):
         formulario = {
             'descripcion':nueva_descripcion,
             'password1':password,
-            'password2':password      
+            'password2':password
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
@@ -98,11 +90,9 @@ class PerfilViewTest(BaseTestCase):
         self.assertTrue(perfil.user.check_password(password))
 
     def test_editar_perfil_password_solo(self):
-        
         # Comprobamos cual es la descripción inicial del usuario
         self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
-        password = self.u.password
         descripcion_inicial = perfil.descripcion
         nueva_password = 'prueba-nueva-pass-2021'
 
@@ -124,15 +114,10 @@ class PerfilViewTest(BaseTestCase):
         self.assertEqual(perfil.descripcion, descripcion_inicial)
         self.assertTrue(perfil.user.check_password(nueva_password))
 
-
-
     def test_editar_perfil_todo(self):
-        
         # Comprobamos cual es la descripción inicial del usuario
         self.client.login(username='prueba', password='usuario1234')
         perfil = UsuarioPerfil.objects.get(user=self.u)
-        descripcion = perfil.descripcion
-        password = self.u.password
         nueva_descripcion = 'Esta es una nueva descripcion'
         nueva_password = 'nueva_password_prueba'
 
@@ -143,7 +128,7 @@ class PerfilViewTest(BaseTestCase):
         formulario = {
             'descripcion':nueva_descripcion,
             'password1':nueva_password,
-            'password2':nueva_password      
+            'password2':nueva_password
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)
@@ -169,7 +154,7 @@ class PerfilViewTest(BaseTestCase):
 
         formulario = {
             'password1':nueva_pass_1,
-            'password2':nueva_pass_2      
+            'password2':nueva_pass_2
         }
 
         response2 = self.client.post("http://testserver{}".format(reverse("editar_perfil")), formulario)

@@ -4,6 +4,7 @@ from django.db import models
 from usuario.models import UsuarioPerfil
 from django.core.validators import MinValueValidator
 from dotenv import load_dotenv
+from django.views.generic.edit import UpdateView
 
 load_dotenv()
 BUCKET_NAME = os.environ.get("S3_BUCKET")

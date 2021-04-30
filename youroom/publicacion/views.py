@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render
+from django.views.generic.edit import UpdateView
+from publicacion.enum import Categorias
 
 @method_decorator(login_required, name='dispatch')
 class PublicacionView(TemplateView):
@@ -180,7 +182,7 @@ class PublicacionMostrarView(TemplateView):
             publicacion_id = self.kwargs['publicacion_id']
             context = super().get_context_data(**kwargs)
             publicacion = Publicacion.objects.get(id=publicacion_id)
-            comentarios = Comentario.objects.filter(publicacion=publicacion)
+            comentarios = Comentario.objects.filter(publicacion=publicacion).order_by('fecha')
             context['comentarios'] = comentarios
             context['publicacion'] = publicacion
             usuario=UsuarioPerfil.objects.get(user=self.request.user)
@@ -190,6 +192,44 @@ class PublicacionMostrarView(TemplateView):
             else:
                 context['valoracion'] = v.puntuacion
             return context
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
+
+
+@method_decorator(login_required, name='dispatch')
+class PublicacionUpdateView(UpdateView):
+    model = Publicacion
+    fields = ['descripcion', 'categoria']
+    template_name = 'publicacion/publicacion_editar.html'
+    success_url = reverse_lazy('perfil')
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
+            publicacion_id = self.kwargs.get('pk')
+            query = Publicacion.objects.filter(id=publicacion_id)
+            if query.exists():
+                publicacion = query[0]
+                context['publicacion'] = publicacion
+                context['categorias'] = Categorias.choices()
+            return context
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
+
+    def get(self, *args, **kwargs):
+        try:
+            publicacion_id = kwargs['pk']
+            usuario = UsuarioPerfil.objects.get(user=self.request.user)
+            query = Publicacion.objects.filter(id=publicacion_id)
+            if (not query.exists()) or (query[0].usuario != usuario):
+                return HttpResponseRedirect('/perfil/')
+            else:
+                publicacion = query[0]
+                return super(PublicacionUpdateView, self).get(self.request)
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)

@@ -1,0 +1,37 @@
+{% extends 'base/base.html' %}
+
+{% block titulo_pagina %}Editar publicación{% endblock %}
+{% block titulo %}Editar publicación{% endblock %}}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-12 timeline">
+        <div class="card mb-3">
+            <div class="container-visor-timeline">
+                <div class="text-center anula-margin-bottom p-3">
+                    <img class="card-img-bottom" src="{{publicacion.imagen.url}}"/>
+                </div>
+            </div>
+            <div class="card-body cuerpo-tarjeta">
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea class="form-control mt-2" name="descripcion" rows="3">{{ publicacion.descripcion }}</textarea>
+                    <select id="sel-cat" name="categoria" class="form-control mt-3">
+                        {% for categoria in categorias %}
+                            {% if publicacion.categoria == categoria.0 %}
+                            <option value="{{ categoria.0 }}" selected>{{categoria.1}}</option>
+                            {% else %}
+                            <option value="{{ categoria.0 }}">{{categoria.1}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        <script>
+                            
+                        </script>
+                    </select>
+                    <button id="btnPublicar" class="btn btn-primary boton b-publicar mt-2" type="submit">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
