@@ -49,7 +49,9 @@ class RankingTestCase(BaseTestCase):
         self.u1.save()
         self.p1 = UsuarioPerfil.objects.get_or_create(user=self.u1)[0]
         self.p1.totalPuntos = 300
+        self.p1.save()
         self.c1 = ContadorVida.objects.get_or_create(perfil=self.p1, estaActivo=True)[0]
+        self.c1.save()
 
         self.u2 = User(username='prueba2')
         self.u2.set_password('usuario1234')
@@ -58,7 +60,9 @@ class RankingTestCase(BaseTestCase):
         self.u2.save()
         self.p2 = UsuarioPerfil.objects.get_or_create(user=self.u2)[0]
         self.p2.totalPuntos = 200
+        self.p2.save()
         self.c2 = ContadorVida.objects.get_or_create(perfil=self.p2, estaActivo=True)[0]
+        self.c2.save()
 
     def tearDown(self):
         super().tearDown()
