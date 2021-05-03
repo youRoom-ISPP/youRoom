@@ -22,10 +22,14 @@ class Publicacion(models.Model):
     def delete(self, *args, **kwargs):
         if os.getenv('PROD') == 'True':
             s3.delete_object(Bucket=BUCKET_NAME, Key=str(self.imagen.name))
+            self.usuario.totalPuntos -= self.totalValoraciones
+            self.usuario.save()
             super(Publicacion, self).delete(*args, **kwargs)
         else:
             storage, path = self.imagen.storage, self.imagen.path
             super(Publicacion, self).delete(*args, **kwargs)
+            self.usuario.totalPuntos -= self.totalValoraciones
+            self.usuario.save()
             storage.delete(path)
 
 

@@ -57,8 +57,7 @@
                             <li class="list-inline-item">
                                 <span id="publicaciones-totales" data-toggle="publicaciones-totales"
                                     data-trigger="click" data-placement="top" data-content="Publicaciones totales">
-                                    <strong class="h5">{{numPublicaciones}} </strong><i
-                                        class="fas fa-camera h5"></i>
+                                    <strong class="h5">{{numPublicaciones}} </strong><i class="fas fa-camera h5"></i>
                                 </span>
                                 <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click"
                                     data-placement="top" data-content="Roomies">
@@ -103,7 +102,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-white px-minimo">
                     {%if p.usuario.foto_perfil %}
-                    <img class="img-fluid pb-1 mr-1" src={{p.usuario.foto_perfil.url}} width="30"/>
+                    <img class="img-fluid pb-1 mr-1" src={{p.usuario.foto_perfil.url}} width="30" />
                     {% else %}
                     <img class="img-fluid pb-1 mr-1" src="{% static 'images/default_profile.png' %}" width="30">
                     {%endif%}
@@ -123,42 +122,56 @@
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pt-2 bg-white">
                         <div class="col-5">
-                            <p class="puntos align-self-center">{{p.totalValoraciones}} <i class="fas fa-star estrellas"></i></p>
+                            <p class="puntos align-self-center">{{p.totalValoraciones}} <i
+                                    class="fas fa-star estrellas"></i></p>
                         </div>
                         <div class="col-7 align-self-center align-items-center text-right">
-                            <!-- Publicacion destacada -->
-                            {% if p.destacada.es_destacada %}
-                            <p class="destacada">Destacada</p>
-                            {% else %}
-                            <!-- Publicación no destacada -->
-                            <button class="btn btn-primary btn-sm boton-destacar" type="button" data-toggle="modal"
-                                data-target="#modalDestacarP{{p.id}}"> Destacar</button>
-                            {% endif %}
-                            <a class="item-menu pl-3 editar-pub" href="{% url 'editar_publicacion' pk=p.id %}"><i class="bi bi-pencil-square"></i></a>
+                            <div class="row pr-2">
+                                <!-- Publicacion destacada -->
+                                {% if p.destacada.es_destacada %}
+                                <p class="col-11 mb-0 destacada" style="margin: auto;">Destacada</p>
+                                {% else %}
+                                <!-- Publicación no destacada -->
+                                <div class="col-11 align-self-center align-items-center">
+                                    <button class="btn btn-primary btn-sm boton-destacar" type="button"
+                                        data-toggle="modal" data-target="#modalDestacarP{{p.id}}"> Destacar</button>
+                                </div>
+                                {% endif %}
+                                <div class="col-1 px-0 text-center align-items-center">
+                                    <a class="item-menu editar-pub" href="{% url 'editar_publicacion' pk=p.id %}"><i
+                                            class="bi bi-pencil-square"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% include 'perfil/modal_destacado.html' %}
                     <div class="row px-1 pt-3">
-                        <p>{{p.descripcion}}</p>
+                        <p class="descripcion-publicacion">{{p.descripcion}}</p>
                     </div>
                     {% if p.comentario_set.all|length > 2 %}
                     <div class="row px-1">
-                        <a class="listado-usuarios" href="{% url 'mostrar_publicacion' publicacion_id=p.id %}"><small>Ver los {{p.comentario_set.all|length}} comentarios</small></a>
+                        <a class="listado-usuarios"
+                            href="{% url 'mostrar_publicacion' publicacion_id=p.id %}"><small>Ver los
+                                {{p.comentario_set.all|length}} comentarios</small></a>
                     </div>
                     {% endif %}
                     {% if p.comentario_set.all|length > 0 %}
                     <div class="row px-1">
                         {% for c in p.comentario_set.all|slice:":2" %}
-                        <p class="col-12 comentario mb-0 pl-0"><a class="listado-usuarios" href="{% url 'usuario' username=c.usuario.user.username %}"><strong class="timeline-user">{{c.usuario.user.username}}</strong></a> {{c.texto}}</p>
+                        <p class="col-12 comentario mb-0 pl-0"><a class="listado-usuarios"
+                                href="{% url 'usuario' username=c.usuario.user.username %}"><strong
+                                    class="timeline-user">{{c.usuario.user.username}}</strong></a> {{c.texto}}</p>
                         {% endfor %}
                     </div>
                     {% endif %}
                     <form id="formCom{{p.id}}" class="row pt-2">{% csrf_token %}
                         <div class="col-10 px-1">
-                            <input class="comentar" name="texto" required type="text" placeholder="Introduce tu comentario">
+                            <input class="comentar" name="texto" required type="text"
+                                placeholder="Introduce tu comentario">
                         </div>
                         <div class="col-2 text-center">
-                            <button id="comentarP{{p.id}}" class="boton-comentar"><i class="bi bi-chat-fill"></i></button>
+                            <button id="comentarP{{p.id}}" class="boton-comentar"><i
+                                    class="bi bi-chat-fill"></i></button>
                         </div>
                     </form>
                 </div>
