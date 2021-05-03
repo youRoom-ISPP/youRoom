@@ -71,7 +71,7 @@
                         </form>
                     </div>
                     <div class="row px-1">
-                        <p>{{p.0.descripcion}}</p>
+                        <p class="descripcion-publicacion">{{p.0.descripcion}}</p>
                     </div>
                     {% else %}
                     <div class="row pt-2 bg-white">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="row px-1 pt-1">
-                        <p>{{p.0.descripcion}}</p>
+                        <p class="descripcion-publicacion">{{p.0.descripcion}}</p>
                     </div>
                     {% endif %}
                     {% if p.0.comentario_set.all|length > 2 %}

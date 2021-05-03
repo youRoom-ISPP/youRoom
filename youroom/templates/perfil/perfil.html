@@ -146,7 +146,7 @@
                     </div>
                     {% include 'perfil/modal_destacado.html' %}
                     <div class="row px-1 pt-3">
-                        <p>{{p.descripcion}}</p>
+                        <p class="descripcion-publicacion">{{p.descripcion}}</p>
                     </div>
                     {% if p.comentario_set.all|length > 2 %}
                     <div class="row px-1">
