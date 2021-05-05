@@ -9,18 +9,23 @@
 <ul class="nav justify-content-around opciones-timeline-mobile mb-md-3 sticky-top">
     <div class="col-6 timeline-nav">
         <li class="nav-item">
-            <a class="nav-link text-white text-center" href="{% url 'usuarios' %}"><i class="bi bi-search dest mr-2"></i>Buscar</a>
+            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'usuarios' %}"><i class="bi bi-search dest mr-2"></i>Buscar</a>
         </li>
     </div>
     <div class="col-6 timeline-nav">
         <li class="nav-item dropdown ">
-            <a class="nav-link text-white dropdown-toggle text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
+            <a class="nav-link text-white dropdown-toggle text-center pt-1 pb-1" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
                 aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list categs mr-2"></i>Categorías</a>
             <div class="dropdown-menu categoria">
                 {% for categoria in categorias %}
                 <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1 }}</a>
                 {% endfor %}
             </div>
+        </li>
+    </div>
+    <div class="col-12 timeline-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white text-center pt-1 pb-1" href="#"><i class="fas fa-star dest mr-2"></i>Publicaciones más valoradas</a>
         </li>
     </div>
 </ul>
@@ -122,12 +127,15 @@
     <div class="row">
         <div class="col-12">
             <div class="row timeline-nav-pc">
-                <a class="text-white" href="{% url 'usuarios' %}"><i class="bi bi-search"></i><span class="ml-1 ml-lg-4">Buscar</span></a>
+                <a class="text-white" href="{% url 'usuarios' %}"><i class="bi bi-search"></i><span class="ml-3 ml-lg-4">Buscar</span></a>
+            </div>
+            <div class="row mt-1 timeline-nav-pc">
+                <a class="text-white" href="#"><i class="fas fa-star"></i><span class="ml-3 ml-lg-4">Más valoradas</span></a>
             </div>
             <div class="row mt-1 timeline-nav-pc">
                 <div class="nav-item dropdown">
                     <a class="dropdown-toggle text-white text-center" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
-                        aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list"></i><span class="ml-1 ml-lg-4">Categorías</span></a>
+                        aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list"></i><span class="ml-3 ml-lg-4">Categorías</span></a>
                     <div class="dropdown-menu categoria">
                         {% for categoria in categorias %}
                         <a class="dropdown-item text-center" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1}}</a>
