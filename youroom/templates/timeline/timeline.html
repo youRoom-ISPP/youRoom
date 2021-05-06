@@ -28,10 +28,10 @@
 
 {% block contenido %}
 <div class="row">
-    <div class="col-12 timeline">
+    <div class="col-12 timeline infinite-container">
         {% for p in publicaciones %}
         <div>
-            <div class="card mb-3">
+            <div class="card mb-3 infinite-item">
                 <div class="card-header bg-white px-minimo">
                     <a class="listado-usuarios" href="{% url 'usuario' username=p.0.usuario.user.username %}">
                         {%if p.0.usuario.foto_perfil %}
@@ -113,6 +113,16 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="col-12 mt-3 mb-3 text-center">
+    {% if page_obj.has_next %}
+        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+        <div class="d-flex justify-content-center" style="display:none;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    {% endif %}
     </div>
 </div>
 {% endblock %}
