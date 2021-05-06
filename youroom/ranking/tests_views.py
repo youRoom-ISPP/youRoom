@@ -46,6 +46,24 @@ class ValorarTestCase(BaseTestCase):
         self.assertEqual(perfil.totalPuntos, 104)
         self.assertEqual(perfil.puntosSemanales, 4)
 
+        # Se prueba a modificar la puntuacion
+        answers = {
+            'puntuacion': 2,
+            'publicacion_id': Publicacion.objects.last().id
+            }
+
+        response = self.client.post('/timeline/valorar/', answers)
+        self.assertEqual(response.status_code, 200)
+
+        objeto_guardado = Valoracion.objects.last()
+        self.assertEqual(objeto_guardado.usuario.user.username, 'prueba')
+        self.assertEqual(objeto_guardado.publicacion.id, Publicacion.objects.last().id)
+        self.assertEqual(objeto_guardado.puntuacion, 2)
+
+        perfil = Publicacion.objects.last().usuario
+        self.assertEqual(perfil.totalPuntos, 102)
+        self.assertEqual(perfil.puntosSemanales, 2)
+
 
 class RankingTestCase(BaseTestCase):
 

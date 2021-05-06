@@ -28,6 +28,7 @@ class ValorarPublicacionView(FormView):
             if not create:
                 previo = valoracion.puntuacion
                 publicacion_a_valorar.usuario.totalPuntos -= previo
+                publicacion_a_valorar.usuario.puntosSemanales -= previo
                 publicacion_a_valorar.totalValoraciones -= previo
             puntos = int(form.cleaned_data.get('puntuacion'))
             valoracion.puntuacion = puntos
