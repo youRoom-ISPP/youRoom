@@ -462,3 +462,7 @@ input[type="file"] {
   padding-right: 1% !important;
   padding-left: 1% !important;
 }
+
+.spinner-border {
+  color: #099a78;
+}

@@ -13,7 +13,7 @@ from usuario.models import UsuarioPerfil, ContadorVida
 from tienda.models import Product
 from .forms import EditarPerfilForm
 from dotenv import load_dotenv
-
+from django.views.generic.list import ListView
 
 load_dotenv()
 BUCKET_NAME = os.environ.get("S3_BUCKET")
@@ -21,13 +21,24 @@ s3 = boto3.client('s3')
 
 
 @method_decorator(login_required, name='dispatch')
-class PerfilView(TemplateView):
+class PerfilView(ListView):
     template_name = 'perfil/perfil.html'
+    paginate_by = 5
+    context_object_name = 'publicaciones'
+
+    def get_queryset(self):
+        try:
+            usuario = UsuarioPerfil.objects.get(user=self.request.user)
+            publicaciones = Publicacion.objects.filter(usuario=usuario).order_by('-fecha_publicacion')
+            return publicaciones
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
 
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
-            usuario, create = UsuarioPerfil.objects.get_or_create(user=self.request.user)
+            usuario = UsuarioPerfil.objects.get(user=self.request.user)
             cont = ContadorVida.objects.get_or_create(perfil=usuario)[0]
             product = Product.objects.get(id=1)
             # Datos necesarios para la suscripcion
@@ -35,8 +46,7 @@ class PerfilView(TemplateView):
             context['product'] = product
             #Del contador obtienes el numVidasSemanales y el numVidasCompradas
             context['cont'] = cont
-            publicaciones = Publicacion.objects.filter(usuario=usuario).order_by('-fecha_publicacion')
-            context['publicaciones'] = publicaciones
+            publicaciones = Publicacion.objects.filter(usuario=usuario)
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = usuario
             context['vidasTotales'] = cont.numVidasCompradas + cont.numVidasSemanales

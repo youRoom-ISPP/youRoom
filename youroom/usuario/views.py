@@ -15,6 +15,7 @@ from datetime import datetime
 import json
 from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
+from django.views.generic.list import ListView
 
 
 class LoginView(auth_view):
@@ -88,8 +89,10 @@ class UsuariosView(TemplateView):
             return render(self.request, 'base/error.html', context)
 
 @method_decorator(login_required, name='dispatch')
-class UsuarioShowView(TemplateView):
+class UsuarioShowView(ListView):
     template_name = 'usuario/usuario.html'
+    paginate_by = 5
+    context_object_name = 'publicaciones'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -100,15 +103,14 @@ class UsuarioShowView(TemplateView):
             return super(UsuarioShowView, self).get(request, kwargs['username'])
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
-            return render(request, 'base/error.html', context)
+            return render(self.request, 'base/error.html', context)
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         try:
-            context = super().get_context_data(**kwargs)
             username = self.kwargs.get('username')
             user = User.objects.get(username=username)
             perfil = UsuarioPerfil.objects.get(user=user)
-            publicaciones = Publicacion.objects.filter(usuario=perfil)
+            publicaciones = Publicacion.objects.filter(usuario=perfil).order_by('-fecha_publicacion')
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user=self.request.user)[0])
             finalVals = []
 
@@ -128,14 +130,29 @@ class UsuarioShowView(TemplateView):
                         aux.append(comentario)
                 aux = aux[:2]
                 finalComents.append(aux)
-            context['formulario_valoracion'] = ValoracionForm()
-            context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
-            context['numPublicaciones'] = publicaciones.count()
-            context['user'] = perfil
-            return context
+            publicaciones=list(zip(publicaciones, finalVals, finalComents))
+            return publicaciones
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
+            username = self.kwargs.get('username')
+            user = User.objects.get(username=username)
+            perfil = UsuarioPerfil.objects.get(user=user)
+            publicaciones = Publicacion.objects.filter(usuario=perfil)
+            context['formulario_valoracion'] = ValoracionForm()
+            context['numPublicaciones'] = publicaciones.count()
+            context['user'] = perfil
+            
+            return context
+
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
 
 class PoliticaDatosView(TemplateView):
     template_name = 'rgpd/datos.html'
