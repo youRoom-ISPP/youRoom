@@ -25,7 +25,7 @@
     </div>
     <div class="col-12 timeline-nav">
         <li class="nav-item">
-            <a class="nav-link text-white text-center pt-1 pb-1" href="#"><i class="fas fa-star dest mr-2"></i>Publicaciones más valoradas</a>
+            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'timeline_valoraciones' %}"><i class="fas fa-star dest mr-2"></i>Publicaciones más valoradas</a>
         </li>
     </div>
 </ul>
@@ -130,7 +130,7 @@
                 <a class="text-white" href="{% url 'usuarios' %}"><i class="bi bi-search"></i><span class="ml-3 ml-lg-4">Buscar</span></a>
             </div>
             <div class="row mt-1 timeline-nav-pc">
-                <a class="text-white" href="#"><i class="fas fa-star"></i><span class="ml-3 ml-lg-4">Más valoradas</span></a>
+                <a class="text-white" href="{% url 'timeline_valoraciones' %}"><i class="fas fa-star"></i><span class="ml-3 ml-lg-4">Más valoradas</span></a>
             </div>
             <div class="row mt-1 timeline-nav-pc">
                 <div class="nav-item dropdown">
