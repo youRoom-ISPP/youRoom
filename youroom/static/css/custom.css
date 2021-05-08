@@ -286,6 +286,14 @@ input[type="file"] {
   transition-duration: 0.8s;
 }
 
+.timeline-nav.izq {
+  border-right: 0.1px solid white;
+}
+
+.timeline-nav.bajo {
+  border-top: 0.1px solid white;
+}
+
 .timeline-nav:hover,
 .timeline-nav:active,
 .timeline-nav:focus {
@@ -310,8 +318,8 @@ input[type="file"] {
 
 @media (max-width: 992px) {
   .timeline-nav-pc {
-    font-size: 0.9rem;
-    padding-left: 0.8em;
+    font-size: 0.8rem;
+    padding-left: 0.6rem;
   }
 } 
 
