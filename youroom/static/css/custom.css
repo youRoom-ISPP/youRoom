@@ -163,7 +163,7 @@ input[type="file"] {
 .dropdown-menu.categoria {
   max-height: 200px;
   overflow-y: scroll;
-}
+} 
 
 @media (max-width: 767px) {
   .header-mobile {
@@ -215,6 +215,10 @@ input[type="file"] {
   .opciones-timeline-pc,
   footer {
     display: none;
+  }
+
+  .opciones-timeline-mobile {
+    font-size: 0.9rem;
   }
 }
 
@@ -282,6 +286,14 @@ input[type="file"] {
   transition-duration: 0.8s;
 }
 
+.timeline-nav.izq {
+  border-right: 0.1px solid white;
+}
+
+.timeline-nav.bajo {
+  border-top: 0.1px solid white;
+}
+
 .timeline-nav:hover,
 .timeline-nav:active,
 .timeline-nav:focus {
@@ -303,6 +315,13 @@ input[type="file"] {
   background-color: #0ddfad;
   transition-duration: 0.8s;
 }
+
+@media (max-width: 992px) {
+  .timeline-nav-pc {
+    font-size: 0.8rem;
+    padding-left: 0.6rem;
+  }
+} 
 
 .timeline {
   padding-right: 0;
