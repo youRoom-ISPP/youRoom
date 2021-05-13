@@ -5,7 +5,8 @@ class UsuarioConfig(AppConfig):
     name = 'usuario'
 
     def ready(self):
-        print("Iniciando el actualizador de vidas y el cancelador de suscripciones")
+        print("Jobs ejecutados")
         from usuario.scheduler import scheduler
         scheduler.restablecer()
+        scheduler.restablecer_puntos()
         scheduler.cancelar()

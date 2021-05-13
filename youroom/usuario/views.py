@@ -1,3 +1,5 @@
+import json
+import math
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.views import LoginView as auth_view
@@ -12,7 +14,6 @@ from django.utils.decorators import method_decorator
 from django.db.models.functions import Lower
 from usuario.serializers import UsuarioSerializer
 from datetime import datetime
-import json
 from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
 from django.views.generic.list import ListView
@@ -55,23 +56,59 @@ class RegistroView(FormView):
             return render(self.request, 'base/error.html', context)
 
 
-def restablecer_vidas():
-    fecha_hoy = datetime.today()
-    if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
-        for contador in ContadorVida.objects.all():
-            contador.numVidasSemanales = 3
-            contador.save()
+class ShedulerJob():
 
+    def restablecer_vidas():
+        fecha_hoy = datetime.today()
+        if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
+            for contador in ContadorVida.objects.all():
+                contador.numVidasSemanales = 3
+                contador.save()
 
-def cancelar_suscripcion():
-    fecha_hoy = datetime.today()
-    if fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
-        for premium in Premium.objects.filter(fechaCancelacion=fecha_hoy.date()):
-            perfil = premium.perfil
-            premium.delete()
-            contador_vidas = get_object_or_404(ContadorVida, perfil=perfil)
-            contador_vidas.estaActivo = True
-            contador_vidas.save()
+    def restablecer_puntos_ranking():
+        fecha_hoy = datetime.today()
+        if fecha_hoy.weekday() == 0 and fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
+            ShedulerJob.recompensar_mejor_usuario()
+            ShedulerJob.recompensar_resto_usuarios()
+            for usuario in UsuarioPerfil.objects.all():
+                usuario.puntosSemanales = 0
+                usuario.save()
+
+    def recompensar_mejor_usuario():
+        mejor_usuario = UsuarioPerfil.objects.order_by('-puntosSemanales').first()
+        if mejor_usuario is not None:
+            if mejor_usuario.puntosSemanales > 0:
+                contador_vidas = ContadorVida.objects.get(perfil=mejor_usuario)
+                if contador_vidas.estaActivo is True:
+                    contador_vidas.numVidasCompradas += 2
+                    contador_vidas.save()
+                else:
+                    mejor_usuario.totalPuntos += math.ceil(0.1 * mejor_usuario.totalPuntos)
+                    mejor_usuario.save()
+
+    def recompensar_resto_usuarios():
+        resto_usuarios = UsuarioPerfil.objects.order_by('-puntosSemanales')[1:3]
+        if len(resto_usuarios) > 0:
+            for usuario in resto_usuarios:
+                if usuario.puntosSemanales > 0:
+                    contador_vidas = ContadorVida.objects.get(perfil=usuario)
+                    if contador_vidas.estaActivo is True:
+                        contador_vidas.numVidasCompradas += 1
+                        contador_vidas.save()
+                    else:
+                        usuario.totalPuntos += math.ceil(0.05 * usuario.totalPuntos)
+                        usuario.save()
+
+    def cancelar_suscripcion():
+        fecha_hoy = datetime.today()
+        if fecha_hoy.hour == 0 and fecha_hoy.minute == 0:
+            for premium in Premium.objects.filter(fechaCancelacion=fecha_hoy.date()):
+                perfil = premium.perfil
+                premium.delete()
+                contador_vidas = get_object_or_404(ContadorVida, perfil=perfil)
+                contador_vidas.estaActivo = True
+                contador_vidas.save()
+
 
 @method_decorator(login_required, name='dispatch')
 class UsuariosView(TemplateView):
@@ -146,7 +183,7 @@ class UsuarioShowView(ListView):
             context['formulario_valoracion'] = ValoracionForm()
             context['numPublicaciones'] = publicaciones.count()
             context['user'] = perfil
-            
+
             return context
 
         except Exception:
