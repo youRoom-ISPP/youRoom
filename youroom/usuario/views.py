@@ -191,5 +191,9 @@ class UsuarioShowView(ListView):
             return render(self.request, 'base/error.html', context)
 
 
+class AyudaView(TemplateView):
+    template_name = 'guia/guia.html'
+
+
 class PoliticaDatosView(TemplateView):
     template_name = 'rgpd/datos.html'
