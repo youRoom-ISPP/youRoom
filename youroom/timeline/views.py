@@ -157,7 +157,9 @@ class TimelineViewCategorias(ListView):
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
+            categoria_seleccionada = self.kwargs.get('categoria')
             context['categorias'] = Categorias.choices()
+            context['categoria'] = categoria_seleccionada
             return context
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}

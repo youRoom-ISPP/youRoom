@@ -3,29 +3,37 @@
 {% load static %}
 
 {% block titulo_pagina %}Timeline{% endblock %}
-{% block titulo %}Timeline{% endblock %}
+{% block titulo %}
+{% if categoria %}
+    {{categoria}}
+{% elif 'valoraciones' in request.path %}
+    Mejores publicaciones
+{% else %}
+    Timeline
+{% endif %}
+{% endblock %}
 
 {% block mobile-sticky-menu %}
 <ul class="nav justify-content-around opciones-timeline-mobile mb-md-3 sticky-top">
-    <div class="col-6 timeline-nav izq">
+    <div class="col-4 timeline-nav izq">
         <li class="nav-item">
-            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'usuarios' %}"><i class="bi bi-search dest mr-2"></i>Buscar</a>
+            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'usuarios' %}"><i class="bi bi-search mr-2"></i><span class="dest">Buscar</span></a>
         </li>
     </div>
-    <div class="col-6 timeline-nav der">
+    <div class="col-4 timeline-nav bajo">
+        <li class="nav-item">
+            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'timeline_valoraciones' %}"><i class="fas fa-star mr-2"></i><span class="dest">Ver más valoradas</span></a>
+        </li>
+    </div>
+    <div class="col-4 timeline-nav der">
         <li class="nav-item dropdown ">
             <a class="nav-link text-white dropdown-toggle text-center pt-1 pb-1" data-toggle="dropdown" href="{% url 'timeline' %}" role="button"
-                aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list categs mr-2"></i>Categorías</a>
-            <div class="dropdown-menu categoria">
+                aria-haspopup="true" aria-expanded="false"><i class="bi bi-card-list mr-2"></i><span class="categs">Categorías</span></a>
+            <div class="dropdown-menu dropdown-menu-right categoria">
                 {% for categoria in categorias %}
                 <a class="dropdown-item" href="{% url 'timeline_categoria' categoria=categoria.1 %}">{{ categoria.1 }}</a>
                 {% endfor %}
             </div>
-        </li>
-    </div>
-    <div class="col-12 timeline-nav bajo">
-        <li class="nav-item">
-            <a class="nav-link text-white text-center pt-1 pb-1" href="{% url 'timeline_valoraciones' %}"><i class="fas fa-star dest mr-2"></i>Ver más valoradas</a>
         </li>
     </div>
 </ul>
@@ -34,6 +42,11 @@
 {% block contenido %}
 <div class="row">
     <div class="col-12 timeline infinite-container">
+        {% if categoria %}
+        <p class="cat-desc">{{ categoria }}</p>
+        {% elif 'valoraciones' in request.path %}
+        <p class="cat-desc">Mejores publicaciones</p>
+        {% endif %}
         {% for p in publicaciones %}
         <div>
             <div class="card mb-3 infinite-item">
@@ -60,20 +73,25 @@
                 <div class="card-body cuerpo-tarjeta">
                     {% if p.0.usuario.user.username != user.username %}
                     <div class="row pl-1 bg-white">
-                        <form id="v{{p.0.id}}">{% csrf_token %}
-                            <fieldset class="rating">
-                                <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="5" />
-                                <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
-                                <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="4" />
-                                <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
-                                <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="3" />
-                                <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
-                                <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="2" />
-                                <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
-                                <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="1" />
-                                <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
-                            </fieldset>
-                        </form>
+                        <div class="col-6 d-flex justify-content-start px-0">
+                            <form id="v{{p.0.id}}" class="align-self-center">{% csrf_token %}
+                                <fieldset class="rating">
+                                    <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="5" />
+                                    <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
+                                    <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="4" />
+                                    <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
+                                    <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="3" />
+                                    <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
+                                    <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="2" />
+                                    <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
+                                    <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="1" />
+                                    <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center">
+                            <p id="puntos-publicacion{{p.0.id}}" class="puntos pb-3">{{p.0.totalValoraciones}} <i class="fas fa-star estrellas"></i></p>
+                        </div>
                     </div>
                     <div class="row px-1">
                         <p class="descripcion-publicacion">{{p.0.descripcion}}</p>
