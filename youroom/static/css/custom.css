@@ -390,6 +390,14 @@ input[type="file"] {
   color: #0ddfad !important;
 }
 
+.bg-verde-claro {
+  background: #77fdde;
+}
+
+.texto-verde-osc {
+  color: #099a78;
+}
+
 @media (min-width: 768px) {
   .p-reducido-1 {
     padding: 1% !important;

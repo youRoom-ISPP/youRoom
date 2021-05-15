@@ -5,15 +5,55 @@
 {% block titulo %}Ranking{% endblock %}
 
 {% block mobile-sticky-menu %}
-<ul class="nav justify-content-around opciones-timeline-mobile sticky-top">
+<ul class="nav justify-content-around opciones-timeline-mobile mb-md-3 sticky-top pb-1">
     <div class="col-12 timeline-nav">
-        <li class="nav-item">
-            <a class="nav-link text-white text-center"><i class="bi bi-trophy mr-2"></i>Ranking</a>
-        </li>
+        <div class="container">
+            <div class="row">
+                <div class="col-9 offset-1 text-right pb-1">
+                    <a class="nav-link text-white text-center"><i class="bi bi-trophy mr-2"></i>Ranking</a>
+                </div>
+                <div class="col-2 text-right pt-2 align-self-center">
+                    <a class="texto-verde-osc text-white text-right" data-toggle="collapse" href="#collapseRanking" role="button" aria-expanded="false"
+                        aria-controls="collapseRanking">
+                        <i class="fas fa-info-circle h5 mr-md-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </ul>
 {% endblock %}
+
+{% block info-ranking %}
+<a class="texto-verde-osc align-self-center text-right" data-toggle="collapse" href="#collapseRanking" role="button" aria-expanded="false"
+    aria-controls="collapseRanking">
+    <i class="fas fa-info-circle h6 ml-lg-4"></i>
+</a>
+{% endblock %}
+
 {% block contenido %}
+<div class="row mb-3">
+    <div class="collapse col-12 px-0 pt-sm-3" id="collapseRanking">
+        <div class="card p-reducido-1 bg-verde-claro mb-1 mb-md-0">
+            <div class="card-body text-dark ml-2 px-2 py-2">
+                <button type="button" class="close align-self-start" data-toggle="collapse" data-target="#collapseRanking" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="card-title ml-1">Ranking semanal</h5>
+                {% if cont.estaActivo is True %}
+                <p class="card-text mb-0"><i class="fas fa-award mx-1 h5 texto-verde-osc"></i> ¡Alcanza el primer puesto y recibirás 2 Keys extra!</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">El segundo y el tercer puesto recibirán 1 Key extra.</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">Recuerda que al comienzo de la próxima semana se restablecerán las estrellas del ranking.</p>
+                {% else %}
+                <p class="card-text mb-0"><i class="fas fa-award mx-1 h5 texto-verde-osc"></i> ¡Alcanza el primer puesto y recibirás un 10% de estrellas extra!</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">El segundo y el tercer puesto recibirán un 5% de estrellas extra.</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">Recuerda que al comienzo de la próxima semana se restablecerán las estrellas del ranking.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row margen-movil">
     <div class="col-12">
         {% for usuario in usuarios %}
