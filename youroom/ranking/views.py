@@ -28,11 +28,13 @@ class ValorarPublicacionView(FormView):
             if not create:
                 previo = valoracion.puntuacion
                 publicacion_a_valorar.usuario.totalPuntos -= previo
+                publicacion_a_valorar.usuario.puntosSemanales -= previo
                 publicacion_a_valorar.totalValoraciones -= previo
             puntos = int(form.cleaned_data.get('puntuacion'))
             valoracion.puntuacion = puntos
             valoracion.save()
             publicacion_a_valorar.usuario.totalPuntos += puntos
+            publicacion_a_valorar.usuario.puntosSemanales += puntos
             publicacion_a_valorar.usuario.save()
             publicacion_a_valorar.totalValoraciones += puntos
             publicacion_a_valorar.save()
@@ -48,7 +50,7 @@ class RankingView(TemplateView):
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
-            lista_usuarios = UsuarioPerfil.objects.filter(totalPuntos__gt=0).order_by('-totalPuntos')
+            lista_usuarios = UsuarioPerfil.objects.filter(puntosSemanales__gt=0).order_by('-puntosSemanales')
             if lista_usuarios.count() > 50:
                 context['usuarios'] = lista_usuarios[:50]
             else:

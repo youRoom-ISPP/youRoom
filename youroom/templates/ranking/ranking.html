@@ -36,7 +36,7 @@
                     <a class="listado-usuarios" href="{% url 'usuario' username=usuario.user.username %}">{{usuario.user.username}}</a>
                 </div>
                 {% endif %}
-                <div class="col-3 text-right valoracion">{{usuario.totalPuntos}}</div>
+                <div class="col-3 text-right valoracion">{{usuario.puntosSemanales}}</div>
             </div>
         </div>
         {% endfor %}
