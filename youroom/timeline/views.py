@@ -137,6 +137,8 @@ class TimelineViewCategorias(ListView):
                     categoria = tupla[0]
                     break
             publicaciones = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
+            comentarios = Comentario.objects.all().order_by('-fecha')
+            finalComents = []
 
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user=self.request.user)[0])
             finalVals = []
@@ -148,7 +150,13 @@ class TimelineViewCategorias(ListView):
                         valorada = True
                 if not valorada:
                     finalVals.append(0)
-            return list(zip(publicaciones, finalVals))
+                aux = []
+                for comentario in comentarios:
+                    if comentario.publicacion.id == p.id:
+                        aux.append(comentario)
+                aux = aux[:2]
+                finalComents.append(aux)
+            return list(zip(publicaciones, finalVals, finalComents))
 
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
