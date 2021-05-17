@@ -6,7 +6,7 @@ from django.views.generic import FormView, TemplateView
 from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
 from publicacion.models import Publicacion
-from usuario.models import UsuarioPerfil
+from usuario.models import UsuarioPerfil, ContadorVida
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -38,7 +38,7 @@ class ValorarPublicacionView(FormView):
             publicacion_a_valorar.usuario.save()
             publicacion_a_valorar.totalValoraciones += puntos
             publicacion_a_valorar.save()
-            return JsonResponse({'message': 'Valoración guardada correctamente', 'valid': True})
+            return JsonResponse({'message': 'Valoración guardada correctamente', 'valid': True, 'total_valoracion': publicacion_a_valorar.totalValoraciones  })
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}
             return render(self.request, 'base/error.html', context)
@@ -51,6 +51,9 @@ class RankingView(TemplateView):
         try:
             context = super().get_context_data(**kwargs)
             lista_usuarios = UsuarioPerfil.objects.filter(puntosSemanales__gt=0).order_by('-puntosSemanales')
+            usuario_logueado = UsuarioPerfil.objects.get(user=self.request.user)
+            contador_usuario_logueado = ContadorVida.objects.get(perfil=usuario_logueado)
+            context['cont'] = contador_usuario_logueado
             if lista_usuarios.count() > 50:
                 context['usuarios'] = lista_usuarios[:50]
             else:

@@ -133,8 +133,6 @@ $("#imagen").change(function (){
     }
 });
 
-$("#visor-imagen").on("click", capturaPulsacion);
-
 $("#btn-borrar-enlace").click(function () {
     if ($("#error-url-enlace").is(":visible")) {
         $("#error-url-enlace").hide();
@@ -163,6 +161,17 @@ $("#btn-guardar-enlace").click(function () {
         $("#error-url-enlace").show();
     }
 });
+
+function resetearEnlaces() {
+    var pagebutton = document.getElementById("btn-borrar-enlace");
+    pagebutton.click();
+    contadorEtiqueta = 0;
+}
+
+document.getElementsByClassName("item-subir-foto titulo-accion")[0].onchange = function() {
+
+        resetearEnlaces();
+};
 
 $("#btnPublicar").click(function () {
     if (puedePublicar) {

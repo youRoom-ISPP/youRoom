@@ -6,7 +6,8 @@
                     <div class="col-12">
                         {% if cont.estaActivo is False %}
                         {% if cont.perfil.totalPuntos >= 50 %}
-                        <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Perderás el 10% de tus estrellas.</p>
+                        <p class="text-center mb-1">¿Seguro que quieres destacar la publicación?<br>Perderás el 10% de tus estrellas.</p>
+                        <p class="font-italic mb-3 mt-0 text-center" style="font-size: small;">Aparecerá destacada en el timeline durante 24 horas.</p>
                         <div class="text-center">
                             <a class="btn btn-primary boton" href="{% url 'destacar_publicacion' p.id %}">Sí, quiero destacar la publicación</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">No quiero</button>
@@ -19,7 +20,8 @@
                         {% endif %}
                         {% else %}
                         {% if vidasTotales >= 2 %}
-                        <p class="text-center">¿Seguro que quieres destacar la publicación?<br>Gastarás 2 Keys priorizando las semanales.</p>
+                        <p class="text-center mb-1">¿Seguro que quieres destacar la publicación?<br>Gastarás 2 Keys.</p>
+                        <p class="font-italic mb-3 mt-0 text-center" style="font-size: small;">Aparecerá destacada en el timeline durante 24 horas.</p>
                         <div class="text-center">
                             <a class="btn btn-primary boton" href="{% url 'destacar_publicacion' p.id %}">Sí, quiero destacar la publicación</a>
                             <button type="button" class="btn btn-cancelar-publicacion" data-dismiss="modal">No quiero</button>

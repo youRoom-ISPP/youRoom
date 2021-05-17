@@ -77,25 +77,25 @@
                 </div>
                 <div class="card-body cuerpo-tarjeta">
                     <div class="row pl-1 bg-white">
-                        <form id="v{{p.0.id}}">{% csrf_token %}
-                            <fieldset class="rating">
-                                <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}"
-                                    name="valoracionP{{p.0.id}}" value="5" />
-                                <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
-                                <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}"
-                                    name="valoracionP{{p.0.id}}" value="4" />
-                                <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
-                                <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}"
-                                    name="valoracionP{{p.0.id}}" value="3" />
-                                <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
-                                <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}"
-                                    name="valoracionP{{p.0.id}}" value="2" />
-                                <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
-                                <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}"
-                                    name="valoracionP{{p.0.id}}" value="1" />
-                                <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
-                            </fieldset>
-                        </form>
+                        <div class="col-6 d-flex justify-content-start px-0">
+                            <form id="v{{p.0.id}}" class="align-self-center">{% csrf_token %}
+                                <fieldset class="rating">
+                                    <input {% if p.1 is 5 %} checked {% endif %} type="radio" id="star5P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="5" />
+                                    <label class="full" for="star5P{{p.0.id}}" title="5 estrellas"></label>
+                                    <input {% if p.1 is 4 %} checked {% endif %} type="radio" id="star4P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="4" />
+                                    <label class="full" for="star4P{{p.0.id}}" title="4 estrellas"></label>
+                                    <input {% if p.1 is 3 %} checked {% endif %} type="radio" id="star3P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="3" />
+                                    <label class="full" for="star3P{{p.0.id}}" title="3 estrellas"></label>
+                                    <input {% if p.1 is 2 %} checked {% endif %} type="radio" id="star2P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="2" />
+                                    <label class="full" for="star2P{{p.0.id}}" title="2 estrellas"></label>
+                                    <input {% if p.1 is 1 %} checked {% endif %} type="radio" id="star1P{{p.0.id}}" name="valoracionP{{p.0.id}}" value="1" />
+                                    <label class="full" for="star1P{{p.0.id}}" title="1 estrella"></label>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center">
+                            <p id="puntos-publicacion{{p.0.id}}" class="puntos pb-3">{{p.0.totalValoraciones}} <i class="fas fa-star estrellas"></i></p>
+                        </div>
                     </div>
                     <div class="row px-1 pt-1">
                         <p class="descripcion-publicacion">{{p.0.descripcion}}</p>

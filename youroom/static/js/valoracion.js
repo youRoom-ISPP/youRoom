@@ -14,6 +14,11 @@ function enviarValoracion(valoracion) {
     }).then((response) => {
         if (response["valid"]) {
             $("#" + valoracion.id).prop("checked", true);
+            $("#puntos-publicacion"+ idPublicacion).empty();
+            $("#puntos-publicacion"+ idPublicacion).append(
+                response["total_valoracion"]
+                +' <i class="fas fa-star estrellas"></i>'
+            );
         }
     }).fail(function () {
     });

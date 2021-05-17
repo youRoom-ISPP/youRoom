@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
 from publicacion.models import Publicacion, Destacada, Comentario
 from ranking.forms import ValoracionForm
 from ranking.models import Valoracion
@@ -18,46 +17,51 @@ class TimelineView(ListView):
     context_object_name = 'publicaciones'
 
     def get_queryset(self):
-        publicaciones = []
-        for destacada in Destacada.objects.all():
-            if (datetime.now(timezone.utc) - destacada.fecha_destacada).total_seconds() > 86400:
-                destacada.delete()
-            else:
-                publicaciones.append(destacada.publicacion)
+        try:
+            publicaciones = []
+            for destacada in Destacada.objects.all():
+                if (datetime.now(timezone.utc) - destacada.fecha_destacada).total_seconds() > 86400:
+                    destacada.delete()
+                else:
+                    publicaciones.append(destacada.publicacion)
 
-        publicaciones.sort(key=lambda x: x.fecha_publicacion, reverse=True)
+            publicaciones.sort(key=lambda x: x.fecha_publicacion, reverse=True)
 
-        for publicacion in Publicacion.objects.all().order_by('-fecha_publicacion'):
-            if publicacion not in publicaciones:
-                publicaciones.append(publicacion)
+            for publicacion in Publicacion.objects.all().order_by('-fecha_publicacion'):
+                if publicacion not in publicaciones:
+                    publicaciones.append(publicacion)
 
-        totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
-        finalVals=[]
-        comentarios = Comentario.objects.all()
-        finalComents = []
-        for p in publicaciones:
-            valorada = False
-            for val in totalVals:
-                if val.publicacion.id == p.id:
-                    finalVals.append(val.puntuacion)
-                    valorada = True
-            if not valorada:
-                finalVals.append(0)
-            aux = []
-            for comentario in comentarios:
-                if comentario.publicacion.id == p.id:
-                    aux.append(comentario)
-            aux = aux[:2]
-            finalComents.append(aux)
-        publicaciones = list(zip(publicaciones, finalVals, finalComents))
-        return publicaciones
-        
+            totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
+            finalVals=[]
+            comentarios = Comentario.objects.all()
+            finalComents = []
+            for p in publicaciones:
+                valorada = False
+                for val in totalVals:
+                    if val.publicacion.id == p.id:
+                        finalVals.append(val.puntuacion)
+                        valorada = True
+                if not valorada:
+                    finalVals.append(0)
+                aux = []
+                for comentario in comentarios:
+                    if comentario.publicacion.id == p.id:
+                        aux.append(comentario)
+                aux = aux[:2]
+                finalComents.append(aux)
+            publicaciones = list(zip(publicaciones, finalVals, finalComents))
+            return publicaciones
+
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
     def get_context_data(self, **kwargs):
         try:
             context = super().get_context_data(**kwargs)
             context['formulario_valoracion'] = ValoracionForm()
             context['categorias'] = Categorias.choices()
-            
+
             return context
 
         except Exception:
@@ -66,27 +70,21 @@ class TimelineView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class TimelineViewValoraciones(TemplateView):
+class TimelineViewValoraciones(ListView):
     template_name = 'timeline/timeline.html'
+    paginate_by = 5
+    context_object_name = 'publicaciones'
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         try:
-            context = super().get_context_data(**kwargs)
             publicaciones = []
-            for destacada in Destacada.objects.all():
-                if (datetime.now(timezone.utc) - destacada.fecha_destacada).total_seconds() > 86400:
-                    destacada.delete()
-                else:
-                    publicaciones.append(destacada.publicacion)
-            
-            publicaciones.sort(key=lambda x: x.totalValoraciones, reverse=True)
 
             for publicacion in Publicacion.objects.all().order_by('-totalValoraciones'):
                 if publicacion not in publicaciones:
                     publicaciones.append(publicacion)
-    
+
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user = self.request.user)[0])
-            finalVals=[]
+            finalVals = []
 
             comentarios = Comentario.objects.all()
             finalComents = []
@@ -104,11 +102,18 @@ class TimelineViewValoraciones(TemplateView):
                         aux.append(comentario)
                 aux = aux[:2]
                 finalComents.append(aux)
-            
+            return list(zip(publicaciones, finalVals, finalComents))
+
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
             context['formulario_valoracion'] = ValoracionForm()
-            context['publicaciones'] = list(zip(publicaciones, finalVals, finalComents))
             context['categorias'] = Categorias.choices()
-            
+
             return context
 
         except Exception:
@@ -117,12 +122,13 @@ class TimelineViewValoraciones(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class TimelineViewCategorias(TemplateView):
+class TimelineViewCategorias(ListView):
     template_name = 'timeline/timeline.html'
+    paginate_by = 5
+    context_object_name = 'publicaciones'
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         try:
-            context = super().get_context_data(**kwargs)
             categoria_seleccionada = self.kwargs.get('categoria')
 
             categoria = None
@@ -131,6 +137,8 @@ class TimelineViewCategorias(TemplateView):
                     categoria = tupla[0]
                     break
             publicaciones = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_publicacion')
+            comentarios = Comentario.objects.all().order_by('-fecha')
+            finalComents = []
 
             totalVals = Valoracion.objects.filter(usuario=UsuarioPerfil.objects.get_or_create(user=self.request.user)[0])
             finalVals = []
@@ -142,9 +150,24 @@ class TimelineViewCategorias(TemplateView):
                         valorada = True
                 if not valorada:
                     finalVals.append(0)
+                aux = []
+                for comentario in comentarios:
+                    if comentario.publicacion.id == p.id:
+                        aux.append(comentario)
+                aux = aux[:2]
+                finalComents.append(aux)
+            return list(zip(publicaciones, finalVals, finalComents))
 
-            context['publicaciones'] = list(zip(publicaciones, finalVals))
+        except Exception:
+            context = {'error_message': 'Ha ocurrido un error inesperado'}
+            return render(self.request, 'base/error.html', context)
+
+    def get_context_data(self, **kwargs):
+        try:
+            context = super().get_context_data(**kwargs)
+            categoria_seleccionada = self.kwargs.get('categoria')
             context['categorias'] = Categorias.choices()
+            context['categoria'] = categoria_seleccionada
             return context
         except Exception:
             context = {'error_message': 'Ha ocurrido un error inesperado'}

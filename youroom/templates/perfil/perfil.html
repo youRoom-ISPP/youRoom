@@ -7,7 +7,7 @@
 
 {% block contenido %}
 <div class="row">
-    <div class="col-12 mb-1 card p-reducido-1">
+    <div class="col-12 mb-1 mb-md-0 card p-reducido-1">
         <div class="row no-gutters align-items-center">
             <div class="col-3 col-sm-2 col-md-3">
                 {%if user.foto_perfil %}
@@ -21,10 +21,10 @@
                     <div class="col-8">
                         <h4 class="pl-2 pb-2">{{user.user.username}}</h4>
                     </div>
-                    <div class="col-4">
-                        <div class="d-flex justify-content-end ">
-                            <button class="btn dropdown-toggle user-options" type="button" id="dropdownMenu2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="col-4 px-0">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn dropdown-toggle user-options px-1 mr-md-3" type="button"
+                                id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-gear-fill"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
@@ -40,6 +40,9 @@
                                     data-toggle="modal" data-target="#modalSuscripcion"><i
                                         class="bi bi-x-circle icon-suscripcion"></i>Cancelar suscripción</a>
                                 {% endif %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item btn-dropdown-user" href="/guia-usuario/"><i
+                                    class="bi bi-question-circle"></i> Ayuda</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item btn-dropdown-user" href="/politica-datos/"><i
                                         class="bi bi-file-earmark-text"></i> Política de datos</a>
@@ -60,7 +63,7 @@
                                     <strong class="h5">{{numPublicaciones}} </strong><i class="fas fa-camera h5"></i>
                                 </span>
                                 <span id="puntos-totales" data-toggle="puntos-totales" data-trigger="click"
-                                    data-placement="top" data-content="Roomies">
+                                    data-placement="top" data-content="Estrellas totales">
                                     <strong class="estrellas h5 ml-2">{{user.totalPuntos}} </strong><i
                                         class="fas fa-star estrellas h5"></i>
                                 </span>
@@ -68,14 +71,9 @@
                             {% if cont.estaActivo is True %}
                             <li class="list-inline-item">
                                 <span id="vida-semanal" data-toggle="vida-semanal" data-trigger="click"
-                                    data-placement="top" data-content="Keys semanales">
-                                    <strong class="vida-semanal h5">{{cont.numVidasSemanales}} </strong><i
+                                    data-placement="top" data-content="Keys totales">
+                                    <strong class="vida-semanal h5">{{vidasTotales}} </strong><i
                                         class="fas fa-key vida-semanal h5"></i>
-                                </span>
-                                <span id="vida-comprada" data-toggle="vida-comprada" data-trigger="click"
-                                    data-placement="top" data-content="Keys compradas">
-                                    <strong class="vida-comprada h5 ml-2">{{cont.numVidasCompradas}} </strong><i
-                                        class="fas fa-key vida-comprada h5"></i>
                                 </span>
                             </li>
                             {% endif %}
@@ -90,6 +88,39 @@
         <div class="row d-block d-sm-none">
             <div class="col-12">
                 <p class="descripcion-usuario ml-1">{{user.descripcion}}</p>
+            </div>
+        </div>
+        <div class="row d-block">
+            <div class="col-12 text-right pb-1">
+                <a class="texto-verde-osc" data-toggle="collapse" href="#collapseInfoSemanal" role="button"
+                    aria-expanded="false" aria-controls="collapseInfoSemanal">
+                    <i class="fas fa-info-circle h5 texto-verde-osc mr-md-4"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="collapse col-12 px-0 pt-sm-3" id="collapseInfoSemanal">
+        <div class="card p-reducido-1 bg-verde-claro mb-1 mb-md-0">
+            <div class="card-body text-dark ml-2 px-2 py-2">
+                <button type="button" class="close align-self-start" data-toggle="collapse"
+                    data-target="#collapseInfoSemanal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="card-title ml-1">Información semanal</h5>
+                <p class="card-text mb-0"><i class="fas fa-star texto-verde-osc h6"></i> <b
+                        class="ml-2 h6">{{user.puntosSemanales}}</b>
+                    estrellas conseguidas esta semana.</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">Al comienzo de la próxima semana se
+                    restablecerán las estrellas del ranking.</p>
+                {% if cont.estaActivo is True %}
+                <p class="card-text mb-0"><i class="fas fa-key vida-semanal h6"></i> <b
+                        class="ml-2 h6">{{cont.numVidasSemanales}}</b> Keys semanales restantes</p>
+                <p class="font-italic mb-1 mt-0" style="font-size: small;">Al comienzo de la próxima semana volverás a
+                    contar con 3 Keys.</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -180,14 +211,14 @@
         {% endfor %}
     </div>
     <div class="col-12 mt-3 mb-3 text-center">
-    {% if page_obj.has_next %}
+        {% if page_obj.has_next %}
         <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
         <div class="d-flex justify-content-center" style="display:none;">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-    {% endif %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
